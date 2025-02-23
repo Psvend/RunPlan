@@ -24,6 +24,12 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
+            <Label x:Name="OutputLabel"
+               Text="Loading activities..."
+               VerticalOptions="Start"
+               HorizontalOptions="Center"
+               FontSize="18" />
+
             <Button
                 x:Name="CounterBtn"
                 Text="Click me" 
