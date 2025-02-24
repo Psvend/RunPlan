@@ -32,7 +32,17 @@ namespace RunPlan.Data
         {
             return await _database.Table<RunningActivity>().ToListAsync();
         }
+
+        
+
+        //add more functions here
+
     }
+
+
+
+
+
 
     // ✅ Define the RunningActivity Model
     public class RunningActivity

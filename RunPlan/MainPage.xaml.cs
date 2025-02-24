@@ -17,6 +17,9 @@ namespace RunPlan
         }
 
 
+
+
+
         private async void LoadActivities()
         {
             List<RunningActivity> activities = await _dbService.GetAllActivitiesAsync();
@@ -30,6 +33,7 @@ namespace RunPlan
 
             OutputLabel.Text = output;
         }
+        
 
 
         // ✅ Handle adding a new activity
