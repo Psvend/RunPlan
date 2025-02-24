@@ -8,8 +8,7 @@ namespace RunPlan
     public partial class MainPage : ContentPage
     {
         private readonly DatabaseService _dbService;
-        //int count = 0;
-
+        
         public MainPage(DatabaseService dbService)
         {
             InitializeComponent();
@@ -17,15 +16,6 @@ namespace RunPlan
             LoadActivities();
         }
 
-
-        /*
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-            CounterBtn.Text = count == 1 ? $"Clicked {count} time" : $"Clicked {count} times";
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
-        */
 
         private async void LoadActivities()
         {
@@ -35,7 +25,7 @@ namespace RunPlan
 
             foreach (var activity in activities)
             {
-                output += $"{activity.Name}, {activity.Distance} km, {activity.Time}\n";
+                output += $"{activity.Name}, {activity.Distance} km, {activity.Time}, {activity.Date}\n";
             }
 
             OutputLabel.Text = output;
@@ -49,9 +39,10 @@ namespace RunPlan
             string activityName = ActivityNameEntry.Text?.Trim();
             string distanceText = DistanceEntry.Text?.Trim();
             string time = TimeEntry.Text?.Trim();
+            string date = DateEntry.Text?.Trim();
 
             // Validate input
-            if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) || string.IsNullOrEmpty(time))
+            if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) || string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
             {
                 await DisplayAlert("Error", "Please fill in all fields.", "OK");
                 return;
@@ -64,12 +55,13 @@ namespace RunPlan
             }
 
             // Insert into database
-            await _dbService.InsertRunningActivity(activityName, distance, time);
+            await _dbService.InsertRunningActivity(activityName, distance, time, date);
 
             // Clear input fields
             ActivityNameEntry.Text = "";
             DistanceEntry.Text = "";
             TimeEntry.Text = "";
+            DateEntry.Text = "";
 
             // Refresh activities
             LoadActivities();

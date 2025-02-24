@@ -20,9 +20,9 @@ namespace RunPlan.Data
         }
 
         // ✅ Insert a new activity
-        public async Task InsertRunningActivity(string name, double distance, string time)
+        public async Task InsertRunningActivity(string name, double distance, string time, string date)
         {
-            var activity = new RunningActivity { Name = name, Distance = distance, Time = time };
+            var activity = new RunningActivity { Name = name, Distance = distance, Time = time, Date = date };
             await _database.InsertAsync(activity);
             Console.WriteLine("✅ Activity added to SQLite!");
         }
@@ -42,5 +42,7 @@ namespace RunPlan.Data
         public string Name { get; set; } = string.Empty;
         public double Distance { get; set; }
         public string Time { get; set; } = "00:00:00";
+
+        public string Date { get; set; } = "yyyy-MM-dd";
     }
 }
