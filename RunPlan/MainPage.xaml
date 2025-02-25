@@ -24,12 +24,20 @@
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
+            <!-- Input Fields for Activity -->
+            <Entry x:Name="ActivityNameEntry" Placeholder="Enter activity name" />
+            <Entry x:Name="DistanceEntry" Placeholder="Enter distance (km)" Keyboard="Numeric"/>
+            <Entry x:Name="TimeEntry" Placeholder="Enter time (hh:mm:ss)" Keyboard="Text"/>
+            <Entry x:Name="DateEntry" Placeholder="Enter date (yyyy-MM-dd)" Keyboard="Text"/>
+
+            <!-- Button to Add Activity -->
+            <Button Text="Add Activity" Clicked="OnAddActivityClicked" HorizontalOptions="Fill"/>
+
+            <!-- Display Activities -->
+            <Label x:Name="OutputLabel" Text="Loading activities..." VerticalOptions="Start" HorizontalOptions="Center" FontSize="18" />
+
+            
+      
         </VerticalStackLayout>
     </ScrollView>
 
