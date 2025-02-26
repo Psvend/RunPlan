@@ -13,7 +13,8 @@ namespace RunPlan.Data
         public DatabaseService()
         {
             // Use the existing database file on your PC
-            string dbPath = @"C:\Users\petri\OneDrive\Desktop\Adv. C#\RunPlan\RunPlan\RunPlan\Data\database.db";
+            //string dbPath = @"C:\Users\petri\OneDrive\Desktop\Adv. C#\RunPlan\RunPlan\RunPlan\Data\database.db";
+            string dbPath = "../../Data/database.db";
 
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<RunningActivity>().Wait();
