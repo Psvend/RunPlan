@@ -3,6 +3,79 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
+
+
+namespace RunPlan
+{
+    public partial class MainPage : ContentPage
+    {
+        private readonly DatabaseService _dbService;
+
+        public MainPage(DatabaseService dbService)
+        {
+            InitializeComponent();
+            _dbService = dbService;
+            LoadActivities();
+        }
+
+        private async void LoadActivities()
+        {
+            var activities = await _dbService.GetAllActivitiesAsync();
+            ActivitiesCollectionView.ItemsSource = activities;
+        }
+
+        // ✅ Handle adding a new activity
+        private async void OnAddActivityClicked(object sender, EventArgs e)
+        {
+            string activityName = ActivityNameEntry.Text?.Trim();
+            string distanceText = DistanceEntry.Text?.Trim();
+            string time = TimeEntry.Text?.Trim();
+            string date = DateEntry.Text?.Trim();
+
+            if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) || string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
+            {
+                await DisplayAlert("Error", "Please fill in all fields.", "OK");
+                return;
+            }
+
+            if (!double.TryParse(distanceText, out double distance))
+            {
+                await DisplayAlert("Error", "Distance must be a number.", "OK");
+                return;
+            }
+
+            await _dbService.InsertRunningActivity(activityName, distance, time, date);
+
+            ActivityNameEntry.Text = "";
+            DistanceEntry.Text = "";
+            TimeEntry.Text = "";
+            DateEntry.Text = "";
+
+            LoadActivities(); // Refresh UI
+        }
+
+        // ✅ Handle deleting an activity
+        private async void OnDeleteActivityClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is RunningActivity activity)
+            {
+                bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete {activity.Name}?", "Yes", "No");
+
+                if (confirm)
+                {
+                    await _dbService.DeleteActivity(activity.Id);
+                    LoadActivities(); // Refresh UI after deletion
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+/*
 namespace RunPlan
 {
     public partial class MainPage : ContentPage
@@ -80,3 +153,4 @@ namespace RunPlan
 
     }
 }
+*/
