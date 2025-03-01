@@ -13,8 +13,12 @@ namespace RunPlan.Data
         public DatabaseService()
         {
             // Use the existing database file on your PC
-            //string dbPath = @"C:\Users\petri\OneDrive\Desktop\Adv. C#\RunPlan\RunPlan\RunPlan\Data\database.db";
-            string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db");
+            //string dbPath = @"..\..\Data\database.db";
+            //string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db");
+            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "database.db");
+
+
+            Console.WriteLine($"SQLite database path: {dbPath}");
 
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<RunningActivity>().Wait();
@@ -33,7 +37,26 @@ namespace RunPlan.Data
         {
             return await _database.Table<RunningActivity>().ToListAsync();
         }
+
+        
+        //Delete an activity
+        public async Task DeleteActivity(int id)
+        {
+            await _database.DeleteAsync<RunningActivity>(id);
+            Console.WriteLine($"Deleted activity with ID: {id}");
+        }
+
+
+
+
+        //add more functions here
+
     }
+
+
+
+
+
 
     // ✅ Define the RunningActivity Model
     public class RunningActivity
