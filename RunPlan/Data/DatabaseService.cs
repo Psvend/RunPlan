@@ -12,13 +12,13 @@ namespace RunPlan.Data
 
         public DatabaseService()
         {
-            // Use the existing database file on your PC
             //string dbPath = @"..\..\Data\database.db";
             //string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db");
             string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "database.db");
 
 
             Console.WriteLine($"SQLite database path: {dbPath}");
+
 
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<RunningActivity>().Wait();
