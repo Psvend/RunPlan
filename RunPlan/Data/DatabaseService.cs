@@ -14,8 +14,9 @@ namespace RunPlan.Data
         {
             // Use the existing database file on your PC
             //string dbPath = @"..\..\Data\database.db";
-            //string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db");
-            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "database.db");
+            //string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db"); //the working one
+            //string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "database.db");
+            string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "database.db");
 
 
             Console.WriteLine($"SQLite database path: {dbPath}");
@@ -56,8 +57,6 @@ namespace RunPlan.Data
 
 
 
-
-
     // ✅ Define the RunningActivity Model
     public class RunningActivity
     {
@@ -70,3 +69,5 @@ namespace RunPlan.Data
         public string Date { get; set; } = "yyyy-MM-dd";
     }
 }
+
+
