@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+#if ANDROID
+using Android.OS;
+#endif
+
+
 namespace RunPlan.Data
 {
     public class DatabaseService
@@ -13,10 +18,11 @@ namespace RunPlan.Data
         public DatabaseService()
         {
             // Use the existing database file on your PC
-            //string dbPath = @"..\..\Data\database.db";
-            //string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db"); //the working one
+            //string dbPath = @"..\..\Data\database.db";  //only works for windows, not android
+            //string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db"); //the working one for windows machine
             //string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "database.db");
-            string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "database.db");
+            //string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "database.db");
+            //string dbPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDownloads).AbsolutePath,"database.db");´ //the working one for android
 
 
             Console.WriteLine($"SQLite database path: {dbPath}");
