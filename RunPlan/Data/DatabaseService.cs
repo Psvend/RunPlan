@@ -67,10 +67,6 @@ namespace RunPlan.Data
             dbFileName = "database_android.db";  // ✅ Android gets a separate database
             string androidDbPath = Path.Combine(folderPath, dbFileName);
 
-            // 🔹 Try copying database to bin/Debug/net9.0-android35.0/
-            string localDebugPath = Path.Combine(Directory.GetCurrentDirectory(), "bin", "Debug", "net9.0-android35.0", dbFileName);
-            TryCopyDatabaseToLocalDebug(androidDbPath, localDebugPath);
-
             return androidDbPath;
 #else
             folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData); // Default fallback
@@ -92,27 +88,6 @@ namespace RunPlan.Data
                 };
                 await _database.InsertAsync(testRecord);
                 Console.WriteLine("✅ Test record added to ensure DB is accessible.");
-            }
-        }
-
-        // 🔹 Copy database from Android to local debug folder
-        private void TryCopyDatabaseToLocalDebug(string sourcePath, string destinationPath)
-        {
-            try
-            {
-                if (File.Exists(sourcePath))
-                {
-                    File.Copy(sourcePath, destinationPath, true);
-                    Console.WriteLine($"✅ Copied Android database to PC: {destinationPath}");
-                }
-                else
-                {
-                    Console.WriteLine("⚠️ Android database file not found, skipping copy.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Failed to copy database: {ex.Message}");
             }
         }
 
@@ -155,8 +130,6 @@ namespace RunPlan.Data
         public string Date { get; set; } = "yyyy-MM-dd";
     }
 }
-
-
 
 
 /*
