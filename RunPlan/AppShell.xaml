@@ -6,10 +6,22 @@
     xmlns:local="clr-namespace:RunPlan"
     Shell.FlyoutBehavior="Flyout"
     Title="RunPlan">
+    <TabBar>
+        <Tab Title="Home" Icon="appicon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+        </Tab>
+        <Tab Title="Yes" Icon="appiconfg.png">
+            <ShellContent ContentTemplate="{DataTemplate local:Activity}" />
+        </Tab>
+        <Tab Title="Empty" Icon="dotnet_bot.png">
+            <ShellContent ContentTemplate="{DataTemplate local:Stats}" />
+        </Tab>
+    </TabBar>
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+     Title="Home"
+     ContentTemplate="{DataTemplate local:MainPage}"
+     Route="MainPage" />
+
 
 </Shell>
