@@ -1,4 +1,4 @@
-namespace RunPlan;
+namespace RunPlan.Model;
 
 public partial class Stats : ContentPage
 {

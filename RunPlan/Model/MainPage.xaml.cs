@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
-namespace RunPlan
+namespace RunPlan.Model
 {
     public partial class MainPage : ContentPage
     {
@@ -29,6 +29,9 @@ namespace RunPlan
             }
 
             OutputLabel.Text = output;
+
+            await Navigation.PushAsync(new Activity(activities));
+
         }
 
 

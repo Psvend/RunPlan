@@ -60,17 +60,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="3.9.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.40" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Activity.xaml">
+	  <MauiXaml Update="Model\Activity.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Stats.xaml">
+	  <MauiXaml Update="Model\Stats.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
