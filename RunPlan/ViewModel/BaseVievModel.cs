@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RunPlan.ViewModel;
 
-    public partial class BaseVievModel: ObervableObject 
-    {
+    public partial class BaseVievModel: ObservableObject
+{
     }
 
