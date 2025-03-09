@@ -41,6 +41,7 @@ namespace RunPlan.Data
             }
         }
 
+
         private string GetDatabasePath()
         {
             string dbFileName = "database.db"; // Default name
