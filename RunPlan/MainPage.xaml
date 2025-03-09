@@ -16,6 +16,52 @@
                    Padding="0,10,0,20" />
 
 
+            <!-- Last activity box -->
+            <Frame BackgroundColor="DarkGray"
+                   Padding="15"
+                   CornerRadius="20"
+                   HasShadow="True"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Start" >
+
+            <Frame.Content>
+                <Grid ColumnDefinitions="*,*,*" Padding="5">
+
+                    <!-- Title -->
+                    <Label Text="Last Activity" 
+                               FontAttributes="Bold" 
+                               FontSize="18"
+                               Grid.ColumnSpan="3"
+                               HorizontalOptions="Start" />
+
+                    <!-- Distance -->
+                    <Label x:Name="LastActivityDistance" 
+                               Text="10 km" 
+                               FontAttributes="Bold"
+                               Grid.Column="0"
+                               HorizontalOptions="Start" />
+
+                    <!-- Pace -->
+                    <Label x:Name="LastActivityPace" 
+                               Text="5:10 min/km"
+                               FontAttributes="Bold"
+                               Grid.Column="1"
+                               HorizontalOptions="Center" />
+
+                    <!-- Duration -->
+                    <Label x:Name="LastActivityTime" 
+                               Text="1h10min"
+                               FontAttributes="Bold"
+                               Grid.Column="2"
+                               HorizontalOptions="End" />
+
+
+                </Grid>
+            </Frame.Content>
+         </Frame>
+
+
+
             <!-- Input Fields -->
             <Entry x:Name="ActivityNameEntry" Placeholder="Enter activity name" />
             <Entry x:Name="DistanceEntry" Placeholder="Enter distance (km)" Keyboard="Numeric"/>
