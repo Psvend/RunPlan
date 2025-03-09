@@ -26,12 +26,14 @@ namespace RunPlan
             {
                 var lastActivity = activities[^1]; // Get last activity
 
+                LastActivityName.Text = $"{lastActivity.Name}";
                 LastActivityDistance.Text = $"{lastActivity.Distance} km";
                 LastActivityPace.Text = CalculatePace(lastActivity.Time, lastActivity.Distance);
                 LastActivityTime.Text = lastActivity.Time;
             }
             else
             {
+                LastActivityName.Text = "N/A";
                 LastActivityDistance.Text = "N/A";
                 LastActivityPace.Text = "N/A";
                 LastActivityTime.Text = "N/A";

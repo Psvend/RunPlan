@@ -25,34 +25,47 @@
                    VerticalOptions="Start" >
 
             <Frame.Content>
-                <Grid ColumnDefinitions="*,*,*" Padding="5">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*" Padding="5">
 
-                    <!-- Title -->
+                    <!-- Box Title -->
                     <Label Text="Last Activity" 
                                FontAttributes="Bold" 
                                FontSize="18"
+                               Grid.Row="0"
                                Grid.ColumnSpan="3"
+                               HorizontalOptions="Start" />
+
+                    <!-- Name -->
+                     <Label x:Name="LastActivityName" 
+                               Text="Evening Run" 
+                               FontAttributes="Bold"
+                               Grid.Row="1" 
+                               Grid.Column="0"
                                HorizontalOptions="Start" />
 
                     <!-- Distance -->
                     <Label x:Name="LastActivityDistance" 
                                Text="10 km" 
                                FontAttributes="Bold"
-                               Grid.Column="0"
+                               Grid.Row="1" 
+                               Grid.Column="1"
                                HorizontalOptions="Start" />
+                             
 
                     <!-- Pace -->
                     <Label x:Name="LastActivityPace" 
                                Text="5:10 min/km"
                                FontAttributes="Bold"
-                               Grid.Column="1"
+                               Grid.Row="1" 
+                               Grid.Column="2"
                                HorizontalOptions="Center" />
 
                     <!-- Duration -->
                     <Label x:Name="LastActivityTime" 
                                Text="1h10min"
                                FontAttributes="Bold"
-                               Grid.Column="2"
+                               Grid.Row="1" 
+                               Grid.Column="3"
                                HorizontalOptions="End" />
 
 
