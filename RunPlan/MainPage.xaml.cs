@@ -9,6 +9,7 @@ namespace RunPlan
     public partial class MainPage : ContentPage
     {
         private readonly DatabaseService _dbService;
+        
 
         public MainPage(DatabaseService dbService)
         {
@@ -60,6 +61,9 @@ namespace RunPlan
             // ✅ Update this weeks running history
             UpdateWeeklyStats(recentActivities);
         }
+
+
+
 
 
 
@@ -179,8 +183,6 @@ namespace RunPlan
         {
             return $"{(int)time.TotalHours}h{time.Minutes}min";
         }
-
-
 
 
 
