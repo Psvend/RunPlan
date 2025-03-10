@@ -36,7 +36,7 @@ public static class MauiProgram
         var dbService = app.Services.GetRequiredService<DatabaseService>();
 
         // Insert a test activity
-        await dbService.InsertRunningActivity("Evening Run", 7.5, "00:40:00","2025-02-24");
+        //await dbService.InsertRunningActivity("Evening Run", 7.5, "00:40:00","2025-02-24");
 
         // Fetch and print activities
         var activities = await dbService.GetAllActivitiesAsync();
