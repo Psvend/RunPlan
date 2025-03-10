@@ -7,13 +7,11 @@ namespace RunPlan.Model;
 public partial class Activity : ContentPage
 {
 
-    public List<RunningActivity> Activities { get; set; }
 
-    public Activity(List<RunningActivity> activities)
+    public Activity(ActivityViewModel activityViewModel)
     {
         InitializeComponent();
-        Activities = activities;
-        BindingContext = this;
+        BindingContext = activityViewModel;
 
     }
 

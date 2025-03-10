@@ -13,10 +13,10 @@ namespace RunPlan.Model
         {
             InitializeComponent();
             _dbService = dbService;
-            LoadActivities();
+            //LoadActivities();
         }
 
-
+        /*
         private async void LoadActivities()
         {
             List<RunningActivity> activities = await _dbService.GetAllActivitiesAsync();
@@ -34,7 +34,7 @@ namespace RunPlan.Model
 
         }
 
-
+        */
         // ✅ Handle adding a new activity
         private async void OnAddActivityClicked(object sender, EventArgs e)
         {
@@ -67,7 +67,7 @@ namespace RunPlan.Model
             DateEntry.Text = "";
 
             // Refresh activities
-            LoadActivities();
+            //LoadActivities();
         }
 
 

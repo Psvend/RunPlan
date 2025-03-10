@@ -19,6 +19,7 @@ public static class MauiProgram
         // Register SQLite DatabaseService
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<ActivityViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

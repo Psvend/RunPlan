@@ -2,6 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model ="clr-namespace:RunPlan.Data"
+             xmlns:viewmodel ="clr-namespace:RunPlan.ViewModel"
+             x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
              Title="Activity">
     <Grid
@@ -11,7 +13,7 @@
         RowSpacing="0">
         <CollectionView
            Grid.ColumnSpan="2"
-            ItemsSource="{Binding activities}"
+            ItemsSource="{Binding RunningActivities}"
             SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:RunningActivity">
@@ -23,7 +25,7 @@
                                     VerticalOptions="Center"
                                     Grid.Column="1"
                                     Padding="10">
-                                    <Label Text="{Binding ActivityName}" FontSize="20" />
+                                    <Label Text="{Binding Name}" FontSize="20" />
                                     <Label Text="{Binding Distance}" FontSize="15" />
                                     <Label Text="{Binding Time}" FontSize="15" />
                                     <Label Text="{Binding Date}" FontSize="15" />
