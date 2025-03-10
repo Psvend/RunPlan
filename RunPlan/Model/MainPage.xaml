@@ -1,11 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RunPlan.MainPage"
+             x:Class="RunPlan.Model.MainPage"
              BackgroundColor="LightGray">    <!--Background color-->
+    
+    
+    
     
 
     <ScrollView>
+        
+        
         <VerticalStackLayout Padding="30,0" Spacing="25">
             <!-- Dashboard title -->
             <Label Text="Dashboard"
@@ -17,61 +22,58 @@
 
 
             <!-- Last activity box -->
-            <Frame BackgroundColor="DarkGray"
-                   Padding="15"
-                   CornerRadius="20"
-                   HasShadow="True"
-                   HorizontalOptions="Fill"
-                   VerticalOptions="Start" >
+            <Border BackgroundColor="DarkGray"
+        Padding="15"
+        StrokeShape="RoundRectangle 20"
+        HorizontalOptions="Fill"
+        VerticalOptions="Start" >
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
+                </Border.Shadow>
 
-            <Frame.Content>
+
                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*" Padding="5">
-
                     <!-- Box Title -->
                     <Label Text="Last Activity" 
-                               FontAttributes="Bold" 
-                               FontSize="18"
-                               Grid.Row="0"
-                               Grid.ColumnSpan="3"
-                               HorizontalOptions="Start" />
+               FontAttributes="Bold" 
+               FontSize="18"
+               Grid.Row="0"
+               Grid.ColumnSpan="3"
+               HorizontalOptions="Start" />
 
                     <!-- Name -->
-                     <Label x:Name="LastActivityName" 
-                               Text="Evening Run" 
-                               FontAttributes="Bold"
-                               Grid.Row="1" 
-                               Grid.Column="0"
-                               HorizontalOptions="Start" />
+                    <Label x:Name="LastActivityName" 
+               Text="Evening Run" 
+               FontAttributes="Bold"
+               Grid.Row="1" 
+               Grid.Column="0"
+               HorizontalOptions="Start" />
 
                     <!-- Distance -->
                     <Label x:Name="LastActivityDistance" 
-                               Text="10 km" 
-                               FontAttributes="Bold"
-                               Grid.Row="1" 
-                               Grid.Column="1"
-                               HorizontalOptions="Start" />
-                             
+               Text="10 km" 
+               FontAttributes="Bold"
+               Grid.Row="1" 
+               Grid.Column="1"
+               HorizontalOptions="Start" />
 
                     <!-- Pace -->
                     <Label x:Name="LastActivityPace" 
-                               Text="5:10 min/km"
-                               FontAttributes="Bold"
-                               Grid.Row="1" 
-                               Grid.Column="2"
-                               HorizontalOptions="Center" />
+               Text="5:10 min/km"
+               FontAttributes="Bold"
+               Grid.Row="1" 
+               Grid.Column="2"
+               HorizontalOptions="Center" />
 
                     <!-- Duration -->
                     <Label x:Name="LastActivityTime" 
-                               Text="1h10min"
-                               FontAttributes="Bold"
-                               Grid.Row="1" 
-                               Grid.Column="3"
-                               HorizontalOptions="End" />
-
-
+               Text="1h10min"
+               FontAttributes="Bold"
+               Grid.Row="1" 
+               Grid.Column="3"
+               HorizontalOptions="End" />
                 </Grid>
-            </Frame.Content>
-         </Frame>
+            </Border>
 
 
 
