@@ -75,6 +75,51 @@
 
 
 
+            <!-- This weeks running history box -->
+            <Frame BackgroundColor="DarkGray"
+          Padding="15"
+          CornerRadius="20"
+          HasShadow="True"
+          HorizontalOptions="Fill"
+          VerticalOptions="Start" >
+
+                <Frame.Content>
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*" Padding="5">
+
+                        <!-- Box Title -->
+                        <Label Text="This weeks running history" 
+                      FontAttributes="Bold" 
+                      FontSize="18"
+                      Grid.Row="0"
+                      Grid.ColumnSpan="3"
+                      HorizontalOptions="Start" />
+
+                        <!-- Name -->
+                        <Label x:Name="WeekActivityHours" 
+                      Text="6h10min" 
+                      FontAttributes="Bold"
+                      Grid.Row="1" 
+                      Grid.Column="0"
+                      HorizontalOptions="Start" />
+
+                        <!-- Distance -->
+                        <Label x:Name="WeekActivityDistance" 
+                      Text="55 km" 
+                      FontAttributes="Bold"
+                      Grid.Row="1" 
+                      Grid.Column="1"
+                      HorizontalOptions="Start" />
+
+
+                    </Grid>
+                </Frame.Content>
+            </Frame>
+
+
+
+
+
+
             <!-- Input Fields -->
             <Entry x:Name="ActivityNameEntry" Placeholder="Enter activity name" />
             <Entry x:Name="DistanceEntry" Placeholder="Enter distance (km)" Keyboard="Numeric"/>
