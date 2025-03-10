@@ -2,6 +2,7 @@
 global using CommunityToolkit.Mvvm.Input;
 global using RunPlan.Model;
 global using RunPlan.ViewModel;
+global using RunPlan.Data;
 global using System.Collections.ObjectModel;
 global using System.ComponentModel;
 global using System.Diagnostics;

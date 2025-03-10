@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model ="clr-namespace:RunPlan.Data"
              xmlns:viewmodel ="clr-namespace:RunPlan.ViewModel"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+              ios:Page.UseSafeArea="True"
              x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
              Title="Activity">
@@ -17,9 +19,13 @@
             SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:RunningActivity">
-                    <Grid Padding="10">
+                    <Grid Padding="10" HorizontalOptions="Fill">
                         <Border HeightRequest="125" Style="{StaticResource CardView}">
-
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command= "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityViewModel}},x:DataType=viewmodel:ActivityViewModel, Path=GoToDetailsCommand}"     
+                                    CommandParameter= "{Binding .}"/>
+                            </Border.GestureRecognizers>
                             <Grid Padding="0" ColumnDefinitions="125,*">
                                 <VerticalStackLayout
                                     VerticalOptions="Center"

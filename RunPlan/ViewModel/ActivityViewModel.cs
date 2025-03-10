@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RunPlan.Data;
 
 namespace RunPlan.ViewModel;
 
@@ -45,7 +44,18 @@ public partial class ActivityViewModel : BaseVievModel
             IsBusy = false;
         }
     }
-    
+
+    [RelayCommand]
+    public async Task GoToDetails(RunningActivity activity)
+    {
+        if (activity == null) return;
+
+        await Shell.Current.GoToAsync(nameof(DetailScreen), true, new Dictionary<string, object>
+        {
+            { "RunningActivity", activity }
+        });
+    }
+
 
 }
 

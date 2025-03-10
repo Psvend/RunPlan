@@ -10,18 +10,17 @@
         <Tab Title="Home" Icon="appicon.png">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>
-        <Tab Title="Yes" Icon="appiconfg.png">
-            <ShellContent ContentTemplate="{DataTemplate local:Activity}" />
+        <Tab Title="Activites" Icon="appiconfg.png">
+            <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activites" />
+
         </Tab>
-        <Tab Title="Empty" Icon="dotnet_bot.png">
+        <Tab Title="Statistics" Icon="dotnet_bot.png">
             <ShellContent ContentTemplate="{DataTemplate local:Stats}" />
         </Tab>
     </TabBar>
 
-    <ShellContent
-     Title="Home"
-     ContentTemplate="{DataTemplate local:MainPage}"
-     Route="MainPage" />
+    
+
 
 
 </Shell>

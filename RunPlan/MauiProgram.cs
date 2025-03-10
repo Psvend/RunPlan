@@ -20,6 +20,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<ActivityViewModel>();
+        builder.Services.AddTransient<DetailViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

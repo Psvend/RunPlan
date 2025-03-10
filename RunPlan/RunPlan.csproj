@@ -72,6 +72,9 @@
 	  <MauiXaml Update="Model\Activity.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Model\DetailScreen.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Model\Stats.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
