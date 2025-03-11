@@ -128,6 +128,6 @@ namespace RunPlan.Data
         public string Name { get; set; } = string.Empty;
         public double Distance { get; set; }
         public string Time { get; set; } = "00:00:00";
-        public string Date { get; set; } = "yyyy-MM-dd";
+        public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
     }
 }
