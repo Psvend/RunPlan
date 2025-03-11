@@ -6,7 +6,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sfChart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"  
              x:Class="RunPlan.Model.MainPage"
-             BackgroundColor="LightGray">    <!--Background color-->
+             BackgroundColor="White">    <!--Background color-->
     
     
    
@@ -143,79 +143,6 @@
 
                     </Grid>
                 </Border.Content>
-            </Border>
-
-            <!-- Weekly Running Distance Graph -->
-            <Border BackgroundColor="White"
-        Padding="10"
-        StrokeShape="RoundRectangle 20"
-        HorizontalOptions="Fill"
-        VerticalOptions="Start">
-
-                <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
-                </Border.Shadow>
-
-                <VerticalStackLayout>
-                    <!-- Chart Title -->
-                    <Label Text="Running Distance - Last 3 Months"
-               FontAttributes="Bold"
-               FontSize="18"
-               TextColor="DarkGrey"
-               HorizontalOptions="Center"
-               Padding="5" />
-
-                    <!-- X-Axis Label -->
-                    <Label Text="Weeks"
-               FontSize="14"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" 
-               Margin="0,0,0,-10"/>
-                   
-                    <sfChart:SfCartesianChart x:Name="WeeklyDistanceChart"
-                                  HeightRequest="250"
-                                  HorizontalOptions="Fill">
-
-                        <!-- X-Axis: Weeks -->
-                        <sfChart:SfCartesianChart.XAxes>
-                            <sfChart:CategoryAxis LabelPlacement="BetweenTicks"
-                                      LabelRotation="45"/>
-                        </sfChart:SfCartesianChart.XAxes>
-
-                        <!-- Y-Axis: Running Distance -->
-                        <sfChart:SfCartesianChart.YAxes>
-                            <sfChart:NumericalAxis Title="Distance (km)"/>
-                        </sfChart:SfCartesianChart.YAxes>
-
-                        <!-- Line Series -->
-                        <sfChart:LineSeries ItemsSource="{Binding WeeklyRunningData}"
-                                XBindingPath="WeekLabel"
-                                YBindingPath="Distance"
-                                ShowDataLabels="True"
-                                StrokeWidth="3">
-
-                            <!-- ✅ Correct way to add markers -->
-                            <sfChart:LineSeries.MarkerSettings>
-                                <sfChart:ChartMarkerSettings Type="Circle"
-                                                             Width="8"
-                                                             Height="8"/>   
-                            </sfChart:LineSeries.MarkerSettings>
-
-                        </sfChart:LineSeries>
-
-                    </sfChart:SfCartesianChart>
-
-                    <!-- Y-Axis Label -->
-                    <Label Text="Distance (km)"
-               FontSize="14"
-               FontAttributes="Bold"
-               VerticalOptions="Center"
-               Rotation="-90"
-               TranslationX="-120"
-               TranslationY="-120"
-               HorizontalOptions="Start"/>
-
-                </VerticalStackLayout>
             </Border>
 
 
