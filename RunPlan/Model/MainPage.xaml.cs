@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using System.Globalization;
 
+
 namespace RunPlan.Model;
 
 public partial class MainPage : ContentPage
 {
     private readonly DatabaseService _dbService;
+    
 
     public MainPage(DatabaseService dbService)
     {
@@ -20,12 +22,26 @@ public partial class MainPage : ContentPage
 
 
 
+    //Data model weekly running data month graph
+    public class WeeklyRunningData
+    {
+        public string WeekLabel { get; set; }
+        public double Distance { get; set; }
+    }
+
+
+
     private async void LoadActivities()
     {
         var activities = await _dbService.GetAllActivitiesAsync();
 
         //get todays date and calculate the date 7 days ago
         DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+
+        // Get today's date and calculate the date 3 months ago
+        DateTime threeMonthsAgo = DateTime.Now.AddMonths(-3);
+        var calendar = CultureInfo.InvariantCulture.Calendar;
+        DateTime parsedDate;
 
         //filter the activities to only show the last 7 days
         var recentActivities = activities
@@ -35,9 +51,16 @@ public partial class MainPage : ContentPage
                 && parsedDate >= sevenDaysAgo)
             .ToList();
 
+        // Filter the last 3 months' data
+        var filteredActivities = activities
+            .Where(a => DateTime.TryParseExact(
+                a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out DateTime parsedDate) && parsedDate >= threeMonthsAgo)
+            .ToList();
+
 
         ActivitiesCollectionView.ItemsSource = activities;
-
+        UpdateWeeklyStats(filteredActivities);
 
 
         // ✅ Update Last Activity Box
@@ -58,8 +81,31 @@ public partial class MainPage : ContentPage
             LastActivityTime.Text = "N/A";
         }
 
+
+        // ✅ Generate Weekly Running Data for the Chart
+        var groupedData = filteredActivities
+            .GroupBy(a =>
+            {
+                DateTime.TryParseExact(a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out parsedDate); // Parse again inside GroupBy
+                return new
+                {
+                    Year = parsedDate.Year,
+                    Week = calendar.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday)
+                };
+            })
+            .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Week)
+            .Select(g => new WeeklyRunningData
+            {
+                WeekLabel = $"{g.Key.Year}-W{g.Key.Week}",
+                Distance = g.Sum(a => a.Distance)
+            })
+            .ToList();
+
         // ✅ Update this weeks running history
         UpdateWeeklyStats(recentActivities);
+        WeeklyDistanceChart.BindingContext = new { WeeklyRunningData = groupedData };
+
     }
 
 
@@ -178,11 +224,13 @@ public partial class MainPage : ContentPage
         }
     }
 
-    // ✅ Converts TimeSpan to a readable format like "6h10min"
+    // Converts TimeSpan to a readable format like "6h10min"
     private string FormatTimeSpan(TimeSpan time)
     {
         return $"{(int)time.TotalHours}h{time.Minutes}min";
     }
+
+
 
 
 
