@@ -78,14 +78,17 @@
 
 
             <!-- This weeks running history box -->
-        <Frame BackgroundColor="White"
+        <Border BackgroundColor="White"
               Padding="10"
-              CornerRadius="15"
-              HasShadow="True"
-              HorizontalOptions="Fill"
+              StrokeShape="RoundRectangle 20"
+                
+                HorizontalOptions="Fill"
               VerticalOptions="Start" >
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
+                </Border.Shadow>
 
-                <Frame.Content>
+                <Border.Content>
                     <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto,*,Auto, Auto" Padding="5">
 
                         <!-- User Image -->
@@ -134,8 +137,8 @@
 
 
                     </Grid>
-                </Frame.Content>
-            </Frame>
+                </Border.Content>
+            </Border>
 
 
 

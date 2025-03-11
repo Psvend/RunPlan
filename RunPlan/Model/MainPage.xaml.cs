@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using System.Globalization;
 
 namespace RunPlan.Model;
 
@@ -17,10 +18,27 @@ public partial class MainPage : ContentPage
 
     }
 
+
+
     private async void LoadActivities()
     {
         var activities = await _dbService.GetAllActivitiesAsync();
+
+        //get todays date and calculate the date 7 days ago
+        DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+
+        //filter the activities to only show the last 7 days
+        var recentActivities = activities
+            .Where(a => DateTime.TryParseExact(
+                a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out DateTime parsedDate)
+                && parsedDate >= sevenDaysAgo)
+            .ToList();
+
+
         ActivitiesCollectionView.ItemsSource = activities;
+
+
 
         // ✅ Update Last Activity Box
         if (activities.Count > 0)
@@ -39,7 +57,17 @@ public partial class MainPage : ContentPage
             LastActivityPace.Text = "N/A";
             LastActivityTime.Text = "N/A";
         }
+
+        // ✅ Update this weeks running history
+        UpdateWeeklyStats(recentActivities);
     }
+
+
+
+
+
+
+
 
     // ✅ Handle adding a new activity
     private async void OnAddActivityClicked(object sender, EventArgs e)
@@ -111,4 +139,51 @@ public partial class MainPage : ContentPage
             return "N/A"; // Return default if calculation fails
         }
     }
+
+
+    private void UpdateWeeklyStats(List<RunningActivity> recentActivities)
+    {
+        double totalDistance = recentActivities.Sum(a => a.Distance);
+        TimeSpan totalTime = TimeSpan.Zero;
+
+        foreach (var activity in recentActivities)
+        {
+            totalTime += ParseTime(activity.Time);
+        }
+
+        // ✅ Update UI Elements
+        WeekActivityHours.Text = $"{FormatTimeSpan(totalTime)}";
+        WeekActivityDistance.Text = $"{totalDistance} km";
+    }
+
+
+
+    // ✅ Parses "hh:mm:ss" format and returns a TimeSpan
+    private TimeSpan ParseTime(string time)
+    {
+        try
+        {
+            string[] parts = time.Split(':');
+            if (parts.Length != 3) return TimeSpan.Zero;
+
+            int hours = int.Parse(parts[0]);
+            int minutes = int.Parse(parts[1]);
+            int seconds = int.Parse(parts[2]);
+
+            return new TimeSpan(hours, minutes, seconds);
+        }
+        catch
+        {
+            return TimeSpan.Zero; // Default if parsing fails
+        }
+    }
+
+    // ✅ Converts TimeSpan to a readable format like "6h10min"
+    private string FormatTimeSpan(TimeSpan time)
+    {
+        return $"{(int)time.TotalHours}h{time.Minutes}min";
+    }
+
+
+
 }
