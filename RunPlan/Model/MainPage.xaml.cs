@@ -1,214 +1,336 @@
-﻿using RunPlan.Data;
+﻿
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
-using System.Globalization;
 using Syncfusion.Maui.Charts;
+using RunPlan.Model; // Import RunningDataModel
 
-namespace RunPlan.Model;
 
-public partial class MainPage : ContentPage
+
+
+namespace RunPlan.Model
 {
-    private readonly DatabaseService _dbService;
-
-    public MainPage(DatabaseService dbService)
+    public partial class MainPage : ContentPage
     {
-        InitializeComponent();
-        _dbService = dbService;
-        LoadActivities();
-    }
+        public ObservableCollection<RunningDataModel> WeeklyRunningData { get; set; }
+        public BarChartDrawable ChartDrawable { get; set; }
+        private readonly DatabaseService _dbService;
 
+        public MainPage(DatabaseService dbService)
+        {
+            InitializeComponent();
+            _dbService = dbService;
+            BindingContext = this;
+            WeeklyRunningData = new ObservableCollection<RunningDataModel>();
+            ChartDrawable = new BarChartDrawable { Data = WeeklyRunningData.ToList() };
 
-    public class WeeklyRunningData
-    {
-        public string WeekLabel { get; set; }
-        public double Distance { get; set; }
-    }
+            LoadActivities();
+        }
 
-    private async void LoadActivities()
-    {
-        var activities = await _dbService.GetAllActivitiesAsync();
+        private async void LoadActivities()
+        {
+            var activities = await _dbService.GetAllActivitiesAsync();
 
-        //get todays date and calculate the date 7 days ago anc etc
-        DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
-        DateTime threeMonthsAgo = DateTime.Now.AddMonths(-3);
-        DateTime parsedDate;
+            DateTime today = DateTime.Now;
+            DateTime firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
+            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            var calendar = CultureInfo.InvariantCulture.Calendar;
 
-        //filter the activities to only show the last 7 days
-        var filteredActivities = activities
-        .Where(a => DateTime.TryParseExact(
-            a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-            DateTimeStyles.None, out parsedDate)
-            && parsedDate >= threeMonthsAgo)
-        .ToList();
+            var filteredActivities = activities
+                .Where(a => DateTime.TryParseExact(
+                    a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out DateTime parsedDate)
+                    && parsedDate >= firstDayOfMonth && parsedDate <= lastDayOfMonth)
+                .ToList();
 
-        // ✅ Generate Weekly Running Data for the Chart
-        var calendar = CultureInfo.InvariantCulture.Calendar;
-        var groupedData = filteredActivities
-            .GroupBy(a =>
+            // ✅ Generate Weekly Running Data (Ensure No Weeks Are Skipped)
+            Dictionary<int, double> weeklyData = new Dictionary<int, double>();
+
+            // Step 1: Initialize all weeks in the current month with 0 km
+            for (DateTime weekStart = firstDayOfMonth; weekStart <= lastDayOfMonth; weekStart = weekStart.AddDays(7))
             {
-                DateTime.TryParseExact(a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out parsedDate);
-                return new
+                int weekNumber = calendar.GetWeekOfYear(weekStart, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+                if (!weeklyData.ContainsKey(weekNumber))
+                    weeklyData[weekNumber] = 0; // Initialize with 0 km
+            }
+
+            // Step 2: Aggregate activity distances per week
+            foreach (var activity in filteredActivities)
+            {
+                if (DateTime.TryParseExact(activity.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out DateTime parsedDate))
                 {
-                    Year = parsedDate.Year,
-                    Week = calendar.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday)
+                    int weekNumber = calendar.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+                    weeklyData[weekNumber] += activity.Distance;
+                }
+            }
+
+            // Step 3: Convert dictionary to List for Chart Binding
+            var groupedData = weeklyData
+                .OrderBy(kvp => kvp.Key) // Order by week number
+                .Select(kvp => new RunningDataModel
+                {
+                    WeekLabel = $"Week {kvp.Key}",
+                    Distance = kvp.Value
+                })
+                .ToList();
+
+
+            // ✅ Prevent graph crashes by ensuring it's never null
+            if (!groupedData.Any())
+            {
+                groupedData = new List<RunningDataModel>
+                {
+                    new RunningDataModel { WeekLabel = "No Data", Distance = 0 }
                 };
-            })
-            .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Week)
-            .Select(g => new WeeklyRunningData
+            }
+
+            // ✅ Update WeeklyRunningData (Ensure UI is refreshed)
+            WeeklyRunningData.Clear();
+            foreach (var item in groupedData)
             {
-                WeekLabel = $"{g.Key.Year}-W{g.Key.Week}",
-                Distance = g.Sum(a => a.Distance)
-            })
-            .ToList();
+                WeeklyRunningData.Add(item);
+            }
 
-        // ✅ Prevent graph crashes by ensuring it's never null
-        if (!groupedData.Any())
-        {
-            groupedData = new List<WeeklyRunningData>();  // Empty list to prevent null reference errors
-        }
+            // ✅ Update ChartDrawable & Refresh UI
+            ChartDrawable.Data = groupedData.ToList();
+            ChartCanvas.Invalidate(); // Force redraw of the chart
 
-        // ✅ Ensure WeeklyDistanceChart is found before binding
-        var chart = this.FindByName<SfCartesianChart>("WeeklyDistanceChart");
-        if (chart != null)
-        {
-            chart.BindingContext = new { WeeklyRunningData = groupedData };
-        }
 
-        ActivitiesCollectionView.ItemsSource = activities;
-       
 
-        // ✅ Update Last Activity Box
-        if (activities.Count > 0)
-        {
-            var lastActivity = activities[^1]; // Get last activity
 
-            LastActivityName.Text = $"{lastActivity.Name}";
-            LastActivityDistance.Text = $"{lastActivity.Distance} km";
-            LastActivityPace.Text = CalculatePace(lastActivity.Time, lastActivity.Distance);
-            LastActivityTime.Text = lastActivity.Time;
-        }
-        else
-        {
-            LastActivityName.Text = "N/A";
-            LastActivityDistance.Text = "N/A";
-            LastActivityPace.Text = "N/A";
-            LastActivityTime.Text = "N/A";
-        }
-
-        
-    }
-
-    // ✅ Handle adding a new activity
-    private async void OnAddActivityClicked(object sender, EventArgs e)
-    {
-        string activityName = ActivityNameEntry.Text?.Trim();
-        string distanceText = DistanceEntry.Text?.Trim();
-        string time = TimeEntry.Text?.Trim();
-        string date = DateEntry.Text?.Trim();
-
-        if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) || string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
-        {
-            await DisplayAlert("Error", "Please fill in all fields.", "OK");
-            return;
-        }
-
-        if (!double.TryParse(distanceText, out double distance))
-        {
-            await DisplayAlert("Error", "Distance must be a number.", "OK");
-            return;
-        }
-
-        await _dbService.InsertRunningActivity(activityName, distance, time, date);
-
-        ActivityNameEntry.Text = "";
-        DistanceEntry.Text = "";
-        TimeEntry.Text = "";
-        DateEntry.Text = "";
-
-        LoadActivities(); // Refresh UI
-    }
-
-    // ✅ Handle deleting an activity
-    private async void OnDeleteActivityClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is RunningActivity activity)
-        {
-            bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete {activity.Name}?", "Yes", "No");
-
-            if (confirm)
+            // ✅ Ensure WeeklyDistanceChart is found before binding
+            var chart = this.FindByName<SfCartesianChart>("WeeklyDistanceChart");
+            if (chart != null)
             {
-                await _dbService.DeleteActivity(activity.Id);
-                LoadActivities(); // Refresh UI after deletion
+                chart.BindingContext = new { WeeklyRunningData = groupedData };
+            }
+
+            ActivitiesCollectionView.ItemsSource = activities;
+
+            // ✅ Update Last Activity Box (Safe from crashes)
+            if (activities.Any())
+            {
+                var lastActivity = activities.Last();
+                LastActivityName.Text = lastActivity.Name;
+                LastActivityDistance.Text = $"{lastActivity.Distance} km";
+                LastActivityPace.Text = CalculatePace(lastActivity.Time, lastActivity.Distance);
+                LastActivityTime.Text = lastActivity.Time;
+            }
+            else
+            {
+                LastActivityName.Text = "N/A";
+                LastActivityDistance.Text = "N/A";
+                LastActivityPace.Text = "N/A";
+                LastActivityTime.Text = "N/A";
+            }
+
+        }
+
+
+
+        // ✅ Handle adding a new activity
+        private async void OnAddActivityClicked(object sender, EventArgs e)
+        {
+            string activityName = ActivityNameEntry.Text?.Trim();
+            string distanceText = DistanceEntry.Text?.Trim();
+            string time = TimeEntry.Text?.Trim();
+            string date = DateEntry.Text?.Trim();
+
+            if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) || string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
+            {
+                await DisplayAlert("Error", "Please fill in all fields.", "OK");
+                return;
+            }
+
+            if (!double.TryParse(distanceText, out double distance))
+            {
+                await DisplayAlert("Error", "Distance must be a number.", "OK");
+                return;
+            }
+
+            await _dbService.InsertRunningActivity(activityName, distance, time, date);
+
+            ActivityNameEntry.Text = "";
+            DistanceEntry.Text = "";
+            TimeEntry.Text = "";
+            DateEntry.Text = "";
+
+            LoadActivities(); // Refresh UI
+        }
+
+        // ✅ Handle deleting an activity
+        private async void OnDeleteActivityClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is RunningActivity activity)
+            {
+                bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete {activity.Name}?", "Yes", "No");
+
+                if (confirm)
+                {
+                    await _dbService.DeleteActivity(activity.Id);
+                    LoadActivities(); // Refresh UI after deletion
+                }
             }
         }
-    }
 
-    // ✅ Calculate Running Pace (min/km)
-    private string CalculatePace(string time, double distance)
-    {
-        try
+        // ✅ Calculate Running Pace (min/km)
+        private string CalculatePace(string time, double distance)
         {
-            string[] parts = time.Split(':'); // Expecting format "hh:mm:ss"
-            if (parts.Length != 3) return "N/A";
+            try
+            {
+                string[] parts = time.Split(':'); // Expecting format "hh:mm:ss"
+                if (parts.Length != 3) return "N/A";
 
-            int hours = int.Parse(parts[0]);
-            int minutes = int.Parse(parts[1]);
-            int seconds = int.Parse(parts[2]);
+                int hours = int.Parse(parts[0]);
+                int minutes = int.Parse(parts[1]);
+                int seconds = int.Parse(parts[2]);
 
-            double totalMinutes = hours * 60 + minutes + (seconds / 60.0);
-            double pace = totalMinutes / distance;
+                double totalMinutes = hours * 60 + minutes + (seconds / 60.0);
+                double pace = totalMinutes / distance;
 
-            int paceMinutes = (int)pace;
-            int paceSeconds = (int)((pace - paceMinutes) * 60);
+                int paceMinutes = (int)pace;
+                int paceSeconds = (int)((pace - paceMinutes) * 60);
 
-            return $"{paceMinutes}:{paceSeconds:00} min/km";
-        }
-        catch
-        {
-            return "N/A"; // Return default if calculation fails
-        }
-    }
-
-    private void UpdateWeeklyStats(List<RunningActivity> recentActivities)
-    {
-        double totalDistance = recentActivities.Sum(a => a.Distance);
-        TimeSpan totalTime = TimeSpan.Zero;
-
-        foreach (var activity in recentActivities)
-        {
-            totalTime += ParseTime(activity.Time);
+                return $"{paceMinutes}:{paceSeconds:00} min/km";
+            }
+            catch
+            {
+                return "N/A"; // Return default if calculation fails
+            }
         }
 
-        // ✅ Update UI Elements
-        WeekActivityHours.Text = $"{FormatTimeSpan(totalTime)}";
-        WeekActivityDistance.Text = $"{totalDistance} km";
-    }
-
-    // ✅ Parses "hh:mm:ss" format and returns a TimeSpan
-    private TimeSpan ParseTime(string time)
-    {
-        try
+        private void UpdateWeeklyStats(List<RunningActivity> recentActivities)
         {
-            string[] parts = time.Split(':');
-            if (parts.Length != 3) return TimeSpan.Zero;
+            double totalDistance = recentActivities.Sum(a => a.Distance);
+            TimeSpan totalTime = TimeSpan.Zero;
 
-            int hours = int.Parse(parts[0]);
-            int minutes = int.Parse(parts[1]);
-            int seconds = int.Parse(parts[2]);
+            foreach (var activity in recentActivities)
+            {
+                totalTime += ParseTime(activity.Time);
+            }
 
-            return new TimeSpan(hours, minutes, seconds);
+            // ✅ Update UI Elements
+            WeekActivityHours.Text = $"{FormatTimeSpan(totalTime)}";
+            WeekActivityDistance.Text = $"{totalDistance} km";
         }
-        catch
+
+        // ✅ Parses "hh:mm:ss" format and returns a TimeSpan
+        private TimeSpan ParseTime(string time)
         {
-            return TimeSpan.Zero; // Default if parsing fails
+            try
+            {
+                string[] parts = time.Split(':');
+                if (parts.Length != 3) return TimeSpan.Zero;
+
+                int hours = int.Parse(parts[0]);
+                int minutes = int.Parse(parts[1]);
+                int seconds = int.Parse(parts[2]);
+
+                return new TimeSpan(hours, minutes, seconds);
+            }
+            catch
+            {
+                return TimeSpan.Zero; // Default if parsing fails
+            }
+        }
+
+        // Converts TimeSpan to a readable format like "6h10min"
+        private string FormatTimeSpan(TimeSpan time)
+        {
+            return $"{(int)time.TotalHours}h{time.Minutes}min";
         }
     }
 
-    // Converts TimeSpan to a readable format like "6h10min"
-    private string FormatTimeSpan(TimeSpan time)
-    {
-        return $"{(int)time.TotalHours}h{time.Minutes}min";
-    }
+
+
 }
+
+
+
+
+/*
+
+private async void LoadActivities()
+{
+    var activities = await _dbService.GetAllActivitiesAsync();
+
+    //get todays date and calculate the date 7 days ago anc etc
+    DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+    DateTime threeMonthsAgo = DateTime.Now.AddMonths(-3);
+    DateTime parsedDate;
+
+    //filter the activities to only show the last 7 days
+    var filteredActivities = activities
+    .Where(a => DateTime.TryParseExact(
+        a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+        DateTimeStyles.None, out parsedDate)
+        && parsedDate >= threeMonthsAgo)
+    .ToList();
+
+    // ✅ Generate Weekly Running Data for the Chart
+    var calendar = CultureInfo.InvariantCulture.Calendar;
+    var groupedData = filteredActivities
+        .GroupBy(a =>
+        {
+            DateTime.TryParseExact(a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+            DateTimeStyles.None, out parsedDate);
+            return new
+            {
+                Year = parsedDate.Year,
+                Week = calendar.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday)
+            };
+        })
+        .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Week)
+        .Select(g => new WeeklyRunningData
+        {
+            WeekLabel = $"{g.Key.Year}-W{g.Key.Week}",
+            Distance = g.Sum(a => a.Distance)
+        })
+        .ToList();
+
+    // ✅ Prevent graph crashes by ensuring it's never null
+    if (!groupedData.Any())
+    {
+        groupedData = new List<WeeklyRunningData>();  // Empty list to prevent null reference errors
+    }
+
+    // ✅ Ensure WeeklyDistanceChart is found before binding
+    var chart = this.FindByName<SfCartesianChart>("WeeklyDistanceChart");
+    if (chart != null)
+    {
+        chart.BindingContext = new { WeeklyRunningData = groupedData };
+    }
+
+    ActivitiesCollectionView.ItemsSource = activities;
+
+
+    // ✅ Update Last Activity Box
+    if (activities.Count > 0)
+    {
+        var lastActivity = activities[^1]; // Get last activity
+
+        LastActivityName.Text = $"{lastActivity.Name}";
+        LastActivityDistance.Text = $"{lastActivity.Distance} km";
+        LastActivityPace.Text = CalculatePace(lastActivity.Time, lastActivity.Distance);
+        LastActivityTime.Text = lastActivity.Time;
+    }
+    else
+    {
+        LastActivityName.Text = "N/A";
+        LastActivityDistance.Text = "N/A";
+        LastActivityPace.Text = "N/A";
+        LastActivityTime.Text = "N/A";
+    }
+
+
+}
+
+*/
+
+
+

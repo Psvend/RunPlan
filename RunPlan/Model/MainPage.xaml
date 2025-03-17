@@ -20,69 +20,71 @@
             <Label Text="Dashboard"
                    FontSize="Large"
                    FontAttributes="Bold"
-                   TextColor="AliceBlue"
+                   TextColor="MediumPurple"
                    HorizontalOptions="Start"
-                   Padding="0,10,0,20" />
+                   />
 
 
             <!-- Last activity box -->
-            <Border BackgroundColor="DarkGray"
-        Padding="15"
-        StrokeShape="RoundRectangle 20"
-        HorizontalOptions="Fill"
-        VerticalOptions="Start" >
-                <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
-                </Border.Shadow>
+            <Border BackgroundColor="MediumPurple"
+                Padding="15"
+                StrokeShape="RoundRectangle 20"
+                HorizontalOptions="Fill"
+                VerticalOptions="Start" >
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
+                        </Border.Shadow>
 
 
                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*" Padding="5">
                     <!-- Box Title -->
                     <Label Text="Last Activity" 
-               FontAttributes="Bold" 
-               FontSize="18"
-               Grid.Row="0"
-               Grid.ColumnSpan="3"
-               HorizontalOptions="Start" />
+                       FontAttributes="Bold" 
+                       FontSize="18"
+                       Grid.Row="0"
+                       Grid.ColumnSpan="3"
+                       HorizontalOptions="Start" />
 
                     <!-- Name -->
                     <Label x:Name="LastActivityName" 
-               Text="Evening Run" 
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="0"
-               HorizontalOptions="Start" />
+                       Text="Evening Run" 
+                       FontAttributes="Bold"
+                       Grid.Row="1" 
+                       Grid.Column="0"
+                       HorizontalOptions="Start" />
 
                     <!-- Distance -->
                     <Label x:Name="LastActivityDistance" 
-               Text="10 km" 
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="1"
-               HorizontalOptions="Start" />
+                       Text="10 km" 
+                       FontAttributes="Bold"
+                       Grid.Row="1" 
+                       Grid.Column="1"
+                       HorizontalOptions="Start" />
 
                     <!-- Pace -->
                     <Label x:Name="LastActivityPace" 
-               Text="5:10 min/km"
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="2"
-               HorizontalOptions="Center" />
+                       Text="5:10 min/km"
+                       FontAttributes="Bold"
+                       Grid.Row="1" 
+                       Grid.Column="2"
+                       HorizontalOptions="Center" />
 
                     <!-- Duration -->
                     <Label x:Name="LastActivityTime" 
-               Text="1h10min"
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="3"
-               HorizontalOptions="End" />
+                       Text="1h10min"
+                       FontAttributes="Bold"
+                       Grid.Row="1" 
+                       Grid.Column="3"
+                       HorizontalOptions="End" />
                 </Grid>
             </Border>
 
 
+            
+            
 
             <!-- This weeks running history box -->
-        <Border BackgroundColor="White"
+            <Border BackgroundColor="MediumPurple"
               Padding="10"
               StrokeShape="RoundRectangle 20"
                 
@@ -131,7 +133,7 @@
                           HorizontalOptions="Start" />
 
                         <!-- Name -->
-                         <Label x:Name="WeekActivityHours" 
+                        <Label x:Name="WeekActivityHours" 
                             Text="6h10min" 
                             TextColor='DarkGrey'
                             FontAttributes="Bold"
@@ -143,6 +145,55 @@
 
                     </Grid>
                 </Border.Content>
+            </Border>
+
+
+
+
+
+
+            <!-- Weekly Running Distance Graph -->
+            <Border BackgroundColor="MediumPurple"
+                    Padding="10"
+                    StrokeShape="RoundRectangle 20"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Start">
+
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
+                </Border.Shadow>
+
+                <!-- ✅ Wrap all content inside a VerticalStackLayout -->
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Weekly Running Distance - Current Month"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           TextColor="DarkGrey"
+                           HorizontalOptions="Center"
+                           Padding="5" />
+
+                    <Label Text="Week of the Month"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+
+                    <GraphicsView x:Name="ChartCanvas"
+                                  Drawable="{Binding ChartDrawable}"
+                                  HeightRequest="250"
+                                  WidthRequest="350"
+                                  BackgroundColor="Transparent"/>
+
+                    <Label Text="Total km run"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           Rotation="-90"
+                           TranslationX="-120"
+                           TranslationY="-120"
+                           HorizontalOptions="Start"/>
+                </VerticalStackLayout>
+
             </Border>
 
 
@@ -167,7 +218,7 @@
                             <Label Text="{Binding Date}" VerticalOptions="Center"/>
 
                             <!-- Delete Button -->
-                            <Button Text="🗑" BackgroundColor="Red" TextColor="White" 
+                            <Button Text="🗑" BackgroundColor="Red" TextColor="DarkGrey" 
                                     Clicked="OnDeleteActivityClicked" 
                                     HorizontalOptions="End" 
                                     BindingContext="{Binding}"/>
