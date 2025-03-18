@@ -12,7 +12,7 @@ using RunPlan.ViewModel;
 
 
 
-namespace RunPlan.View
+namespace RunPlan.Model
 {
     public partial class MainPage : ContentPage
     {
@@ -25,7 +25,7 @@ namespace RunPlan.View
             BindingContext = ViewModel;
         }
     }
-}
+};
 
 
 

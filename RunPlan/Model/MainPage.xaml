@@ -6,6 +6,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sfChart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"  
              x:Class="RunPlan.Model.MainPage"
+             xmlns:viewModel="clr-namespace:RunPlan.ViewModel"
              BackgroundColor="White">    <!--Background color-->
     
     
@@ -209,7 +210,7 @@
             <Entry x:Name="DateEntry" Placeholder="Enter date (yyyy-MM-dd)" Keyboard="Text"/>
 
             <!-- Button to Add Activity -->
-            <Button Text="Add Activity" Clicked="OnAddActivityClicked" HorizontalOptions="Fill"/>
+            <Button Text="Add Activity" Command="{Binding AddActivityCommand}" HorizontalOptions="Fill"/>
 
             <!-- Display Activities with Delete Buttons -->
             <CollectionView x:Name="ActivitiesCollectionView">
@@ -223,9 +224,9 @@
 
                             <!-- Delete Button -->
                             <Button Text="🗑" BackgroundColor="Red" TextColor="Black" 
-                                    Clicked="OnDeleteActivityClicked" 
-                                    HorizontalOptions="End" 
-                                    BindingContext="{Binding}"/>
+                                     Command="{Binding Source= {RelativeSource AncestorType={x:Type viewModel:MainViewModel}}, Path=DeleteActivityCommand}"
+                                     CommandParameter="{Binding}" HorizontalOptions="End"/>
+                                   
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
