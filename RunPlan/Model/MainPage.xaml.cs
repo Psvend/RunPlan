@@ -27,7 +27,8 @@ namespace RunPlan.Model
             BindingContext = this;
             WeeklyRunningData = new ObservableCollection<RunningDataModel>();
             ChartDrawable = new BarChartDrawable { Data = WeeklyRunningData.ToList() };
-
+            ChartCanvas.BindingContext = this;
+            
             LoadActivities();
         }
 
@@ -160,6 +161,7 @@ namespace RunPlan.Model
             TimeEntry.Text = "";
             DateEntry.Text = "";
 
+            Console.WriteLine("🔄 New Activity Added! Refreshing Chart...");
             LoadActivities(); // Refresh UI
         }
 

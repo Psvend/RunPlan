@@ -12,11 +12,11 @@ public class BarChartDrawable : IDrawable
 
     public void Draw(ICanvas canvas, RectF dirtyRect)
     {
-        Console.WriteLine("🔍 Drawing Chart...");
+        Console.WriteLine("Drawing Chart...");
 
         if (Data == null || Data.Count == 0)
         {
-            Console.WriteLine("⚠ No Data Found!");
+            Console.WriteLine("No Data Found!");
             return;
         }
 
@@ -25,12 +25,12 @@ public class BarChartDrawable : IDrawable
         canvas.StrokeSize = 2;
 
         float barWidth = dirtyRect.Width / (Data.Count + 1);
-        float maxHeight = dirtyRect.Height - 20;
+        float maxHeight = dirtyRect.Height - 40;
         float maxValue = (float)Data.Max(d => d.Distance);
 
-        Console.WriteLine($"📊 Max Distance Value: {maxValue}");
+        Console.WriteLine($"Max Distance Value: {maxValue}");
 
-        if (maxValue <= 0) maxValue = 1; // ✅ Prevent division by zero
+        if (maxValue <= 0) maxValue = 1; 
 
         for (int i = 0; i < Data.Count; i++)
         {
@@ -39,7 +39,7 @@ public class BarChartDrawable : IDrawable
 
             float barHeight = (float)(item.Distance / maxValue * maxHeight);
             float x = i * barWidth + barWidth / 2;
-            float y = dirtyRect.Height - barHeight;
+            float y = dirtyRect.Height - barHeight - 20;
 
             canvas.FillRectangle(x, y, barWidth - 10, barHeight);
             canvas.FontSize = 12;
@@ -50,38 +50,3 @@ public class BarChartDrawable : IDrawable
 
 
 }
-
-
-/*
-public void Draw(ICanvas canvas, RectF dirtyRect)
-{
-    if (Data == null || Data.Count == 0)
-        return; // ✅ Avoid crashing if no data
-
-    canvas.FillColor = Colors.Blue;
-    canvas.StrokeColor = Colors.Black;
-    canvas.StrokeSize = 2;
-
-    float barWidth = dirtyRect.Width / (Data.Count + 1);
-    float maxHeight = dirtyRect.Height - 20;
-    float maxValue = (float)Data.Max(d => d.Distance);
-
-    if (maxValue <= 0) maxValue = 1; // ✅ Prevent division by zero
-
-    for (int i = 0; i < Data.Count; i++)
-    {
-        var item = Data[i];
-        float barHeight = (float)(item.Distance / maxValue * maxHeight);
-        float x = i * barWidth + barWidth / 2;
-        float y = dirtyRect.Height - barHeight;
-
-        canvas.FillRectangle(x, y, barWidth - 10, barHeight);
-        canvas.FontSize = 12;
-        canvas.DrawString(item.WeekLabel, x, dirtyRect.Height, HorizontalAlignment.Center);
-    }
-}
-
-*/
-
-
-
