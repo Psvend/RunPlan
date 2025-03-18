@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Charts;
-using RunPlan.Model; // Import RunningDataModel
+using RunPlan.Model; 
 using RunPlan.ViewModel;
 
 
@@ -24,6 +24,59 @@ namespace RunPlan.Model
             ViewModel = new MainViewModel(dbService);
             BindingContext = ViewModel;
         }
+
+
+        private async void OnAddActivityClicked(object sender, EventArgs e)
+        {
+           
+            string activityName = ActivityNameEntry.Text?.Trim();
+            string distanceText = DistanceEntry.Text?.Trim();
+            string time = TimeEntry.Text?.Trim();
+            string date = DateEntry.Text?.Trim();
+
+            if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) ||
+                string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
+            {
+                await DisplayAlert("Error", "Please fill in all fields.", "OK");
+                return;
+            }
+
+            if (!double.TryParse(distanceText, out double distance))
+            {
+                await DisplayAlert("Error", "Distance must be a valid number.", "OK");
+                return;
+            }
+
+            await ViewModel._dbService.InsertRunningActivity(activityName, distance, time, date);
+
+            ActivityNameEntry.Text = "";
+            DistanceEntry.Text = "";
+            TimeEntry.Text = "";
+            DateEntry.Text = "";
+
+            await ViewModel.LoadActivities(); // Refresh UI
+        }
+
+
+        private async void OnDeleteActivityClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is RunningActivity activity)
+            {
+                bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete {activity.Name}?", "Yes", "No");
+
+                if (confirm)
+                {
+                    await ViewModel._dbService.DeleteActivity(activity.Id);
+                    ViewModel.LoadActivities(); // Refresh UI after deletion
+                }
+            }
+        }
+
+
+
+
+
+
     }
 };
 

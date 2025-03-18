@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RunPlan.Model;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input; 
+using CommunityToolkit.Mvvm.Input;
 
 
 
@@ -16,25 +16,12 @@ namespace RunPlan.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly DatabaseService _dbService;
+        public readonly DatabaseService _dbService;
         public ObservableCollection<RunningDataModel> WeeklyRunningData { get; set; }
         public BarChartDrawable ChartDrawable { get; set; }
         public Dictionary<string, List<RunningDataModel>> MonthlyData { get; private set; }
 
-        private string _selectedMonth;
-        public string SelectedMonth
-        {
-            get => _selectedMonth;
-            set
-            {
-                if (_selectedMonth != value)
-                {
-                    _selectedMonth = value;
-                    OnPropertyChanged();
-                    UpdateChartForMonth(_selectedMonth);
-                }
-            }
-        }
+       
 
         public ObservableCollection<string> AvailableMonths { get; set; }
 
@@ -54,10 +41,14 @@ namespace RunPlan.ViewModel
             AddActivityCommand = new AsyncRelayCommand(AddActivity);
             DeleteActivityCommand = new AsyncRelayCommand<RunningActivity>(DeleteActivity);
 
-            Task.Run(LoadActivities);
+            //Task.Run(LoadActivities);
+            _ = LoadActivities();
         }
 
-        private async Task LoadActivities()
+
+
+
+        public async Task LoadActivities()
         {
             var activities = await _dbService.GetAllActivitiesAsync();
 
@@ -73,83 +64,59 @@ namespace RunPlan.ViewModel
                 .ToList();
 
             MonthlyData.Clear();
-            AvailableMonths.Clear();
             CultureInfo culture = CultureInfo.InvariantCulture;
             Calendar calendar = culture.Calendar;
 
-            foreach (var activity in filteredActivities)
+            // ✅ Step 1: Ensure all weeks exist in the last 3 months (Even if Empty)
+            for (int i = 0; i < 3; i++)
             {
-                if (DateTime.TryParseExact(activity.Date, "yyyy-MM-dd", culture, DateTimeStyles.None, out DateTime parsedDate))
+                string monthKey = today.AddMonths(-i).ToString("yyyy-MM");
+                DateTime firstDayOfMonth = new DateTime(today.Year, today.Month, 1).AddMonths(-i);
+                DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                if (!MonthlyData.ContainsKey(monthKey))
+                    MonthlyData[monthKey] = new List<RunningDataModel>();
+
+                Dictionary<int, double> weeklyDistances = new Dictionary<int, double>();
+
+                for (DateTime weekStart = firstDayOfMonth; weekStart <= lastDayOfMonth; weekStart = weekStart.AddDays(7))
                 {
-                    string monthKey = parsedDate.ToString("yyyy-MM");
-                    int weekNumber = calendar.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-
-                    if (!MonthlyData.ContainsKey(monthKey))
-                        MonthlyData[monthKey] = new List<RunningDataModel>();
-
-                    var weekData = MonthlyData[monthKey].FirstOrDefault(w => w.WeekLabel == $"Week {weekNumber}");
-                    if (weekData == null)
-                    {
-                        MonthlyData[monthKey].Add(new RunningDataModel
-                        {
-                            WeekLabel = $"Week {weekNumber}",
-                            Distance = activity.Distance
-                        });
-                    }
-                    else
-                    {
-                        weekData.Distance += activity.Distance;
-                    }
-
-                    if (!AvailableMonths.Contains(monthKey))
-                        AvailableMonths.Add(monthKey);
+                    int weekNumber = calendar.GetWeekOfYear(weekStart, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+                    weeklyDistances[weekNumber] = 0;
                 }
+
+                // ✅ Step 2: Fill in actual distances
+                foreach (var activity in filteredActivities)
+                {
+                    if (DateTime.TryParseExact(activity.Date, "yyyy-MM-dd", culture, DateTimeStyles.None, out DateTime parsedDate))
+                    {
+                        int weekNumber = calendar.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+                        if (weeklyDistances.ContainsKey(weekNumber))
+                            weeklyDistances[weekNumber] += activity.Distance;
+                    }
+                }
+
+                // ✅ Step 3: Convert weeks into chart data
+                var sortedWeeks = weeklyDistances
+                    .OrderBy(w => w.Key)
+                    .Select(kvp => new RunningDataModel
+                    {
+                        WeekLabel = $"Week {kvp.Key}",
+                        Distance = kvp.Value
+                    })
+                    .ToList();
+
+                MonthlyData[monthKey] = sortedWeeks;
             }
 
-            AvailableMonths.Insert(0, "Last 3 Months");
-            SelectedMonth = today.ToString("yyyy-MM"); // Default selection
+            UpdateChartForLastThreeMonths();
         }
 
-        public void UpdateChartForMonth(string selectedMonth)
-        {
-            if (selectedMonth == "Last 3 Months")
-            {
-                var lastThreeMonths = new List<RunningDataModel>();
-                DateTime today = DateTime.Now;
 
-                for (int i = 0; i < 3; i++)
-                {
-                    string monthKey = today.AddMonths(-i).ToString("yyyy-MM");
-                    if (MonthlyData.ContainsKey(monthKey))
-                    {
-                        lastThreeMonths.AddRange(MonthlyData[monthKey]);
-                    }
-                }
 
-                WeeklyRunningData.Clear();
-                foreach (var item in lastThreeMonths.OrderBy(d => d.WeekLabel))
-                {
-                    WeeklyRunningData.Add(item);
-                }
 
-                ChartDrawable.Data = lastThreeMonths;
-            }
-            else if (MonthlyData.ContainsKey(selectedMonth))
-            {
-                var selectedData = MonthlyData[selectedMonth].OrderBy(d => d.WeekLabel).ToList();
 
-                WeeklyRunningData.Clear();
-                foreach (var item in selectedData)
-                {
-                    WeeklyRunningData.Add(item);
-                }
 
-                ChartDrawable.Data = selectedData;
-            }
-
-            ChartDrawable.Data = WeeklyRunningData.ToList();
-            OnPropertyChanged(nameof(ChartDrawable));
-        }
 
         // ✅ Handle adding a new activity
         private async Task AddActivity()
@@ -174,6 +141,7 @@ namespace RunPlan.ViewModel
             await LoadActivities(); // Refresh UI
         }
 
+
         // ✅ Handle deleting an activity
         private async Task DeleteActivity(RunningActivity activity)
         {
@@ -184,6 +152,10 @@ namespace RunPlan.ViewModel
             await _dbService.DeleteActivity(activity.Id);
             await LoadActivities(); // Refresh UI after deletion
         }
+
+        
+
+
 
         // ✅ Calculate Running Pace (min/km)
         public static string CalculatePace(string time, double distance)
@@ -211,6 +183,36 @@ namespace RunPlan.ViewModel
             }
         }
 
+
+        
+        public void UpdateChartForLastThreeMonths()
+        {
+            var lastThreeMonthsData = new List<RunningDataModel>();
+            DateTime today = DateTime.Now;
+
+            for (int i = 2; i >= 0; i--) // Get last 3 months
+            {
+                string monthKey = today.AddMonths(-i).ToString("yyyy-MM");
+                if (MonthlyData.ContainsKey(monthKey))
+                {
+                    lastThreeMonthsData.AddRange(MonthlyData[monthKey]);
+                }
+            }
+
+            WeeklyRunningData.Clear();
+            foreach (var item in lastThreeMonthsData.OrderBy(d => d.WeekLabel)) // Sort Correctly
+            {
+                WeeklyRunningData.Add(item);
+            }
+
+            ChartDrawable.Data = lastThreeMonthsData;
+            OnPropertyChanged(nameof(ChartDrawable));
+        }
+
+        
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -223,6 +225,10 @@ namespace RunPlan.ViewModel
         public string Time { get; set; }
         public string Date { get; set; }
     }
+
+
+
+
 }
 
 
@@ -231,10 +237,8 @@ namespace RunPlan.ViewModel
 
 
 
-
-
-
 /*
+
 namespace RunPlan.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged

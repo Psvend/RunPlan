@@ -4,6 +4,10 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using Syncfusion.Maui.Core.Hosting;
+using RunPlan.ViewModel;
+using RunPlan.Model;
+
+
 
 namespace RunPlan;
 
@@ -25,6 +29,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<ActivityViewModel>();
         builder.Services.AddTransient<DetailViewModel>();
+        builder.Services.AddTransient<MainViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
