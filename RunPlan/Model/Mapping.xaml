@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model ="clr-namespace:RunPlan.Data"
+             xmlns:viewmodel ="clr-namespace:RunPlan.ViewModel"
+             x:DataType="viewmodel:MappingViewModel"
+             x:Class="RunPlan.Model.Mapping"
+             Title="Mapping">
+    
+    
+    <VerticalStackLayout Padding="10">
+        <Button Text="Start Tracking" Command="{Binding StartTrackingCommand}" />
+        <Button Text="Stop Tracking" Command="{Binding StopTrackingCommand}" />
+
+        <GraphicsView x:Name="RouteGraphicsView"
+              Drawable="{Binding RouteDrawable}"
+              HeightRequest="400"
+              WidthRequest="400"
+              BackgroundColor="White"/>
+    </VerticalStackLayout>
+</ContentPage>
