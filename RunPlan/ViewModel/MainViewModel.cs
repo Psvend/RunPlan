@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 
 
 
+
 namespace RunPlan.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
@@ -20,8 +21,9 @@ namespace RunPlan.ViewModel
         public ObservableCollection<RunningDataModel> WeeklyRunningData { get; set; }
         public BarChartDrawable ChartDrawable { get; set; }
         public Dictionary<string, List<RunningDataModel>> MonthlyData { get; private set; }
+        private List<RunningActivity> filteredActivities = new List<RunningActivity>(); // 🔥 Global List
 
-       
+
 
         public ObservableCollection<string> AvailableMonths { get; set; }
 
@@ -46,8 +48,42 @@ namespace RunPlan.ViewModel
         }
 
 
+        public async Task LoadActivities()
+        {
+            Console.WriteLine("📥 Fetching activities from database...");
+
+            var activities = await _dbService.GetAllActivitiesAsync();
+            if (activities == null || activities.Count == 0)
+            {
+                Console.WriteLine("⚠ No activities found in the database!");
+                return; // ⛔ Don't proceed if no data
+            }
+
+            DateTime today = DateTime.Now;
+            DateTime firstDayOfThisMonth = new DateTime(today.Year, today.Month, 1);
+            DateTime firstDayOfLastMonth = firstDayOfThisMonth.AddMonths(-1);
+            DateTime firstDayOfTwoMonthsAgo = firstDayOfThisMonth.AddMonths(-2);
+
+            filteredActivities = activities
+                .Where(a => DateTime.TryParseExact(a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                                                   DateTimeStyles.None, out DateTime parsedDate)
+                            && parsedDate >= firstDayOfTwoMonthsAgo)
+                .ToList();
+
+            Console.WriteLine($"✅ Loaded {filteredActivities.Count} activities.");
+            foreach (var act in filteredActivities)
+            {
+                Console.WriteLine($"📌 Activity: {act.Name} | {act.Distance} km | {act.Date}");
+            }
+
+            MonthlyData.Clear();
+            UpdateChartForLastThreeMonths();
+        }
 
 
+
+
+        /*
         public async Task LoadActivities()
         {
             var activities = await _dbService.GetAllActivitiesAsync();
@@ -111,7 +147,7 @@ namespace RunPlan.ViewModel
 
             UpdateChartForLastThreeMonths();
         }
-
+        */
 
 
 
@@ -184,32 +220,188 @@ namespace RunPlan.ViewModel
         }
 
 
-        
+        //Handles the graph logic
         public void UpdateChartForLastThreeMonths()
         {
             var lastThreeMonthsData = new List<RunningDataModel>();
             DateTime today = DateTime.Now;
+            CultureInfo culture = CultureInfo.InvariantCulture;
 
-            for (int i = 2; i >= 0; i--) // Get last 3 months
+            // ✅ Get last 3 months (Newest Month Last)
+            var monthKeys = Enumerable.Range(0, 3)
+                .Select(i => today.AddMonths(-i).ToString("yyyy-MM"))
+                .OrderBy(m => m) // ✅ Ensure months are ordered correctly
+                .ToList();
+
+            Console.WriteLine($"📅 Processing months: {string.Join(", ", monthKeys)}");
+
+            foreach (var monthKey in monthKeys)
             {
-                string monthKey = today.AddMonths(-i).ToString("yyyy-MM");
-                if (MonthlyData.ContainsKey(monthKey))
+                if (!MonthlyData.ContainsKey(monthKey))
                 {
-                    lastThreeMonthsData.AddRange(MonthlyData[monthKey]);
+                    MonthlyData[monthKey] = new List<RunningDataModel>();
                 }
+
+                Dictionary<int, double> weeklyDistances = new Dictionary<int, double>();
+
+                // ✅ Ensure activities exist for this month
+                var activitiesForMonth = filteredActivities.Where(a => a.Date.StartsWith(monthKey)).ToList();
+                if (activitiesForMonth.Count == 0)
+                {
+                    Console.WriteLine($"⚠ No activities found for {monthKey}");
+                }
+
+                // ✅ Process activities and map them to weeks
+                foreach (var activity in activitiesForMonth)
+                {
+                    if (DateTime.TryParseExact(activity.Date, "yyyy-MM-dd", culture, DateTimeStyles.None, out DateTime parsedDate))
+                    {
+                        int weekNumber = ISOWeek.GetWeekOfYear(parsedDate);
+
+                        if (!weeklyDistances.ContainsKey(weekNumber))
+                        {
+                            weeklyDistances[weekNumber] = 0; // ✅ Initialize empty weeks
+                        }
+
+                        weeklyDistances[weekNumber] += activity.Distance;
+                    }
+                }
+
+                // ✅ Convert to RunningDataModel for the graph
+                var sortedWeeks = weeklyDistances
+                    .OrderBy(w => w.Key)
+                    .Select(kvp => new RunningDataModel
+                    {
+                        WeekLabel = $"Week {kvp.Key}", // ✅ Keep a readable label
+                        WeekNumber = kvp.Key, // ✅ Store numerical week number
+                        MonthKey = monthKey, // ✅ Store the month for sorting
+                        Distance = kvp.Value == 0 ? 0.05 : kvp.Value // ✅ Ensure empty weeks show up
+                    })
+                    .ToList();
+
+                lastThreeMonthsData.AddRange(sortedWeeks);
             }
 
+            // ✅ Final Sorting: Newest month on right, weeks sorted properly
+            lastThreeMonthsData = lastThreeMonthsData
+                .OrderBy(d => monthKeys.IndexOf(d.MonthKey)) // ✅ Sort months first
+                .ThenBy(d => d.WeekNumber) // ✅ Then sort by week number
+                .ToList();
+
+            // ✅ Debugging: Print data
+            Console.WriteLine($"✅ Final Sorted Data: {string.Join(", ", lastThreeMonthsData.Select(d => $"{d.MonthKey}-W{d.WeekNumber}: {d.Distance}km"))}");
+
+            // ✅ Update UI
             WeeklyRunningData.Clear();
-            foreach (var item in lastThreeMonthsData.OrderBy(d => d.WeekLabel)) // Sort Correctly
+            foreach (var item in lastThreeMonthsData)
             {
                 WeeklyRunningData.Add(item);
             }
 
             ChartDrawable.Data = lastThreeMonthsData;
             OnPropertyChanged(nameof(ChartDrawable));
+
+            Console.WriteLine($"✅ Chart updated with {lastThreeMonthsData.Count} bars.");
         }
 
-        
+
+
+
+
+
+
+
+
+
+
+
+        /*
+        public void UpdateChartForLastThreeMonths()
+        {
+            var lastThreeMonthsData = new List<RunningDataModel>();
+            DateTime today = DateTime.Now;
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            Calendar calendar = culture.Calendar;
+
+            Console.WriteLine("📊 Updating Chart for Last 3 Months...");
+
+            for (int i = 2; i >= 0; i--) // Process last 3 months (latest month last)
+            {
+                string monthKey = today.AddMonths(-i).ToString("yyyy-MM");
+                DateTime firstDayOfMonth = new DateTime(today.Year, today.Month, 1).AddMonths(-i);
+                DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+                Console.WriteLine($"📌 Processing Month: {monthKey}");
+
+                if (!MonthlyData.ContainsKey(monthKey))
+                {
+                    Console.WriteLine($"⚠ No data for {monthKey}, initializing empty list.");
+                    MonthlyData[monthKey] = new List<RunningDataModel>();
+                }
+
+                Dictionary<int, double> weeklyDistances = new Dictionary<int, double>();
+
+                // ✅ Ensure all weeks in the month exist
+                for (DateTime weekStart = firstDayOfMonth; weekStart <= lastDayOfMonth; weekStart = weekStart.AddDays(7))
+                {
+                    int weekNumber = ISOWeek.GetWeekOfYear(weekStart);
+                    if (!weeklyDistances.ContainsKey(weekNumber))
+                        weeklyDistances[weekNumber] = 0; // Default to 0 km
+                }
+
+                Console.WriteLine($"📊 Weeks Initialized for {monthKey}: {string.Join(", ", weeklyDistances.Keys)}");
+
+                // ✅ Map real activity distances to weeks
+                foreach (var activity in filteredActivities) // 🔥 FIX: Use RunningActivity instead of RunningDataModel
+                {
+                    if (DateTime.TryParseExact(activity.Date, "yyyy-MM-dd", culture, DateTimeStyles.None, out DateTime parsedDate))
+                    {
+                        int weekNumber = ISOWeek.GetWeekOfYear(parsedDate);
+                        if (weeklyDistances.ContainsKey(weekNumber))
+                        {
+                            weeklyDistances[weekNumber] += activity.Distance;
+                            Console.WriteLine($"✅ {activity.Name} ({activity.Date}) added to Week {weekNumber} -> {weeklyDistances[weekNumber]} km");
+                        }
+                    }
+                }
+
+                // ✅ Convert weekly data into chart-friendly format
+                var sortedWeeks = weeklyDistances
+                    .Where(kvp => kvp.Key <= ISOWeek.GetWeekOfYear(today)) // ✅ Only include up to current week
+                    .OrderBy(kvp => kvp.Key) // ✅ Sort weeks correctly
+                    .Select(kvp => new RunningDataModel
+                    {
+                        WeekLabel = $"Week {kvp.Key}",
+                        Distance = kvp.Value == 0 ? 0.05 : kvp.Value // ✅ Small bar for empty weeks
+                    })
+                    .ToList();
+
+                lastThreeMonthsData.AddRange(sortedWeeks);
+            }
+
+            // ✅ Fix Sorting: Ensure latest month is on the right
+            lastThreeMonthsData = lastThreeMonthsData
+                .OrderByDescending(d => d.WeekLabel) // Sort by week number
+                .ToList();
+
+            // ✅ Print final data before updating chart
+            Console.WriteLine($"📊 Final Data for Chart: {string.Join(", ", lastThreeMonthsData.Select(w => $"{w.WeekLabel}: {w.Distance} km"))}");
+
+            // ✅ Update UI Data
+            WeeklyRunningData.Clear();
+            foreach (var item in lastThreeMonthsData)
+            {
+                WeeklyRunningData.Add(item);
+            }
+
+            ChartDrawable.Data = lastThreeMonthsData;
+            OnPropertyChanged(nameof(ChartDrawable));
+
+            Console.WriteLine($"✅ Chart updated with {lastThreeMonthsData.Count} bars.");
+        }
+
+        */
+
 
 
 

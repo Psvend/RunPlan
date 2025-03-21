@@ -39,9 +39,11 @@ public class BarChartDrawable : IDrawable
             //Console.WriteLine($"📌 Week: {item.WeekLabel}, Distance: {item.Distance}");
 
             float barHeight = (float)(item.Distance / maxValue * maxHeight);
+            
+           // if(barHeight¨< 5) barHeight = 5; 
+            
             float x = i * barWidth + barWidth / 2;
             float y = dirtyRect.Height - barHeight - 25; //edits the space between bottom of bars and labels
-
             float labelY = y - 20;  //edits the height of the labels 
             canvas.FillRectangle(x, y, barWidth - 40, barHeight);  //edits the thickness of the bars
 
@@ -49,10 +51,12 @@ public class BarChartDrawable : IDrawable
             canvas.FontSize = 12;
             canvas.FontColor = Colors.Black;
 
-            if (item.Distance > 0) { 
-            canvas.DrawString($"{item.Distance} km", x, labelY, HorizontalAlignment.Center);
+            if (item.Distance > 0.05) {
+                canvas.FontSize = 12;
+                canvas.FontColor = Colors.Black;
+                canvas.DrawString($"{item.Distance} km", x, labelY, HorizontalAlignment.Center);
+            
             }
-            //canvas.DrawString(item.WeekLabel, x, labelY, HorizontalAlignment.Center);
         }
     }
 
