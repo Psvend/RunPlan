@@ -180,12 +180,25 @@
                            HorizontalOptions="Center" />
 
                     <GraphicsView x:Name="ChartCanvas"
-                                  Drawable="{Binding ChartDrawable}"
-                                  HeightRequest="250"
-                                  WidthRequest="350"
-                                  BackgroundColor="Transparent"/>
+                      Drawable="{Binding ChartDrawable}"
+                      HeightRequest="250"
+                      WidthRequest="350"
+                      BackgroundColor="Transparent">
+                        <GraphicsView.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnChartTapped" />
+                        </GraphicsView.GestureRecognizers>
+                    </GraphicsView>
 
-                   
+                    <Label x:Name="TooltipLabel"
+                           Text=""
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           BackgroundColor="Black"
+                           Padding="6"
+                           HorizontalOptions="Center"
+                           IsVisible="False"
+                           Margin="0,5,0,0" />
 
                 </VerticalStackLayout>
 

@@ -74,6 +74,43 @@ namespace RunPlan.Model
 
 
 
+        private void OnChartTapped(object sender, TappedEventArgs e)
+        {
+            var point = e.GetPosition(ChartCanvas);
+
+            if (point == null || ViewModel?.ChartDrawable?.Data == null)
+                return;
+
+            float leftMargin = 40;
+            float rightMargin = 20;
+            float totalWidth = (float)(ChartCanvas.Width - leftMargin - rightMargin);
+            int count = ViewModel.ChartDrawable.Data.Count;
+
+            if (count == 0) return;
+
+            float barSpacing = (float)(totalWidth / count);
+            int barIndex = (int)((point.Value.X - leftMargin) / barSpacing);
+
+
+
+            if (barIndex >= 0 && barIndex < count)
+            {
+                var item = ViewModel.ChartDrawable.Data[barIndex];
+
+                if (item != null)
+                {
+                 
+                    TooltipLabel.Text = $"{item.WeekLabel}\n📊 Distance: {item.Distance} km";
+                    TooltipLabel.IsVisible = true;
+                }
+            }
+            else
+            {
+                TooltipLabel.IsVisible = false;
+            }
+        }
+
+
 
 
 
