@@ -28,7 +28,7 @@ public class BarChartDrawable : IDrawable
         float barWidth = dirtyRect.Width / (Data.Count + 1);
         float maxHeight = dirtyRect.Height - bottomMargin - 20;
         float maxValue = (float)Data.Max(d => d.Distance);
-
+       
         Console.WriteLine($"Max Distance Value: {maxValue}");
 
         if (maxValue <= 0) maxValue = 1;
@@ -36,13 +36,21 @@ public class BarChartDrawable : IDrawable
         for (int i = 0; i < Data.Count; i++)
         {
             var item = Data[i];
-            //Console.WriteLine($"📌 Week: {item.WeekLabel}, Distance: {item.Distance}");
-
             float barHeight = (float)(item.Distance / maxValue * maxHeight);
-            
-           // if(barHeight¨< 5) barHeight = 5; 
-            
-            float x = i * barWidth + barWidth / 2;
+
+            //draws tiny bar for empty weeks
+            if (Math.Abs(item.Distance - 0.05) < 0.05)
+            {
+                canvas.FillColor = Colors.HotPink;
+                barHeight = 1;
+            } else
+            {
+                canvas.FillColor = Colors.HotPink;
+            }
+
+
+
+                float x = i * barWidth + barWidth / 2;
             float y = dirtyRect.Height - barHeight - 25; //edits the space between bottom of bars and labels
             float labelY = y - 20;  //edits the height of the labels 
             canvas.FillRectangle(x, y, barWidth - 40, barHeight);  //edits the thickness of the bars
@@ -51,6 +59,7 @@ public class BarChartDrawable : IDrawable
             canvas.FontSize = 12;
             canvas.FontColor = Colors.Black;
 
+            //Hides label for empty bars
             if (item.Distance > 0.05) {
                 canvas.FontSize = 12;
                 canvas.FontColor = Colors.Black;
