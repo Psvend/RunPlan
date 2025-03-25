@@ -158,32 +158,31 @@
                     Padding="10"
                     StrokeShape="RoundRectangle 20"
                     HorizontalOptions="Fill"
-                    VerticalOptions="Start">
+                    VerticalOptions="Fill">
 
                 <Border.Shadow>
                     <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
                 </Border.Shadow>
 
-       
-                <VerticalStackLayout Spacing="10">
 
-                    <Label Text="Weekly Running Distance - Current Month"
+                <Grid RowDefinitions="Auto, Auto, *, Auto"
+                      ColumnDefinitions="*"
+                      RowSpacing="10"
+                      ColumnSpacing="0">
+
+                    <Label Text="Three Months Overview"
                            FontAttributes="Bold"
                            FontSize="18"
                            TextColor="DarkGrey"
                            HorizontalOptions="Center"
-                           Padding="5" />
-
-                    <Label Text="Week of the Month"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
+                           Padding="5" 
+                           Grid.Row="0"/>
 
                     <GraphicsView x:Name="ChartCanvas"
-                      Drawable="{Binding ChartDrawable}"
-                      HeightRequest="250"
-                      WidthRequest="350"
-                      BackgroundColor="Transparent">
+                                  HeightRequest="300"
+                                  Drawable="{Binding ChartDrawable}"
+                                  BackgroundColor="Transparent"
+                                  Grid.Row="2">
                         <GraphicsView.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnChartTapped" />
                         </GraphicsView.GestureRecognizers>
@@ -198,9 +197,10 @@
                            Padding="6"
                            HorizontalOptions="Center"
                            IsVisible="False"
-                           Margin="0,5,0,0" />
+                           Margin="0,5,0,0" 
+                           Grid.Row="3"/>
 
-                </VerticalStackLayout>
+                </Grid>
 
             </Border>
 

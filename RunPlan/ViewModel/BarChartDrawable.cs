@@ -27,7 +27,7 @@ public class BarChartDrawable : IDrawable
 
         float leftMargin = 40;
         float rightMargin = 20;
-        float bottomMargin = 50;
+        float bottomMargin = 70;
         float topMargin = 40;
 
         float chartWidth = dirtyRect.Width - leftMargin - rightMargin;
@@ -45,6 +45,7 @@ public class BarChartDrawable : IDrawable
             float y = yZero - (i / maxValue * chartHeight);
             canvas.DrawLine(leftMargin, y, dirtyRect.Width - rightMargin, y);
             canvas.DrawString($"{i} km", 5, y - 8, HorizontalAlignment.Left);
+       
         }
 
         Dictionary<string, int> monthFirstIndex = new();
@@ -105,6 +106,10 @@ public class BarChartDrawable : IDrawable
         OnBarTapped?.Invoke(null);
     }
 }
+
+
+
+
 
 
 
