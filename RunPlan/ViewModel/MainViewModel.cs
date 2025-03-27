@@ -155,7 +155,7 @@ namespace RunPlan.ViewModel
             DateTime today = DateTime.Now;
             CultureInfo culture = CultureInfo.InvariantCulture;
 
-            Console.WriteLine("📊 Updating Chart for Last 3 Months...");
+            Console.WriteLine("Updating Chart for Last 3 Months...");
 
             // Step 1: Build the full range of Mondays (week starts)
             DateTime startDate = new DateTime(today.Year, today.Month, 1).AddMonths(-2);
@@ -169,6 +169,7 @@ namespace RunPlan.ViewModel
 
             // Step 2: Map distances to week start
             Dictionary<DateTime, double> weeklySums = allWeeks.ToDictionary(w => w, w => 0.0);
+            Dictionary<DateTime, TimeSpan> weeklyTimes = allWeeks.ToDictionary(w => w, w => TimeSpan.Zero); //new one 
             Dictionary<DateTime, string> weekMonthMap = new(); // Used to label correctly
 
             foreach (var activity in filteredActivities)
@@ -178,11 +179,29 @@ namespace RunPlan.ViewModel
                     int delta = (7 + (int)parsedDate.DayOfWeek - (int)DayOfWeek.Monday) % 7;
                     DateTime weekStart = parsedDate.AddDays(-delta);
 
+
+                    //new one
+                    if (weeklySums.ContainsKey(weekStart))
+                    {
+                        weeklySums[weekStart] += activity.Distance;
+
+                        if (TimeSpan.TryParse(activity.Time, out var activityTime))
+                        {
+                            weeklyTimes[weekStart] += activityTime;
+                        }
+
+                        weekMonthMap[weekStart] = parsedDate.ToString("yyyy-MM");
+                    }
+
+
+
+                    /*
                     if (weeklySums.ContainsKey(weekStart))
                     {
                         weeklySums[weekStart] += activity.Distance;
                         weekMonthMap[weekStart] = parsedDate.ToString("yyyy-MM"); // Store actual month from activity
                     }
+                    */
                 }
             }
 
@@ -199,7 +218,8 @@ namespace RunPlan.ViewModel
                     WeekLabel = $"Week {ISOWeek.GetWeekOfYear(weekStart)}",
                     Distance = distance == 0 ? 0.05 : distance,
                     WeekNumber = ISOWeek.GetWeekOfYear(weekStart),
-                    MonthKey = monthKey
+                    MonthKey = monthKey,
+                    Time = weeklyTimes[weekStart].ToString(@"hh\:mm\:ss")
                 });
             }
 
@@ -225,94 +245,6 @@ namespace RunPlan.ViewModel
 
 
 
-
-
-        /*
-
-        //Controls the graph and how it sorts and shows the weeks/months
-
-        public void UpdateChartForLastThreeMonths()
-        {
-            var lastThreeMonthsData = new List<RunningDataModel>();
-            DateTime today = DateTime.Now;
-            CultureInfo culture = CultureInfo.InvariantCulture;
-
-            Console.WriteLine("📊 Updating Chart for Last 3 Months...");
-
-            // Define date range (first day of 2 months ago to today)
-            DateTime firstDay = new DateTime(today.Year, today.Month, 1).AddMonths(-2);
-            DateTime lastDay = today;
-
-            // 🔁 Get all Mondays (week starts)
-            List<DateTime> allWeeks = new();
-            DateTime currentWeek = firstDay;
-
-            // Align to Monday
-            while (currentWeek.DayOfWeek != DayOfWeek.Monday)
-                currentWeek = currentWeek.AddDays(-1);
-
-            while (currentWeek <= lastDay)
-            {
-                allWeeks.Add(currentWeek);
-                currentWeek = currentWeek.AddDays(7);
-            }
-
-            // 🔢 Group distances by week start
-            Dictionary<DateTime, double> weeklySums = new();
-            foreach (var weekStart in allWeeks)
-            {
-                weeklySums[weekStart] = 0; // Default value
-            }
-
-            // ⏱ Assign each activity to the right weekly bucket
-            foreach (var activity in filteredActivities)
-            {
-                if (DateTime.TryParseExact(activity.Date, "yyyy-MM-dd", culture, DateTimeStyles.None, out DateTime parsedDate))
-                {
-                    // Find the Monday of that week
-                    DateTime weekStart = parsedDate.AddDays(-(int)parsedDate.DayOfWeek + (parsedDate.DayOfWeek == DayOfWeek.Sunday ? -6 : 1));
-                    if (weeklySums.ContainsKey(weekStart))
-                    {
-                        weeklySums[weekStart] += activity.Distance;
-                    }
-                }
-            }
-
-
-
-
-            // Build chart data
-            foreach (var kvp in weeklySums.OrderBy(k => k.Key))
-            {
-                var weekStart = kvp.Key;
-                var distance = kvp.Value == 0 ? 0.05 : kvp.Value;
-
-                lastThreeMonthsData.Add(new RunningDataModel
-                {
-                    WeekLabel = $"Week {ISOWeek.GetWeekOfYear(weekStart)}",
-                    Distance = distance,
-                    WeekNumber = ISOWeek.GetWeekOfYear(weekStart),
-                    MonthKey = weekStart.ToString("yyyy-MM")
-                    //MonthKey = weekStart.ToString("yyyy-MM")
-                });
-            }
-           
-
-
-            // ✅ Sort by week date (already ordered above)
-            WeeklyRunningData.Clear();
-            foreach (var item in lastThreeMonthsData)
-            {
-                WeeklyRunningData.Add(item);
-            }
-
-            ChartDrawable.Data = lastThreeMonthsData;
-            OnPropertyChanged(nameof(ChartDrawable));
-
-            Console.WriteLine($"✅ Chart updated with {lastThreeMonthsData.Count} weekly bars.");
-        }
-
-        */
 
 
 

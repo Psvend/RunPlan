@@ -49,7 +49,7 @@
                     <!-- Name -->
                     <Label x:Name="LastActivityName" 
                        Text="Evening Run" 
-                       FontAttributes="Bold"
+                       FontFamily="Arial"
                        Grid.Row="1" 
                        Grid.Column="0"
                        HorizontalOptions="Start" />
@@ -57,7 +57,7 @@
                     <!-- Distance -->
                     <Label x:Name="LastActivityDistance" 
                        Text="10 km" 
-                       FontAttributes="Bold"
+                       FontFamily="Arial"
                        Grid.Row="1" 
                        Grid.Column="1"
                        HorizontalOptions="Start" />
@@ -65,7 +65,7 @@
                     <!-- Pace -->
                     <Label x:Name="LastActivityPace" 
                        Text="5:10 min/km"
-                       FontAttributes="Bold"
+                       FontFamily="Arial"
                        Grid.Row="1" 
                        Grid.Column="2"
                        HorizontalOptions="Center" />
@@ -73,7 +73,7 @@
                     <!-- Duration -->
                     <Label x:Name="LastActivityTime" 
                        Text="1h10min"
-                       FontAttributes="Bold"
+                       FontFamily="Arial"
                        Grid.Row="1" 
                        Grid.Column="3"
                        HorizontalOptions="End" />
@@ -92,7 +92,7 @@
                 HorizontalOptions="Fill"
               VerticalOptions="Start" >
                 <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
+                    <Shadow Brush="MediumPurple" Opacity="0.5" Offset="5,5" />
                 </Border.Shadow>
 
                 <Border.Content>
@@ -114,8 +114,8 @@
                         <!-- Box Title -->
                         <Label Text="Total running history for this week" 
                           FontAttributes="Bold" 
-                          FontFamily="OpenSansRegular"     
-                          TextColor='DarkGrey'
+                          FontFamily="Arial"  
+                          TextColor='White'
                           FontSize="18"
                           Grid.Row="0"
                           Grid.Column="1"
@@ -127,8 +127,8 @@
                         <!-- Distance -->
                         <Label x:Name="WeekActivityDistance" 
                           Text="55 km"
-                          TextColor='DarkGrey'     
-                          FontAttributes="Bold"
+                          TextColor='White'     
+                          FontFamily="Arial"
                           Grid.Row="1" 
                           Grid.Column="1"
                           HorizontalOptions="Start" />
@@ -136,8 +136,8 @@
                         <!-- Name -->
                         <Label x:Name="WeekActivityHours" 
                             Text="6h10min" 
-                            TextColor='DarkGrey'
-                            FontAttributes="Bold"
+                            TextColor='White'
+                            FontFamily="Arial"
                             Grid.Row="1" 
                             Grid.Column="2"
                             VerticalOptions="Center"
@@ -172,10 +172,10 @@
 
                     <Label Text="Three Months Overview"
                            FontAttributes="Bold"
-                           FontSize="18"
-                           TextColor="DarkGrey"
+                           FontSize="30"
+                           TextColor="White"
                            HorizontalOptions="Center"
-                           Padding="5" 
+                           Padding="13" 
                            Grid.Row="0"/>
 
                     <GraphicsView x:Name="ChartCanvas"
@@ -188,17 +188,61 @@
                         </GraphicsView.GestureRecognizers>
                     </GraphicsView>
 
-                    <Label x:Name="TooltipLabel"
-                           Text=""
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           BackgroundColor="Black"
-                           Padding="6"
-                           HorizontalOptions="Center"
-                           IsVisible="False"
-                           Margin="0,5,0,0" 
-                           Grid.Row="3"/>
+                    <StackLayout x:Name="TooltipPanel"
+                                 IsVisible="False"
+                                 Padding="4"
+                                 BackgroundColor="Transparent"
+                                 Margin="20,80,0,0"
+                                 HorizontalOptions="Start"
+                                 VerticalOptions="Start"
+                                 Spacing="6"
+                                 Grid.Row="0">
+
+                        <!-- Week Label -->
+                        <Label x:Name="TooltipWeek"
+                               Text="Week"
+                               TextColor="White"
+                               FontFamily="Arial"
+                               FontAttributes="Bold"
+                               FontSize="20"/>  
+
+                        <!-- Labels Row -->
+                        <Grid ColumnSpacing="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="Distance"
+                                   TextColor="White"
+                                   FontFamily="Arial"
+                                   FontAttributes="Bold"
+                                   Grid.Column="0"/>
+                            <Label Text="Time"
+                                   TextColor="White"
+                                   FontAttributes="Bold"
+                                   Grid.Column="1"/>    
+                        </Grid>
+
+                        <!-- Values Row -->
+                        <Grid ColumnSpacing="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label x:Name="TooltipDistance"
+                                   Text="0 km"
+                                   TextColor="White"
+                                   FontFamily="Arial"
+                                   Grid.Column="0"/>
+                            <Label x:Name="TooltipTime"
+                                   Text="0:00"
+                                   TextColor="White"
+                                   FontFamily="Arial"
+                                   Grid.Column="1"/>        
+                        </Grid>
+                    </StackLayout>
 
                 </Grid>
 

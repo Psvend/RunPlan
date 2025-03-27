@@ -14,6 +14,8 @@ namespace RunPlan.Model
         public string? WeekLabel { get; set; }
         public double Distance { get; set; }
         public string MonthKey { get; set; }   
-        public int WeekNumber { get; set; }    
+        public int WeekNumber { get; set; }   
+      
+        public string Time { get; set; }
     }
 };
