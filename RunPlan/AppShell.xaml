@@ -17,10 +17,16 @@
         <Tab Title="Statistics" Icon="dotnet_bot.png">
             <ShellContent ContentTemplate="{DataTemplate local:Stats}" />
         </Tab>
+
+        <Tab Title="Activity List" Icon="list.png">
+            <ShellContent ContentTemplate="{DataTemplate local:ActivityList}" Route="ActivityList" />
+        </Tab>
+
+
     </TabBar>
 
-    
 
-
+    <!-- Navigation-only pages -->
+    <ShellContent Route="Activity" ContentTemplate="{DataTemplate local:Activity}" />
 
 </Shell>
