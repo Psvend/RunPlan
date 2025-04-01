@@ -84,11 +84,15 @@ public class BarChartDrawable : IDrawable
 
 
 
-        // ✅ Draw Month labels
+
+        // ✅ Draw Month labels only for the latest 3 months
         foreach (var kvp in monthFirstIndex)
         {
-            int i = kvp.Value;
             string monthKey = kvp.Key;
+            if (!lastThreeMonthKeys.Contains(monthKey))
+                continue; 
+
+            int i = kvp.Value;
             string monthName = DateTime.ParseExact(monthKey, "yyyy-MM", CultureInfo.InvariantCulture)
                                        .ToString("MMMM", CultureInfo.InvariantCulture);
 
