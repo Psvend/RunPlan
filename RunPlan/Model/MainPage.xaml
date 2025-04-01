@@ -4,7 +4,7 @@
              xmlns:sfChart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"  
              x:Class="RunPlan.Model.MainPage"
              xmlns:viewModel="clr-namespace:RunPlan.ViewModel"
-             BackgroundColor="#6246AF">
+             BackgroundColor="#8260DA">
 
     <ScrollView>
 
@@ -134,8 +134,9 @@
             </VerticalStackLayout>
 
 
+            
             <!-- Weekly Running Distance Graph -->
-            <Border BackgroundColor="#6246AF"
+            <Border BackgroundColor="#6346AF"
                     Padding="10"
                     StrokeShape="RoundRectangle 20"
                     HorizontalOptions="Fill"
@@ -150,43 +151,34 @@
                       ColumnDefinitions="*"
                       RowSpacing="15"
                       ColumnSpacing="0"
-                      Padding="0,10,0,0">
+                      Padding="0,10,0,0">   
 
+                    <!-- Chart Title -->
                     <Label Text="Three Months Overview"
                            FontAttributes="Bold"
                            FontSize="30"
                            TextColor="White"
                            HorizontalOptions="Center"
-                           Padding="13" 
-                           Grid.Row="0" />
+                           Padding="13"
+                           Grid.Row="0" />  
 
-                    <GraphicsView x:Name="ChartCanvas"
-                                  HeightRequest="300"
-                                  Drawable="{Binding ChartDrawable}"
-                                  BackgroundColor="Transparent"
-                                  Grid.Row="2">
-                        <GraphicsView.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnChartTapped" />
-                        </GraphicsView.GestureRecognizers>
-                    </GraphicsView>
-
+                    <!-- ⬆️ Move the Tooltip above the chart -->
                     <StackLayout x:Name="TooltipPanel"
                                  IsVisible="False"
-                                 Padding="4"
-                                 BackgroundColor="Transparent"
-                                 Margin="20,80,0,0"
-                                 HorizontalOptions="Start"
-                                 VerticalOptions="Start"
+                                 Margin="40,0,0,0"
                                  Spacing="6"
-                                 Grid.Row="0">
+                                 Grid.Row="1"
+                                 Orientation="Vertical"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalOptions="Start">
+
 
                         <!-- Week Label -->
                         <Label x:Name="TooltipWeek"
                                Text="Week"
-                               TextColor="White"
-                               FontFamily="Arial"
+                               FontSize="18"
                                FontAttributes="Bold"
-                               FontSize="20" />
+                               TextColor="White" />
 
                         <!-- Labels Row -->
                         <Grid ColumnSpacing="30">
@@ -196,14 +188,13 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Text="Distance"
-                                   TextColor="White"
-                                   FontFamily="Arial"
-                                   FontAttributes="Bold"
-                                   Grid.Column="0" />
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               Grid.Column="0" />
                             <Label Text="Time"
-                                   TextColor="White"
-                                   FontAttributes="Bold"
-                                   Grid.Column="1" />
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               Grid.Column="1" />
                         </Grid>
 
                         <!-- Values Row -->
@@ -214,26 +205,40 @@
                             </Grid.ColumnDefinitions>
 
                             <Label x:Name="TooltipDistance"
-                                   Text="0 km"
-                                   TextColor="White"
-                                   FontFamily="Arial"
-                                   Grid.Column="0" />
+                               Text="0 km"
+                               TextColor="White"
+                               Grid.Column="0" />
                             <Label x:Name="TooltipTime"
-                                   Text="0:00"
-                                   TextColor="White"
-                                   FontFamily="Arial"
-                                   Grid.Column="1" />
+                       Text="0:00"
+                       TextColor="White"
+                       Grid.Column="1" />
                         </Grid>
+
+                        
                     </StackLayout>
 
+
+
+                    <!-- Chart Itself -->
+                    <GraphicsView x:Name="ChartCanvas"
+                      HeightRequest="300"
+                      Drawable="{Binding ChartDrawable}"
+                      BackgroundColor="Transparent"
+                      Grid.Row="2">
+                        <GraphicsView.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnChartTapped" />
+                        </GraphicsView.GestureRecognizers>
+                    </GraphicsView>
+
                 </Grid>
-
-
-
             </Border>
+
+            
 
             <BoxView HeightRequest="80" Opacity="0" />
 
+            
+            
             <!-- Add New Activity -->
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 20"

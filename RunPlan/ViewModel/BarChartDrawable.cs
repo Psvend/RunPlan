@@ -106,6 +106,7 @@ public class BarChartDrawable : IDrawable
 
         // ✅ Axes
         canvas.StrokeColor = Color.FromArgb("7B5EB5");
+        float adjustedTop = topMargin + 40;  //new
         canvas.DrawLine(leftMargin, topMargin, leftMargin, yZero);
         canvas.DrawLine(leftMargin, yZero, dirtyRect.Width - rightMargin, yZero);
     }
