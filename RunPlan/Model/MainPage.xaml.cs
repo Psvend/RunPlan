@@ -23,6 +23,8 @@ namespace RunPlan.Model
             InitializeComponent();
             ViewModel = new MainViewModel(dbService);
             BindingContext = ViewModel;
+            UpdateLastActivityUI(ViewModel.LastActivity);
+
 
 
             //Forces redraw when graph updates
@@ -66,6 +68,7 @@ namespace RunPlan.Model
             DateEntry.Text = "";
 
             await ViewModel.LoadActivities(); // Refresh UI
+            UpdateLastActivityUI(ViewModel.LastActivity);
         }
 
 
@@ -79,6 +82,7 @@ namespace RunPlan.Model
                 {
                     await ViewModel._dbService.DeleteActivity(activity.Id);
                     ViewModel.LoadActivities(); // Refresh UI after deletion
+                    UpdateLastActivityUI(ViewModel.LastActivity);
                 }
             }
         }
@@ -124,6 +128,25 @@ namespace RunPlan.Model
         }
 
 
+        //To update Last Activity box and This Week box
+        private void UpdateLastActivityUI(RunningActivity activity)
+        {
+            if (activity == null) return;
+
+            LastActivityName.Text = activity.Name;
+            LastActivityDistance.Text = $"{activity.Distance} km";
+
+            if (TimeSpan.TryParse(activity.Time, out TimeSpan parsedTime))
+            {
+                LastActivityTime.Text = $"{parsedTime.Hours}h{parsedTime.Minutes}min";
+            }
+            else
+            {
+                LastActivityTime.Text = activity.Time; // fallback
+            }
+
+            LastActivityPace.Text = MainViewModel.CalculatePace(activity.Time, activity.Distance);
+        }
 
 
 

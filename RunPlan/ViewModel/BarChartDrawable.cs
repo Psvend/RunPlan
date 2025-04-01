@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 public class BarChartDrawable : IDrawable
 {
     public List<RunningDataModel> Data { get; set; } = new();
-    public Action<string> OnBarTapped; // 👈 Tooltip callback
+    public Action<string> OnBarTapped; 
     private List<(RectF bounds, RunningDataModel model)> barHitAreas = new(); // Store hit zones
 
     public void Draw(ICanvas canvas, RectF dirtyRect)

@@ -22,8 +22,9 @@ namespace RunPlan.ViewModel
         public BarChartDrawable ChartDrawable { get; set; }
         public Dictionary<string, List<RunningDataModel>> MonthlyData { get; private set; }
         private List<RunningActivity> filteredActivities = new List<RunningActivity>(); // 🔥 Global List
-
-
+        public RunningActivity LastActivity => filteredActivities?.LastOrDefault();
+        private string _thisWeekTime;
+        private string _thisWeekDistance;
 
         public ObservableCollection<string> AvailableMonths { get; set; }
 
@@ -78,6 +79,9 @@ namespace RunPlan.ViewModel
 
             MonthlyData.Clear();
             UpdateChartForLastThreeMonths();
+            OnPropertyChanged(nameof(LastActivityPace));
+            OnPropertyChanged(nameof(LastActivity)); // This updates name, distance, and time too
+
         }
 
 
@@ -193,15 +197,6 @@ namespace RunPlan.ViewModel
                         weekMonthMap[weekStart] = parsedDate.ToString("yyyy-MM");
                     }
 
-
-
-                    /*
-                    if (weeklySums.ContainsKey(weekStart))
-                    {
-                        weeklySums[weekStart] += activity.Distance;
-                        weekMonthMap[weekStart] = parsedDate.ToString("yyyy-MM"); // Store actual month from activity
-                    }
-                    */
                 }
             }
 
@@ -229,6 +224,17 @@ namespace RunPlan.ViewModel
                 .ThenBy(d => d.WeekNumber)
                 .ToList();
 
+
+            // Updates "This Week" stats (latest week)
+            var thisWeek = lastThreeMonthsData.LastOrDefault();
+            if (thisWeek != null)
+            {
+                ThisWeekDistance = $"{thisWeek.Distance} km";
+                ThisWeekTime = thisWeek.Time;
+            }
+
+
+
             WeeklyRunningData.Clear();
             foreach (var item in lastThreeMonthsData)
             {
@@ -244,8 +250,37 @@ namespace RunPlan.ViewModel
 
 
 
+        //To help last & week activity boxes
+        public string LastActivityPace
+        {
+            get
+            {
+                if (LastActivity == null || LastActivity.Distance <= 0 || string.IsNullOrEmpty(LastActivity.Time))
+                    return "N/A";
 
+                return CalculatePace(LastActivity.Time, LastActivity.Distance);
+            }
+        }
 
+        public string ThisWeekDistance
+        {
+            get => _thisWeekDistance;
+            set
+            {
+                _thisWeekDistance = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ThisWeekTime
+        {
+            get => _thisWeekTime;
+            set
+            {
+                _thisWeekTime = value;
+                OnPropertyChanged();
+            }
+        }
 
 
 

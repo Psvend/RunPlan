@@ -57,7 +57,7 @@
 
                         <!-- Run name -->
                         <Label x:Name="LastActivityName"
-                               Text="Evening Run"
+                               Text="{Binding LastActivity.Name}"
                                TextColor="White"
                                Grid.Row="1"
                                Grid.Column="1" />
@@ -69,11 +69,14 @@
                                      Grid.Column="2"
                                      Spacing="15">
                             <Label x:Name="LastActivityPace"
-                       Text="5:10 min/km"
-                       TextColor="White" />
+                                   Text="{Binding LastActivityPace}"
+                                   TextColor="White" />
                             <Label x:Name="LastActivityTime"
-                       Text="1h10min"
-                       TextColor="White" />     
+                                   Text="{Binding LastActivity.Time}"
+                                   TextColor="White" /> 
+                            <Label x:Name="LastActivityDistance"
+                                   Text="{Binding LastActivity.Distance, StringFormat='{}{0} km'}"
+                                   TextColor="White" />    
                         </StackLayout>
                     </Grid>
                 </Border>
@@ -113,13 +116,13 @@
                                Grid.ColumnSpan="2" />   
 
                         <Label x:Name="WeekActivityDistance"
-                               Text="55 km"
+                               Text="{Binding ThisWeekDistance}"
                                TextColor="White"
                                Grid.Row="1"
                                Grid.Column="1" />
 
                         <Label x:Name="WeekActivityHours"
-                               Text="6h10min"
+                               Text="{Binding ThisWeekTime}"
                                TextColor="White"
                                Grid.Row="1"
                                Grid.Column="2" />   
