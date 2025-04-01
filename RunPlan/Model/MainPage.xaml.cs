@@ -9,6 +9,8 @@ using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Charts;
 using RunPlan.Model; 
 using RunPlan.ViewModel;
+using CommunityToolkit.Mvvm.Messaging;
+using RunPlan.Messages;
 
 
 
@@ -23,6 +25,17 @@ namespace RunPlan.Model
             InitializeComponent();
             ViewModel = new MainViewModel(dbService);
             BindingContext = ViewModel;
+
+
+            //Listens after updates from other pages
+            WeakReferenceMessenger.Default.Register<ActivityUpdatedMessage>(this, async (r, m) =>
+            {
+                await ViewModel.LoadActivities(); // or a smarter refresh
+                UpdateLastActivityUI(ViewModel.LastActivity);
+            });
+
+
+
             UpdateLastActivityUI(ViewModel.LastActivity);
 
 
@@ -36,56 +49,11 @@ namespace RunPlan.Model
                 }
             };
 
+
+
+
         }
 
-
-        private async void OnAddActivityClicked(object sender, EventArgs e)
-        {
-           
-            string activityName = ActivityNameEntry.Text?.Trim();
-            string distanceText = DistanceEntry.Text?.Trim();
-            string time = TimeEntry.Text?.Trim();
-            string date = DateEntry.Text?.Trim();
-
-            if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) ||
-                string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
-            {
-                await DisplayAlert("Error", "Please fill in all fields.", "OK");
-                return;
-            }
-
-            if (!double.TryParse(distanceText, out double distance))
-            {
-                await DisplayAlert("Error", "Distance must be a valid number.", "OK");
-                return;
-            }
-
-            await ViewModel._dbService.InsertRunningActivity(activityName, distance, time, date);
-
-            ActivityNameEntry.Text = "";
-            DistanceEntry.Text = "";
-            TimeEntry.Text = "";
-            DateEntry.Text = "";
-
-            await ViewModel.LoadActivities(); // Refresh UI
-            UpdateLastActivityUI(ViewModel.LastActivity);
-        }
-
-
-        private async void OnDeleteActivityClicked(object sender, EventArgs e)
-        {
-            if (sender is Button button && button.BindingContext is RunningActivity activity)
-            {
-                bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete {activity.Name}?", "Yes", "No");
-
-                if (confirm)
-                {
-                    await ViewModel._dbService.DeleteActivity(activity.Id);
-                    ViewModel.LoadActivities(); // Refresh UI after deletion
-                    UpdateLastActivityUI(ViewModel.LastActivity);
-                }
-            }
-        }
 
 
 
@@ -146,6 +114,14 @@ namespace RunPlan.Model
             }
 
             LastActivityPace.Text = MainViewModel.CalculatePace(activity.Time, activity.Distance);
+        }
+
+
+        //To help navigation between pages to go smoother
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+           // MessageCenter.Unsubscribe<ActivityViewModel>(this, "ActivityUpdated");
         }
 
 

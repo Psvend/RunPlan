@@ -22,7 +22,19 @@ namespace RunPlan.ViewModel
         public BarChartDrawable ChartDrawable { get; set; }
         public Dictionary<string, List<RunningDataModel>> MonthlyData { get; private set; }
         private List<RunningActivity> filteredActivities = new List<RunningActivity>(); // 🔥 Global List
-        public RunningActivity LastActivity => filteredActivities?.LastOrDefault();
+
+       
+        public RunningActivity LastActivity =>
+        filteredActivities?
+        .Where(a => DateTime.TryParse(a.Date, out _))
+        .OrderByDescending(a =>
+    DateTime.TryParseExact(a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate)
+        ? parsedDate
+        : DateTime.MinValue)
+        .FirstOrDefault();
+
+
+
         private string _thisWeekTime;
         private string _thisWeekDistance;
 
@@ -151,6 +163,7 @@ namespace RunPlan.ViewModel
                 return "N/A"; // Return default if calculation fails
             }
         }
+
 
 
         public void UpdateChartForLastThreeMonths()
