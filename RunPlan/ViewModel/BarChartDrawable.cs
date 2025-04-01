@@ -22,7 +22,7 @@ public class BarChartDrawable : IDrawable
 
         canvas.StrokeColor = Color.FromArgb("7B5EB5");
         canvas.StrokeSize = 1;
-        canvas.FontColor = Colors.Beige; 
+        canvas.FontColor = Colors.White; 
         canvas.FontSize = 12;
 
         float leftMargin = 40;
@@ -61,8 +61,8 @@ public class BarChartDrawable : IDrawable
             float barWidth = barSpacing / 2;
             float y = yZero - barHeight;
 
-            canvas.FillColor = Color.FromArgb("4C3A70");
-            canvas.FillRectangle(x, y, barWidth, barHeight);
+            canvas.FillColor = Color.FromArgb("4E3689");  //"4C3A70"
+            canvas.FillRoundedRectangle(x, y, barWidth, barHeight, 4);
 
             // ✅ Track clickable bar area
             barHitAreas.Add((new RectF(x, y, barWidth, barHeight), item));
