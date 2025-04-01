@@ -237,6 +237,7 @@ namespace RunPlan.ViewModel
 
             ChartDrawable.Data = lastThreeMonthsData;
             OnPropertyChanged(nameof(ChartDrawable));
+           
 
             Console.WriteLine($"✅ Chart updated with {lastThreeMonthsData.Count} weekly bars.");
         }

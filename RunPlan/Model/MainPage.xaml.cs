@@ -23,6 +23,17 @@ namespace RunPlan.Model
             InitializeComponent();
             ViewModel = new MainViewModel(dbService);
             BindingContext = ViewModel;
+
+
+            //Forces redraw when graph updates
+            ViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModel.ChartDrawable))
+                {
+                    ChartCanvas.Invalidate(); // 👈 Triggers chart redraw!
+                }
+            };
+
         }
 
 
