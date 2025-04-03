@@ -80,6 +80,9 @@
 	  <MauiXaml Update="Model\Activity.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Model\ActivityList.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Model\DetailScreen.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
