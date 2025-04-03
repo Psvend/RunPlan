@@ -205,7 +205,7 @@ public partial class ActivityListViewModel : BaseVievModel
     }
 
 
-
+    //BE SURE THAT THE YEAR FILTERS AFTER THE MONTH HAS BEEN PICKED. NEED TO BE CONNECTED. DEFAULT SHOULD BE CURRENT MONTH
 
     //Month filter
 
