@@ -27,6 +27,6 @@
 
 
     <!-- Navigation-only pages -->
-    <ShellContent Route="Activity" ContentTemplate="{DataTemplate local:Activity}" />
+    <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity" />
 
 </Shell>

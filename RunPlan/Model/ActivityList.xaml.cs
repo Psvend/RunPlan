@@ -12,7 +12,11 @@ namespace RunPlan.Model;
 
 public partial class ActivityList : ContentPage
 {
-    public ActivityList(ActivityViewModel vm)
+
+    private bool isNavigating = false; 
+
+
+    public ActivityList(ActivityListViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
@@ -20,6 +24,25 @@ public partial class ActivityList : ContentPage
 
     private async void OnAddActivityClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("Activity");
+        if (isNavigating) return;
+        isNavigating = true;
+
+        await Shell.Current.GoToAsync("///Activity");
+
+        isNavigating = false;
     }
+
+
+    //Refreshes ActivityList page after coming back from add activity page
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is ActivityListViewModel vm)
+            await vm.LoadActivities();
+    }
+
+    
+
+
+
 }

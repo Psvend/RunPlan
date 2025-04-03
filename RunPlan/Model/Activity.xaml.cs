@@ -36,6 +36,15 @@ public partial class Activity : ContentPage
         WeakReferenceMessenger.Default.Unregister<ActivityUpdatedMessage>(this);
 
     }
+
+
+    //Handles back button navigation to return to Activity List
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("///ActivityList"); // Goes back one page
+    }
+
+
 }
 
 

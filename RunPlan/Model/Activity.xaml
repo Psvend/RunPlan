@@ -13,6 +13,14 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="50" Spacing="30">
+            <Button Text="Back"
+         Clicked="OnBackClicked"
+         BackgroundColor="Transparent"
+         TextColor="White"
+         HorizontalOptions="Start"
+         FontSize="16"
+         Padding="0,0,0,10"/>
+
 
             <!-- 🟣 Add New Activity Form -->
             <Border BackgroundColor="White"
@@ -22,6 +30,8 @@
                 HorizontalOptions="Fill">
 
                 <VerticalStackLayout Spacing="12">
+                   
+
                     <Label Text="Add New Activity"
                        FontAttributes="Bold"
                        FontSize="18"
@@ -63,46 +73,7 @@
             <!-- Spacer -->
             <BoxView HeightRequest="20" BackgroundColor="Transparent"/>
 
-            <!-- 🟣 Activity History -->
-            <Label Text="Activity History"
-               FontAttributes="Bold"
-               FontSize="18"
-               TextColor="White"
-               HorizontalOptions="Start" />
-
-            <CollectionView ItemsSource="{Binding RunningActivities}"
-                        Margin="0,0,0,20"
-                        SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:RunningActivity">
-                        <Border StrokeShape="RoundRectangle 10"
-                            Padding="10"
-                            BackgroundColor="#4E3689"
-                            Margin="0,6">
-                            <Grid ColumnDefinitions="*,Auto"
-                              RowDefinitions="Auto,Auto"
-                              RowSpacing="4">
-                                <StackLayout Grid.Column="0" Grid.RowSpan="2">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" />
-                                    <Label Text="{Binding Time, StringFormat='Time: {0}'}" />
-                                    <Label Text="{Binding Date, StringFormat='Date: {0}'}" />
-                                </StackLayout>
-
-                                <Button Text="🗑"
-                                    Grid.Column="1"
-                                    Grid.Row="0"
-                                    BackgroundColor="Transparent"
-                                    TextColor="Red"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityViewModel}}, Path=DeleteActivityCommand}"
-                                    CommandParameter="{Binding}"
-                                    VerticalOptions="Start"
-                                    FontSize="20" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            
 
         </VerticalStackLayout>
     </ScrollView>
