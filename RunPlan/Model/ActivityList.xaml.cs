@@ -27,7 +27,7 @@ public partial class ActivityList : ContentPage
         if (isNavigating) return;
         isNavigating = true;
 
-        await Shell.Current.GoToAsync("///Activity");
+        await Shell.Current.GoToAsync("//Activity");
 
         isNavigating = false;
     }

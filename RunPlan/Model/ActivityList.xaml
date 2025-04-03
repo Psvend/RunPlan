@@ -12,7 +12,8 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
-            <Button Text="Add Activity"
+
+			<Button Text="Add Activity"
                     Clicked="OnAddActivityClicked"
                     BackgroundColor="MediumPurple"
                     TextColor="White"
@@ -20,13 +21,39 @@
                     HorizontalOptions="Fill" />
 
 
+			<HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+				<Button Text="This Week" Command="{Binding FilterThisWeekCommand}" />
+				<Picker Title="Select Month"
+                        ItemsSource="{Binding AvailableMonths}"
+                        SelectedItem="{Binding SelectedMonth}"
+                        WidthRequest="140"
+                        BackgroundColor="White"
+                        TextColor="Black" />
+				<Picker Title="Select Year"
+                        ItemsSource="{Binding AvailableYears}"
+                        SelectedItem="{Binding SelectedYear}"
+                        TextColor="White"
+                        TitleColor="White"
+                        BackgroundColor="#4E3689"
+                        Margin="0,10" />
+			</HorizontalStackLayout>
+
+			
             <Label Text="List Of Activities"
                    FontAttributes="Bold"
                    FontSize="18"
                    TextColor="White"
                    HorizontalOptions="Start" />
 
-            <CollectionView ItemsSource="{Binding RunningActivities}"
+
+			<Label Text="Empty for now – go run!"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   FontSize="16"
+                   IsVisible="{Binding IsEmptyMessageVisible}" />
+
+
+			<CollectionView ItemsSource="{Binding RunningActivities}"
                             Margin="0,0,0,20"
                             SelectionMode="None">
                 <CollectionView.ItemTemplate>
@@ -61,8 +88,8 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            
 
-        </VerticalStackLayout>
+
+		</VerticalStackLayout>
     </ScrollView>
 </ContentPage>
