@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using Microsoft.Maui.Graphics;
 
 namespace RunPlan.ViewModel;
 
@@ -13,21 +10,32 @@ public class RouteDrawable : IDrawable
 
     public void Draw(ICanvas canvas, RectF dirtyRect)
     {
+
+        Debug.WriteLine($"Route has {RouteCoordinates.Count} points.");
+
         if (RouteCoordinates.Count < 2)
             return; // Not enough points to draw a route
 
-        // Style for the route line
-        canvas.StrokeColor = Colors.Blue;
-        canvas.StrokeSize = 5;
+        double minLat = RouteCoordinates.Min(p => p.Latitude);
+        double maxLat = RouteCoordinates.Max(p => p.Latitude);
+        double minLon = RouteCoordinates.Min(p => p.Longitude);
+        double maxLon = RouteCoordinates.Max(p => p.Longitude);
 
-        // Scale and translate coordinates for drawing
+        double latRange = maxLat - minLat;
+        double lonRange = maxLon - minLon;
+        if (latRange == 0 || lonRange == 0)
+            return;
+
+        float MapX(double lon) => (float)((lon - minLon) / lonRange * dirtyRect.Width);
+        float MapY(double lat) => (float)((1 - (lat - minLat) / latRange) * dirtyRect.Height);
+
         var path = new PathF();
         bool isFirstPoint = true;
 
         foreach (var location in RouteCoordinates)
         {
-            var x = (float)(location.Longitude * 10); // Simplified scaling
-            var y = (float)(location.Latitude * 10);
+            float x = MapX(location.Longitude);
+            float y = MapY(location.Latitude);
 
             if (isFirstPoint)
             {
@@ -40,7 +48,8 @@ public class RouteDrawable : IDrawable
             }
         }
 
-        // Draw the route
+        canvas.StrokeColor = Colors.Blue;
+        canvas.StrokeSize = 5;
         canvas.DrawPath(path);
     }
 }

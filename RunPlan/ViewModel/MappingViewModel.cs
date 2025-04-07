@@ -14,15 +14,36 @@ public partial class MappingViewModel : BaseVievModel
     public ObservableCollection<Location> RouteCoordinates { get; } = new();
     public RouteDrawable RouteDrawable { get; } = new();
 
+    public string FormattedTotalDistance
+    {
+        get
+        {
+            if (TotalDistance < 1)
+            {
+                return $"{TotalDistance * 1000:F0} m"; // Show meters if under 1 km
+            }
+            else
+            {
+                return $"{TotalDistance:F2} km"; // Show kilometers
+            }
+        }
+    }
+
+
     private double _totalDistance;
     public double TotalDistance
     {
         get => _totalDistance;
-        set => SetProperty(ref _totalDistance, value);
+        set
+        {
+            if (SetProperty(ref _totalDistance, value))
+            {
+                OnPropertyChanged(nameof(FormattedTotalDistance)); // So the label updates too
+            }
+        }
     }
 
-    public ICommand StartTrackingCommand { get; }
-    public ICommand StopTrackingCommand { get; }
+
     public event Action? RouteUpdated;  // Notify when route updates
 
 
@@ -34,10 +55,11 @@ public partial class MappingViewModel : BaseVievModel
         _geolocation = geolocation;
         RouteDrawable.RouteCoordinates = RouteCoordinates;
 
-        StartTrackingCommand = new RelayCommand(async () => await StartTrackingAsync());
-        StopTrackingCommand = new RelayCommand(StopTracking);
+      
     }
 
+    // ✅ Start tracking command (automatically exposed as ICommand)
+    [RelayCommand]
     private async Task StartTrackingAsync()
     {
         var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
@@ -60,7 +82,6 @@ public partial class MappingViewModel : BaseVievModel
             {
                 RouteCoordinates.Add(location);
 
-                // Calculate distance
                 if (previousLocation != null)
                 {
                     double distance = Location.CalculateDistance(previousLocation, location, DistanceUnits.Kilometers);
@@ -70,18 +91,19 @@ public partial class MappingViewModel : BaseVievModel
 
                 previousLocation = location;
 
-                // Refresh the UI
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    RouteDrawable.RouteCoordinates = RouteCoordinates;
-                    RouteUpdated?.Invoke();  // Event to refresh GraphicsView
+
+                    RouteUpdated?.Invoke();  // Notify the UI to refresh GraphicsView
                 });
             }
 
-            await Task.Delay(5000); // Adjust tracking interval
+            await Task.Delay(5); // Adjust tracking interval
         }
     }
 
+    // ✅ Stop tracking command
+    [RelayCommand]
     private void StopTracking()
     {
         _isTracking = false;

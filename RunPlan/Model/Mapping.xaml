@@ -6,16 +6,36 @@
              x:DataType="viewmodel:MappingViewModel"
              x:Class="RunPlan.Model.Mapping"
              Title="Mapping">
-    
-    
-    <VerticalStackLayout Padding="10">
-        <Button Text="Start Tracking" Command="{Binding StartTrackingCommand}" />
+
+
+       <VerticalStackLayout Padding="10">
+        <Button Text="Start Tracking" Command="{Binding StartTrackingCommand}"
+               
+                />
         <Button Text="Stop Tracking" Command="{Binding StopTrackingCommand}" />
 
+        <Label Text="{Binding FormattedTotalDistance}" 
+       FontSize="Large" 
+       HorizontalOptions="Center" 
+       Margin="10" />
+
+        <!-- GraphicsView to draw the running route -->
         <GraphicsView x:Name="RouteGraphicsView"
-              Drawable="{Binding RouteDrawable}"
-              HeightRequest="400"
-              WidthRequest="400"
-              BackgroundColor="White"/>
+                      Drawable="{Binding RouteDrawable}"
+                      HeightRequest="400"
+                      WidthRequest="400"
+                      BackgroundColor="Violet"/>
+
+        <CollectionView x:Name="Activies">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout Padding="10" Spacing="10">
+                        <Label Text="{Binding TotalDistance}" FontSize="Large"/>
+
+                    </HorizontalStackLayout>
+                </DataTemplate>
+                
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>
