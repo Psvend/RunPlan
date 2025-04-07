@@ -8,34 +8,89 @@
              Title="Mapping">
 
 
-       <VerticalStackLayout Padding="10">
-        <Button Text="Start Tracking" Command="{Binding StartTrackingCommand}"
-               
-                />
-        <Button Text="Stop Tracking" Command="{Binding StopTrackingCommand}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <Label Text="{Binding FormattedTotalDistance}" 
-       FontSize="Large" 
-       HorizontalOptions="Center" 
-       Margin="10" />
+            <!-- Header -->
+            <Label Text="🏃 Live Run Tracker"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,10"/>
 
-        <!-- GraphicsView to draw the running route -->
-        <GraphicsView x:Name="RouteGraphicsView"
-                      Drawable="{Binding RouteDrawable}"
-                      HeightRequest="400"
-                      WidthRequest="400"
-                      BackgroundColor="Violet"/>
+            <!-- Start / Stop Buttons -->
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="Start" 
+                        Command="{Binding StartTrackingCommand}" 
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        CornerRadius="10"
+                        WidthRequest="120"/>
+                <Button Text="Stop" 
+                        Command="{Binding StopTrackingCommand}" 
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        CornerRadius="10"
+                        WidthRequest="120"/>
+            </HorizontalStackLayout>
 
-        <CollectionView x:Name="Activies">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <HorizontalStackLayout Padding="10" Spacing="10">
-                        <Label Text="{Binding TotalDistance}" FontSize="Large"/>
+            <!-- Distance Display -->
+            <Label Text="📏 Distance"
+                   FontSize="18"
+                   FontAttributes="Bold"/>
+            <Label Text="{Binding FormattedTotalDistance}"
+                   FontSize="22"
+                   TextColor="DarkBlue"
+                   HorizontalOptions="Center"/>
 
-                    </HorizontalStackLayout>
-                </DataTemplate>
-                
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+            <!-- Timer Display -->
+            <Label Text="⏱ Time Elapsed"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0"/>
+            <Label Text="{Binding ElapsedTimeFormatted}"
+                   FontSize="22"
+                   TextColor="DarkBlue"
+                   HorizontalOptions="Center"/>
+
+            <!-- Route Drawing Area -->
+            <Label Text="🗺 Route Map"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0"/>
+            <GraphicsView x:Name="RouteGraphicsView"
+                          Drawable="{Binding RouteDrawable}"
+                          HeightRequest="300"
+                          WidthRequest="300"
+                          BackgroundColor="LightGray"
+                          HorizontalOptions="Center"
+                          Margin="0,0,0,10"/>
+
+            <!-- Recent Activities -->
+            <Label Text="📌 Recent Activities"
+                   FontSize="18"
+                   FontAttributes="Bold"/>
+            <CollectionView x:Name="Activies"
+                            HeightRequest="150">
+                <CollectionView.EmptyView>
+                    <Label Text="No activities yet."
+                           HorizontalOptions="Center"
+                           TextColor="Gray"
+                           Margin="10"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" BackgroundColor="#f4f4f4" CornerRadius="8">
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding TotalDistance}"
+                                       FontSize="Medium"
+                                       FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

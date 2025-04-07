@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Maui.Graphics;
+using System.Timers;
 
 
 namespace RunPlan.ViewModel;
@@ -13,6 +14,24 @@ public partial class MappingViewModel : BaseVievModel
     private readonly IGeolocation _geolocation;
     public ObservableCollection<Location> RouteCoordinates { get; } = new();
     public RouteDrawable RouteDrawable { get; } = new();
+
+    private System.Timers.Timer? _timer;
+    private TimeSpan _elapsedTime = TimeSpan.Zero;
+    private DateTime _startTime;
+
+    public string ElapsedTimeFormatted => _elapsedTime.ToString(@"hh\:mm\:ss");
+    public TimeSpan ElapsedTime
+    {
+        get => _elapsedTime;
+        set
+        {
+            if (SetProperty(ref _elapsedTime, value))
+            {
+                OnPropertyChanged(nameof(ElapsedTimeFormatted)); // Update formatted string too
+            }
+        }
+    }
+
 
     public string FormattedTotalDistance
     {
@@ -72,6 +91,13 @@ public partial class MappingViewModel : BaseVievModel
         _isTracking = true;
         RouteCoordinates.Clear();
         TotalDistance = 0;
+        _startTime = DateTime.Now;
+        _timer = new System.Timers.Timer(1000); // 1 second interval
+        _timer.Elapsed += (s, e) =>
+        {
+            ElapsedTime = DateTime.Now - _startTime;
+        };
+        _timer.Start();
 
         Location? previousLocation = null;
 
@@ -104,9 +130,25 @@ public partial class MappingViewModel : BaseVievModel
 
     // ✅ Stop tracking command
     [RelayCommand]
-    private void StopTracking()
+    private async Task StopTracking()
     {
         _isTracking = false;
         Debug.WriteLine($"Tracking stopped. Total Distance: {TotalDistance} km");
+        _timer?.Stop();
+        _timer?.Dispose();
+        _timer = null;
+        string name = await Application.Current.MainPage.DisplayPromptAsync(
+       "Save Run",
+       "Give your run a name:",
+       "Save",
+       "Cancel",
+       "Morning Run"
+   );
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            Debug.WriteLine($"Run saved: {name}, Distance: {FormattedTotalDistance}");
+            // Optionally add to a saved runs collection here
+        }
     }
 }
