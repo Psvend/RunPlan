@@ -51,6 +51,30 @@ public partial class ActivityList : ContentPage
         }
     }
 
+    private void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+
+    //Navigates to activity details page when an activity is selected
+    private async void OnActivitySelected(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is RunningActivity selected)
+        {
+            await Shell.Current.GoToAsync("ActivityDetail", true, new Dictionary<string, object>
+        {
+            { "RunningActivity", selected }
+        });
+
+            ((CollectionView)sender).SelectedItem = null; // clear selection
+        }
+    }
+
+
+
+
+
 
 
 }

@@ -139,7 +139,8 @@
 
 			<CollectionView ItemsSource="{Binding RunningActivities}"
                             Margin="0,0,0,20"
-                            SelectionMode="None">
+                            SelectionChanged="OnActivitySelected"
+                            SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:RunningActivity">
                         <Border StrokeShape="RoundRectangle 10"

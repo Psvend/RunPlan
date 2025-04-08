@@ -1,0 +1,117 @@
+<ContentPage
+    x:Class="RunPlan.Model.ActivityDetail"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:model="clr-namespace:RunPlan.Data"
+    x:DataType="model:RunningActivity"
+    Title="Activity Detail"
+    BackgroundColor="#8260DA">
+
+
+
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="20">
+
+			<!-- Back Button -->
+			<ImageButton Source="back.png"
+                         WidthRequest="30"
+                         HeightRequest="30"
+                         BackgroundColor="Transparent"
+                         Clicked="OnBackClicked"
+                         HorizontalOptions="Start" />
+
+			<!-- Title -->
+			<Label Text="{Binding Name}"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+
+			<!-- Info Grid (2x2 Boxes) -->
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20">
+
+				<!-- Distance Box -->
+				<Frame Grid.Row="0" Grid.Column="0"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="100"
+					   WidthRequest="150"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Distance}" FontSize="36" FontAttributes="Bold" />
+									<Span Text=" km" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
+				</Frame>
+
+				
+			
+				<!-- Time Box -->
+				<Frame Grid.Row="0" Grid.Column="1"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="100"
+					   WidthRequest="150"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Time}" FontSize="36" FontAttributes="Bold" />
+									<Span Text=" min" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
+				</Frame>
+
+
+				<!-- Pace Box -->
+				<Frame BackgroundColor="#4E3689" CornerRadius="20" Padding="20" HasShadow="False"
+					   Grid.Row="1" Grid.Column="0">
+					<Label Text="{Binding Pace, StringFormat='{0} min/km'}"
+						   TextColor="White" FontSize="20" FontAttributes="Bold"
+						   HorizontalOptions="Center"/>
+				</Frame>
+
+				<!-- Future Box -->
+				<Frame BackgroundColor="#4E3689" CornerRadius="20" Padding="20" HasShadow="False"
+					   Grid.Row="1" Grid.Column="1">
+					<Label Text="TBD"
+						   TextColor="White" FontSize="20" FontAttributes="Bold"
+						   HorizontalOptions="Center"/>
+				</Frame>
+
+			</Grid>
+
+			<!-- Description -->
+			<Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   HasShadow="False">
+				<Label Text="{Binding Description}"
+                       TextColor="#4E3689"
+                       FontSize="16" />
+			</Frame>
+
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>
