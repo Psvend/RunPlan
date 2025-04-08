@@ -120,6 +120,9 @@ namespace RunPlan.Data
         }
     }
 
+
+
+
     // ✅ Define the RunningActivity Model
     public class RunningActivity
     {
@@ -129,5 +132,6 @@ namespace RunPlan.Data
         public double Distance { get; set; }
         public string Time { get; set; } = "00:00:00";
         public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+      
     }
 }

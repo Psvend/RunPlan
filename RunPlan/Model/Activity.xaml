@@ -7,49 +7,81 @@
               ios:Page.UseSafeArea="True"
              x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
-             Title="Activity">
-    <Grid
-        ColumnDefinitions="*,*"
-        ColumnSpacing="5"
-        RowDefinitions="*,Auto"
-        RowSpacing="0">
-        <CollectionView
-           Grid.ColumnSpan="2"
-            ItemsSource="{Binding RunningActivities}"
-            SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:RunningActivity">
-                    <Grid Padding="10" HorizontalOptions="Fill">
-                        <Border HeightRequest="125" Style="{StaticResource CardView}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command= "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityViewModel}},x:DataType=viewmodel:ActivityViewModel, Path=GoToDetailsCommand}"     
-                                    CommandParameter= "{Binding .}"/>
-                            </Border.GestureRecognizers>
-                            <Grid Padding="0" ColumnDefinitions="125,*">
-                                <VerticalStackLayout
-                                    VerticalOptions="Center"
-                                    Grid.Column="1"
-                                    Padding="10">
-                                    <Label Text="{Binding Name}" FontSize="20" />
-                                    <Label Text="{Binding Distance}" FontSize="15" />
-                                    <Label Text="{Binding Time}" FontSize="15" />
-                                    <Label Text="{Binding Date}" FontSize="15" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Button Text="Get Monkeys" 
-                Command="{Binding LoadActivitiesCommand}"
-                IsEnabled="{Binding IsNotBusy}"
-                Grid.Row="1"
-                Grid.Column="0"
-                Style="{StaticResource ButtonOutline}"
-                Margin="8"/>
+             BackgroundColor="#8260DA">
+             
+             
+
+    <ScrollView>
+        <VerticalStackLayout Padding="50" Spacing="30">
+            <Button Text="Back"
+         Clicked="OnBackClicked"
+         BackgroundColor="Transparent"
+         TextColor="White"
+         HorizontalOptions="Start"
+         FontSize="16"
+         Padding="0,0,0,10"/>
 
 
-    </Grid>
+            <!-- 🟣 Add New Activity Form -->
+            <Border BackgroundColor="White"
+                StrokeShape="RoundRectangle 20"
+                Padding="15"
+                Stroke="MediumPurple"
+                HorizontalOptions="Fill">
+
+                <VerticalStackLayout Spacing="12">
+                   
+
+                    <Label Text="Add New Activity"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       TextColor="MediumPurple"
+                       HorizontalOptions="Center" />
+
+                    <Entry Text="{Binding ActivityName}"
+                       Placeholder="Activity name"
+                       BackgroundColor="#F0F0F0"
+                       TextColor="Black" />
+
+                    <Entry Text="{Binding DistanceText}"
+                       Placeholder="Distance (km)"
+                       Keyboard="Numeric"
+                       BackgroundColor="#F0F0F0"
+                       TextColor="Black" />
+
+                    <Entry Text="{Binding Time}"
+                       Placeholder="Time (hh:mm:ss)"
+                       Keyboard="Text"
+                       BackgroundColor="#F0F0F0"
+                       TextColor="Black" />
+
+                    <Entry Text="{Binding Date}"
+                       Placeholder="Date (yyyy-MM-dd)"
+                       Keyboard="Text"
+                       BackgroundColor="#F0F0F0"
+                       TextColor="Black" />
+
+                    <Button Text="Add Activity"
+                        Command="{Binding AddActivityCommand}"
+                        BackgroundColor="MediumPurple"
+                        TextColor="White"
+                        CornerRadius="10"
+                        HorizontalOptions="Fill" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Spacer -->
+            <BoxView HeightRequest="20" BackgroundColor="Transparent"/>
+
+            
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+
+
+
+
+
+
 </ContentPage>
