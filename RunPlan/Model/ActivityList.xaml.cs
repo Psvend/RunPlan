@@ -27,7 +27,7 @@ public partial class ActivityList : ContentPage
         if (isNavigating) return;
         isNavigating = true;
 
-        await Shell.Current.GoToAsync("///Activity");
+        await Shell.Current.GoToAsync("//Activity");
 
         isNavigating = false;
     }
@@ -41,7 +41,15 @@ public partial class ActivityList : ContentPage
             await vm.LoadActivities();
     }
 
-    
+
+    //Search bar 
+    private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (BindingContext is ActivityListViewModel vm)
+        {
+            vm.FilterActivitiesBySearch();
+        }
+    }
 
 
 

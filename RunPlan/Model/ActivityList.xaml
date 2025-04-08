@@ -12,21 +12,132 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
-            <Button Text="Add Activity"
-                    Clicked="OnAddActivityClicked"
-                    BackgroundColor="MediumPurple"
-                    TextColor="White"
-                    CornerRadius="10"
-                    HorizontalOptions="Fill" />
+			<Grid ColumnDefinitions="*, Auto"
+      Padding="10"
+      VerticalOptions="Center"
+      HorizontalOptions="FillAndExpand">
+				<Label Text="Your Runs!"
+					   FontAttributes="Bold"
+					   FontSize="32"
+					   TextColor="White"
+					   VerticalOptions="Center"
+					   Grid.Column="0" />
+				<ImageButton
+					Source="plus.png"
+					WidthRequest="75"
+					HeightRequest="75"
+					BackgroundColor="#BC54BD"
+					CornerRadius="55"
+					HorizontalOptions="End"
+					VerticalOptions="Center"
+					Clicked="OnAddActivityClicked"
+					Aspect="AspectFit"
+					Grid.Column="1" />
+			</Grid>
 
 
-            <Label Text="List Of Activities"
+
+			<HorizontalStackLayout HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Spacing="10"
+                       Padding="0,10">
+
+				<!-- This Week Button -->
+				<VerticalStackLayout Spacing="4" VerticalOptions="End">
+					<Label Text="" HeightRequest="16"/>
+					<!-- Fakes label spacing -->
+					<Button Text="This Week"
+							Command="{Binding FilterThisWeekCommand}"
+							BackgroundColor="#4E3689"
+							TextColor="White"
+							FontAttributes="Bold"
+							HeightRequest="50"
+							WidthRequest="110"
+							CornerRadius="25" />
+				</VerticalStackLayout>
+
+				<!-- Month Picker -->
+				<VerticalStackLayout Spacing="4" VerticalOptions="End">
+					<Label Text="  Select Month"
+						   FontSize="12"
+						   TextColor="White"
+						   HorizontalOptions="Start" />
+					<Border StrokeShape="RoundRectangle 25"
+							StrokeThickness="0"
+							Stroke="Transparent"
+							BackgroundColor="#4E3689"
+							Padding="0">
+						<Picker ItemsSource="{Binding AvailableMonths}"
+								SelectedItem="{Binding SelectedMonth}"
+								WidthRequest="140"
+								HeightRequest="50"
+								BackgroundColor="#4E3689"
+								TextColor="White"
+								TitleColor="White"
+								FontAttributes="Bold" />
+					</Border>
+				</VerticalStackLayout>
+
+				<!-- Year Picker with Rounded Corners -->
+				<VerticalStackLayout Spacing="4" VerticalOptions="End">
+					<Label Text="  Select Year"
+						   FontSize="12"
+						   TextColor="White"
+						   HorizontalOptions="Start" />
+
+					<Border StrokeShape="RoundRectangle 25"
+							BackgroundColor="#4E3689"
+							Padding="0"
+							StrokeThickness="0"
+							Stroke="Transparent"
+							>
+						<Picker ItemsSource="{Binding AvailableYears}"
+								SelectedItem="{Binding SelectedYear}"
+								WidthRequest="100"
+								HeightRequest="50"
+								BackgroundColor="Transparent"
+								TextColor="White"
+								TitleColor="White"
+								FontAttributes="Bold" />
+					</Border>
+				</VerticalStackLayout>
+
+
+			</HorizontalStackLayout>
+
+
+
+			<Label Text="List Of Activities"
                    FontAttributes="Bold"
                    FontSize="18"
                    TextColor="White"
-                   HorizontalOptions="Start" />
+                   HorizontalOptions="Start"
+				   Margin="0,20,0,0"
+				   />
 
-            <CollectionView ItemsSource="{Binding RunningActivities}"
+			<Border StrokeShape="RoundRectangle 20"
+					BackgroundColor="White"
+					Padding="0"
+					StrokeThickness="0"
+					Stroke="Transparent"
+					Margin="0,0,0,5">
+				<SearchBar Placeholder="Search activities..."
+						   Text="{Binding SearchQuery, Mode=TwoWay}"
+						   TextChanged="OnSearchTextChanged"
+						   BackgroundColor="Transparent"
+						   TextColor="MediumPurple"
+						   CancelButtonColor="MediumPurple" />
+			</Border>
+
+			
+			<Label Text="Empty for now – go run!"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   FontSize="16"
+                   IsVisible="{Binding IsEmptyMessageVisible}" />
+
+
+			<CollectionView ItemsSource="{Binding RunningActivities}"
                             Margin="0,0,0,20"
                             SelectionMode="None">
                 <CollectionView.ItemTemplate>
@@ -46,23 +157,29 @@
                                     <Label Text="{Binding Date, StringFormat='Date: {0}'}" />
                                 </StackLayout>
 
-                                <Button Text="Delete"
-                                        Grid.Column="1"
-                                        Grid.Row="0"
-                                        BackgroundColor="Transparent"
-                                        TextColor="Red"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityListViewModel}}, Path=DeleteActivityCommand}"
-                                        CommandParameter="{Binding}"
-                                        VerticalOptions="Start"
-                                        FontSize="14" />
+                                <ImageButton 
+                                    Source ="bin.png"    
+									Grid.Column="1"
+                                    Grid.Row="0"
+									WidthRequest="60"
+                                    HeightRequest="60"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityListViewModel}}, Path=DeleteActivityCommand}"
+                                    CommandParameter="{Binding}"
+                                    VerticalOptions="Start"
+									Aspect="AspectFit"
+                                        />
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            
+			
+			
 
-        </VerticalStackLayout>
+		</VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
+
