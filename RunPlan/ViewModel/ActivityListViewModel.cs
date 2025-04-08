@@ -190,7 +190,7 @@ public partial class ActivityListViewModel : BaseVievModel
 
     partial void OnSelectedYearChanged(int value)
     {
-        FilterByYear(value);
+        FilterByYearAndMonth(value, SelectedMonth);
     }
 
     private void FilterByYear(int year)
@@ -243,18 +243,7 @@ public partial class ActivityListViewModel : BaseVievModel
     partial void OnSelectedMonthChanged(string value)
     {
         if (string.IsNullOrEmpty(value)) return;
-
-        var currentYear = DateTime.Now.Year;
-        var filtered = allActivities
-            .Where(a => DateTime.TryParse(a.Date, out var d)
-                        && d.ToString("MMMM") == value
-                        && d.Year == currentYear)
-            .OrderByDescending(a => DateTime.Parse(a.Date))
-            .ToList();
-
-        IsEmptyMessageVisible = filtered.Count == 0;
-
-        ApplyFilter(filtered);
+        FilterByYearAndMonth(SelectedYear, value);
     }
 
 
@@ -268,6 +257,27 @@ public partial class ActivityListViewModel : BaseVievModel
     }
 
 
+
+    private void FilterByYearAndMonth(int year, string month)
+    {
+        var filtered = allActivities
+            .Where(a =>
+                DateTime.TryParse(a.Date, out var d) &&
+                d.Year == year &&
+                d.ToString("MMMM", CultureInfo.InvariantCulture) == month)
+            .Select(a =>
+            {
+                DateTime.TryParse(a.Date, out var parsedDate);
+                return new { Activity = a, ParsedDate = parsedDate };
+            })
+            .OrderByDescending(x => x.ParsedDate)
+            .Select(x => x.Activity)
+            .ToList();
+
+        IsEmptyMessageVisible = filtered.Count == 0;
+
+        ApplyFilter(filtered);
+    }
 
 
 
