@@ -15,6 +15,7 @@ using System.Globalization;
 
 
 
+
 namespace RunPlan.ViewModel;
 
 public partial class ActivityListViewModel : BaseVievModel
@@ -45,6 +46,7 @@ public partial class ActivityListViewModel : BaseVievModel
     [ObservableProperty] private bool isEmptyMessageVisible;
     [ObservableProperty] private List<int> availableYears;
     [ObservableProperty] private int selectedYear;
+    [ObservableProperty] private string searchQuery;
 
 
     [RelayCommand]
@@ -275,6 +277,23 @@ public partial class ActivityListViewModel : BaseVievModel
             .ToList();
 
         IsEmptyMessageVisible = filtered.Count == 0;
+
+        ApplyFilter(filtered);
+    }
+
+
+
+    //To handle search bar
+    public void FilterActivitiesBySearch()
+    {
+        IEnumerable<RunningActivity> filtered = allActivities;
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filtered = filtered
+                .Where(a => a.Name != null &&
+                            a.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+        }
 
         ApplyFilter(filtered);
     }
