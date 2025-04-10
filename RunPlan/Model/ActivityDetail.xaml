@@ -2,8 +2,8 @@
     x:Class="RunPlan.Model.ActivityDetail"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:model="clr-namespace:RunPlan.Data"
-    x:DataType="model:RunningActivity"
+    xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
+    x:DataType="viewmodel:DetailViewModel"
     Title="Activity Detail"
     BackgroundColor="#8260DA">
 
@@ -28,15 +28,15 @@
                    HorizontalOptions="Center" />
 
 			<!-- Info Grid (2x2 Boxes) -->
-			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20">
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
 
 				<!-- Distance Box -->
 				<Frame Grid.Row="0" Grid.Column="0"
 					   BackgroundColor="#4E3689"
 					   CornerRadius="12"
 					   BorderColor="#4E3689"
-					   HeightRequest="100"
-					   WidthRequest="150"
+					   HeightRequest="150"
+					   WidthRequest="180"
 					   HorizontalOptions="Center"
 					   VerticalOptions="Center"
 					   Padding="0"
@@ -62,8 +62,8 @@
 					   BackgroundColor="#4E3689"
 					   CornerRadius="12"
 					   BorderColor="#4E3689"
-					   HeightRequest="100"
-					   WidthRequest="150"
+					   HeightRequest="150"
+					   WidthRequest="180"
 					   HorizontalOptions="Center"
 					   VerticalOptions="Center"
 					   Padding="0"
@@ -85,20 +85,63 @@
 
 
 				<!-- Pace Box -->
-				<Frame BackgroundColor="#4E3689" CornerRadius="20" Padding="20" HasShadow="False"
-					   Grid.Row="1" Grid.Column="0">
-					<Label Text="{Binding Pace, StringFormat='{0} min/km'}"
-						   TextColor="White" FontSize="20" FontAttributes="Bold"
-						   HorizontalOptions="Center"/>
+				<Frame Grid.Row="1" Grid.Column="0"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="150"
+					   WidthRequest="180"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Pace, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold" />
+									<Span Text="min/km" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
 				</Frame>
 
+
+
+
+
 				<!-- Future Box -->
-				<Frame BackgroundColor="#4E3689" CornerRadius="20" Padding="20" HasShadow="False"
-					   Grid.Row="1" Grid.Column="1">
-					<Label Text="TBD"
-						   TextColor="White" FontSize="20" FontAttributes="Bold"
-						   HorizontalOptions="Center"/>
+				<Frame Grid.Row="1" Grid.Column="1"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="150"
+					   WidthRequest="180"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="" FontSize="36" FontAttributes="Bold" />
+									<Span Text=" empty for now" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
 				</Frame>
+
+
+
 
 			</Grid>
 
@@ -106,6 +149,8 @@
 			<Frame BackgroundColor="White"
                    CornerRadius="15"
                    Padding="20"
+				   HeightRequest="80"
+				   WidthRequest="390"
                    HasShadow="False">
 				<Label Text="{Binding Description}"
                        TextColor="#4E3689"
