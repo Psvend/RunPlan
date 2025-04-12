@@ -31,6 +31,7 @@ namespace RunPlan.Data
             {
                 _database = new SQLiteAsyncConnection(_dbPath);
                 _database.CreateTableAsync<RunningActivity>().Wait();
+                _database.CreateTableAsync<User>().Wait();
 
                 // ✅ Ensure database exists by adding a test record if empty
                 EnsureDatabaseInitialized().Wait();
@@ -113,6 +114,20 @@ namespace RunPlan.Data
             Console.WriteLine($"🗑️ Deleted activity with ID: {id}");
         }
 
+        public async Task<bool> RegisterUserAsync(string email, string password)
+        {
+            var existing = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if(existing != null) return false;
+            var user = new User { Email = email, Password = password };
+            await _database.InsertAsync(user);
+            Console.WriteLine("User registrered!");
+            return true;
+        }
+        public async Task<bool>ValidateUserAsync(string email, string password)
+        {
+            var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            return user != null;
+        }
         // ✅ Get database path (for debugging)
         public string GetDbPath()
         {

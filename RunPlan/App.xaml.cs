@@ -1,16 +1,17 @@
-﻿namespace RunPlan
+﻿namespace RunPlan;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    private readonly LoginPage _loginPage;
+
+    public App(LoginPage loginPage)
     {
-        public App()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        _loginPage = loginPage;
+    }
 
-
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
-        }
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(new NavigationPage(_loginPage)); // brug loginPage her
     }
 }

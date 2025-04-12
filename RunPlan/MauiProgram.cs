@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using RunPlan.Data;
+using RunPlan.Services;
+using RunPlan.Model;
+using LoginPage = RunPlan.Model.LoginPage;
+
 
 namespace RunPlan;
 
@@ -15,12 +19,17 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+        builder.Services.AddSingleton<App>();
 
         // Register SQLite DatabaseService
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<ActivityViewModel>();
         builder.Services.AddTransient<DetailViewModel>();
+        builder.Services.AddSingleton<LoginViewModel>();
+        builder.Services.AddSingleton<LoginPage>();
+        builder.Services.AddSingleton<App>();
+
 
 #if DEBUG
         builder.Logging.AddDebug();
