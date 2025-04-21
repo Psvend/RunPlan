@@ -147,6 +147,11 @@
                                 BackgroundColor="#4E3689"
                                 Stroke="MediumPurple"
                                 Margin="0,6">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command= "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityListViewModel}},x:DataType=viewmodel ActivityListViewModel, Path=GoToDetailsCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="*,Auto"
                                   RowDefinitions="Auto,Auto"
                                   RowSpacing="10">

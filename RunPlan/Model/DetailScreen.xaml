@@ -4,24 +4,41 @@
              xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
              x:DataType="viewmodel:DetailViewModel"
              x:Class="RunPlan.Model.DetailScreen"
-             Title="{Binding RunningActivity.Name}">
+             Title="{Binding RunningActivity.Name}"
+             Background="#8260DA">
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,*">
-            <Label Style="{StaticResource LargeLabel}"
-                   Grid.Row="1"
-                   FontAttributes="Bold"
-                   Text="{Binding RunningActivity.Name}"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,8"/>
+        <VerticalStackLayout Padding="30" Spacing="25">
+            <Label Text="{Binding RunningActivity.Name}"
+                   FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                    TextColor="Black" />
 
-            <VerticalStackLayout Grid.Row="2" Padding="10" Spacing="10">
+            <!-- Grid for Distance / Time / Pace / Intensity -->
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" ColumnSpacing="30" RowSpacing="20">
 
-                <Label Style="{StaticResource MediumLabel}" Text="{Binding RunningActivity.Date}" />
-                <Label Style="{StaticResource SmallLabel}" Text="{Binding RunningActivity.Distance, StringFormat='Distance: {0}'}" />
-                <Label Style="{StaticResource SmallLabel}" Text="{Binding RunningActivity.Time, StringFormat='Time: {0}'}" />
-            </VerticalStackLayout>
+                <!-- Distance -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Center">
+                    <Label Text="{Binding RunningActivity.Distance}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Distance (km)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Time -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1" HorizontalOptions="Center">
+                    <Label Text="{Binding RunningActivity.Time}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Time (hh:mm:ss)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Pace -->
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
+                    <Entry Text="{Binding RunningActivity.Date}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Date (yyyy-MM-dd)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
 
 
-        </Grid>
+            </Grid>
+        </VerticalStackLayout>
+       
     </ScrollView>
 </ContentPage>
