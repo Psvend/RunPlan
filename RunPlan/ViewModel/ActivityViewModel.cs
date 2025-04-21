@@ -22,11 +22,20 @@ public partial class ActivityViewModel : BaseVievModel
 
     private readonly DatabaseService _databaseService;
 
+    private bool _isTracking;
+    private Location? _previousLocation;
+    private DateTime _startTime;
+    private Timer? _timer;
+
+    private readonly IGeolocation _geolocation;
 
 
 
-    public ActivityViewModel(DatabaseService databaseService)
+
+
+    public ActivityViewModel(DatabaseService databaseService, IGeolocation geolocation)
     {
+        _geolocation = geolocation;
         _databaseService = databaseService;
         Title = "Running Activities";
 
@@ -120,8 +129,55 @@ public partial class ActivityViewModel : BaseVievModel
             { "RunningActivity", activity }
         });
     }
+    [RelayCommand]
+    private async Task StartTrackingAsync()
+    {
+        var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        _isTracking = true;
+        _startTime = DateTime.Now;
+        _previousLocation = null;
+        DistanceText = "0";
+        Date = _startTime.ToString("yyyy-MM-dd");
+
+        _timer = new Timer(async _ => await UpdateLocationAsync(), null, 0, 5000);
+    }
+
+    [RelayCommand]
+    private void StopTracking()
+    {
+        _isTracking = false;
+        _timer?.Dispose();
+        Time = (DateTime.Now - _startTime).ToString(@"hh\:mm\:ss");
+    }
+
+    private async Task UpdateLocationAsync()
+    {
+        if (!_isTracking) return;
+
+        await MainThread.InvokeOnMainThreadAsync(async () =>
+        {
+            try
+            {
+                var location = await _geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best));
+
+                if (location != null && _previousLocation != null)
+                {
+                    var distance = Location.CalculateDistance(_previousLocation, location, DistanceUnits.Kilometers);
+                    if (double.TryParse(DistanceText, out double current))
+                        DistanceText = (current + distance).ToString("F2");
+                }
+
+                _previousLocation = location;
+            }
+            catch (Exception ex)
+            {
+                // Optional: log or show error to user
+                Debug.WriteLine($"Location error: {ex.Message}");
+            }
+        });
+    }
 
 
- 
+
 
 }

@@ -35,20 +35,20 @@
 
                 <!-- Distance -->
                 <VerticalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Center">
-                    <Entry Text="{Binding DistanceText}" FontSize="22" HorizontalOptions="Center"/>
-                    <Label Text="km" FontSize="14" TextColor="Gray" HorizontalOptions="Center"/>
+                    <Entry Text="{Binding DistanceText}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Distance (km)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- Time -->
                 <VerticalStackLayout Grid.Row="0" Grid.Column="1" HorizontalOptions="Center">
-                    <Entry Text="{Binding Time}" FontSize="22" HorizontalOptions="Center"/>
-                    <Label Text="min" FontSize="14" TextColor="Gray" HorizontalOptions="Center"/>
+                    <Entry Text="{Binding Time}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Time (hh:mm:ss)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- Pace -->
                 <VerticalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
-                    <Entry Text="{Binding Date}" FontSize="22" HorizontalOptions="Center"/>
-                    <Label Text="/km" FontSize="14" TextColor="Gray" HorizontalOptions="Center"/>
+                    <Entry Text="{Binding Date}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Date (yyyy-MM-dd)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
           
@@ -64,6 +64,17 @@
                 CornerRadius="15"
                 HorizontalOptions="Fill" />
 
+            <Button Text="Start Tracking Automatically"
+             Command="{Binding StartTrackingCommand}"
+             BackgroundColor="DarkViolet"
+            TextColor="White"
+            CornerRadius="10" />
+            <Button Text="Stop Tracking"
+             Command="{Binding StopTrackingCommand}"
+            BackgroundColor="Gray"
+            TextColor="White"
+            CornerRadius="10" />
+
         </VerticalStackLayout>
     </ScrollView>
 
@@ -74,3 +85,5 @@
 
 
 </ContentPage>
+
+
