@@ -7,49 +7,84 @@
               ios:Page.UseSafeArea="True"
              x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
-             Title="Activity">
-    <Grid
-        ColumnDefinitions="*,*"
-        ColumnSpacing="5"
-        RowDefinitions="*,Auto"
-        RowSpacing="0">
-        <CollectionView
-           Grid.ColumnSpan="2"
-            ItemsSource="{Binding RunningActivities}"
-            SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:RunningActivity">
-                    <Grid Padding="10" HorizontalOptions="Fill">
-                        <Border HeightRequest="125" Style="{StaticResource CardView}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command= "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityViewModel}},x:DataType=viewmodel:ActivityViewModel, Path=GoToDetailsCommand}"     
-                                    CommandParameter= "{Binding .}"/>
-                            </Border.GestureRecognizers>
-                            <Grid Padding="0" ColumnDefinitions="125,*">
-                                <VerticalStackLayout
-                                    VerticalOptions="Center"
-                                    Grid.Column="1"
-                                    Padding="10">
-                                    <Label Text="{Binding Name}" FontSize="20" />
-                                    <Label Text="{Binding Distance}" FontSize="15" />
-                                    <Label Text="{Binding Time}" FontSize="15" />
-                                    <Label Text="{Binding Date}" FontSize="15" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Button Text="Get Monkeys" 
-                Command="{Binding LoadActivitiesCommand}"
-                IsEnabled="{Binding IsNotBusy}"
-                Grid.Row="1"
-                Grid.Column="0"
-                Style="{StaticResource ButtonOutline}"
-                Margin="8"/>
+             BackgroundColor="#8260DA">
+             
+             
 
 
-    </Grid>
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="25">
+            <!-- Back Button -->
+            <ImageButton Source="back.png"
+		                 Clicked="OnBackClicked"
+		                 BackgroundColor="Transparent"
+		                 HorizontalOptions="Start"
+		                 HeightRequest="30"
+                         WidthRequest="30"    
+		                 Padding="0,0,0,10"/>
+            <!-- Title -->
+            <Entry Text="{Binding ActivityName}" 
+               Placeholder="Activity Title"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"
+               TextColor="Black" />
+
+            <!-- Grid for Distance / Time / Pace / Intensity -->
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" ColumnSpacing="30" RowSpacing="20">
+
+                <!-- Distance -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Center">
+                    <Entry Text="{Binding DistanceText}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Distance (km)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Time -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1" HorizontalOptions="Center">
+                    <Entry Text="{Binding Time}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Time (hh:mm:ss)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Pace -->
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
+                    <Entry Text="{Binding Date}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
+                    <Label Text="Date (yyyy-MM-dd)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+          
+            </Grid>
+
+        
+           
+            <Button Text="save Activity"
+                Command="{Binding AddActivityCommand}"
+                FontSize="18"
+                TextColor="White"
+                BackgroundColor="MediumPurple"
+                CornerRadius="15"
+                HorizontalOptions="Fill" />
+
+            <Button Text="Start Tracking Automatically"
+             Command="{Binding StartTrackingCommand}"
+             BackgroundColor="DarkViolet"
+            TextColor="White"
+            CornerRadius="10" />
+            <Button Text="Stop Tracking"
+             Command="{Binding StopTrackingCommand}"
+            BackgroundColor="Gray"
+            TextColor="White"
+            CornerRadius="10" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+
+
+
+
+
+
 </ContentPage>
+
+

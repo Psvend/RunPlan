@@ -1,189 +1,140 @@
-﻿using RunPlan.Data;
+﻿
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
-using System.Globalization;
+using Syncfusion.Maui.Charts;
+using RunPlan.Model; 
+using RunPlan.ViewModel;
+using CommunityToolkit.Mvvm.Messaging;
+using RunPlan.Messages;
 
-namespace RunPlan.Model;
 
-public partial class MainPage : ContentPage
+
+namespace RunPlan.Model
 {
-    private readonly DatabaseService _dbService;
-
-    public MainPage(DatabaseService dbService)
+    public partial class MainPage : ContentPage
     {
-        InitializeComponent();
-        _dbService = dbService;
-        LoadActivities();
+        public MainViewModel ViewModel { get; private set; }
 
-    }
-
-
-
-    private async void LoadActivities()
-    {
-        var activities = await _dbService.GetAllActivitiesAsync();
-
-        //get todays date and calculate the date 7 days ago
-        DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
-
-        //filter the activities to only show the last 7 days
-        var recentActivities = activities
-            .Where(a => DateTime.TryParseExact(
-                a.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out DateTime parsedDate)
-                && parsedDate >= sevenDaysAgo)
-            .ToList();
-
-
-        ActivitiesCollectionView.ItemsSource = activities;
-
-
-
-        // ✅ Update Last Activity Box
-        if (activities.Count > 0)
+        public MainPage(DatabaseService dbService)
         {
-            var lastActivity = activities[^1]; // Get last activity
-
-            LastActivityName.Text = $"{lastActivity.Name}";
-            LastActivityDistance.Text = $"{lastActivity.Distance} km";
-            LastActivityPace.Text = CalculatePace(lastActivity.Time, lastActivity.Distance);
-            LastActivityTime.Text = lastActivity.Time;
-        }
-        else
-        {
-            LastActivityName.Text = "N/A";
-            LastActivityDistance.Text = "N/A";
-            LastActivityPace.Text = "N/A";
-            LastActivityTime.Text = "N/A";
-        }
-
-        // ✅ Update this weeks running history
-        UpdateWeeklyStats(recentActivities);
-    }
+            InitializeComponent();
+            ViewModel = new MainViewModel(dbService);
+            BindingContext = ViewModel;
 
 
-
-
-
-
-
-
-    // ✅ Handle adding a new activity
-    private async void OnAddActivityClicked(object sender, EventArgs e)
-    {
-        string activityName = ActivityNameEntry.Text?.Trim();
-        string distanceText = DistanceEntry.Text?.Trim();
-        string time = TimeEntry.Text?.Trim();
-        string date = DateEntry.Text?.Trim();
-
-        if (string.IsNullOrEmpty(activityName) || string.IsNullOrEmpty(distanceText) || string.IsNullOrEmpty(time) || string.IsNullOrEmpty(date))
-        {
-            await DisplayAlert("Error", "Please fill in all fields.", "OK");
-            return;
-        }
-
-        if (!double.TryParse(distanceText, out double distance))
-        {
-            await DisplayAlert("Error", "Distance must be a number.", "OK");
-            return;
-        }
-
-        await _dbService.InsertRunningActivity(activityName, distance, time, date);
-
-        ActivityNameEntry.Text = "";
-        DistanceEntry.Text = "";
-        TimeEntry.Text = "";
-        DateEntry.Text = "";
-
-        LoadActivities(); // Refresh UI
-    }
-
-    // ✅ Handle deleting an activity
-    private async void OnDeleteActivityClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is RunningActivity activity)
-        {
-            bool confirm = await DisplayAlert("Delete", $"Are you sure you want to delete {activity.Name}?", "Yes", "No");
-
-            if (confirm)
+            //Listens after updates from other pages
+            WeakReferenceMessenger.Default.Register<ActivityUpdatedMessage>(this, async (r, m) =>
             {
-                await _dbService.DeleteActivity(activity.Id);
-                LoadActivities(); // Refresh UI after deletion
+                await ViewModel.LoadActivities(); // or a smarter refresh
+                UpdateLastActivityUI(ViewModel.LastActivity);
+            });
+
+
+
+            UpdateLastActivityUI(ViewModel.LastActivity);
+
+
+
+            //Forces redraw when graph updates
+            ViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModel.ChartDrawable))
+                {
+                    ChartCanvas.Invalidate(); // 👈 Triggers chart redraw!
+                }
+            };
+
+
+
+
+        }
+
+
+
+
+        private void OnChartTapped(object sender, TappedEventArgs e)
+        {
+            var point = e.GetPosition(ChartCanvas);
+
+            if (point == null || ViewModel?.ChartDrawable?.Data == null)
+                return;
+
+            float leftMargin = 40;
+            float rightMargin = 20;
+            float totalWidth = (float)(ChartCanvas.Width - leftMargin - rightMargin);
+            int count = ViewModel.ChartDrawable.Data.Count;
+
+            if (count == 0) return;
+
+            float barSpacing = (float)(totalWidth / count);
+            int barIndex = (int)((point.Value.X - leftMargin) / barSpacing);
+
+
+
+            if (barIndex >= 0 && barIndex < count)
+            {
+                var item = ViewModel.ChartDrawable.Data[barIndex];
+
+                if (item != null)
+                {
+                    string distanceLabel = item.Distance == 0.05 ? "0 km" : $"{item.Distance} km";
+                    TooltipWeek.Text = item.WeekLabel;
+                    TooltipDistance.Text = distanceLabel;
+                    TooltipTime.Text = item.Time ?? "00:00:00";
+                    TooltipPanel.IsVisible = true;
+                }
+            }
+            else
+            {
+                TooltipPanel.IsVisible = false;
             }
         }
-    }
 
-    // ✅ Calculate Running Pace (min/km)
-    private string CalculatePace(string time, double distance)
-    {
-        try
+
+        //To update Last Activity box and This Week box
+        private void UpdateLastActivityUI(RunningActivity activity)
         {
-            string[] parts = time.Split(':'); // Expecting format "hh:mm:ss"
-            if (parts.Length != 3) return "N/A";
+            if (activity == null) return;
 
-            int hours = int.Parse(parts[0]);
-            int minutes = int.Parse(parts[1]);
-            int seconds = int.Parse(parts[2]);
+            LastActivityName.Text = activity.Name;
+            LastActivityDistance.Text = $"{activity.Distance} km";
 
-            double totalMinutes = hours * 60 + minutes + (seconds / 60.0);
-            double pace = totalMinutes / distance;
+            if (TimeSpan.TryParse(activity.Time, out TimeSpan parsedTime))
+            {
+                LastActivityTime.Text = $"{parsedTime.Hours}h{parsedTime.Minutes}min";
+            }
+            else
+            {
+                LastActivityTime.Text = activity.Time; // fallback
+            }
 
-            int paceMinutes = (int)pace;
-            int paceSeconds = (int)((pace - paceMinutes) * 60);
-
-            return $"{paceMinutes}:{paceSeconds:00} min/km";
-        }
-        catch
-        {
-            return "N/A"; // Return default if calculation fails
-        }
-    }
-
-
-    private void UpdateWeeklyStats(List<RunningActivity> recentActivities)
-    {
-        double totalDistance = recentActivities.Sum(a => a.Distance);
-        TimeSpan totalTime = TimeSpan.Zero;
-
-        foreach (var activity in recentActivities)
-        {
-            totalTime += ParseTime(activity.Time);
+            LastActivityPace.Text = MainViewModel.CalculatePace(activity.Time, activity.Distance);
         }
 
-        // ✅ Update UI Elements
-        WeekActivityHours.Text = $"{FormatTimeSpan(totalTime)}";
-        WeekActivityDistance.Text = $"{totalDistance} km";
-    }
 
-
-
-    // ✅ Parses "hh:mm:ss" format and returns a TimeSpan
-    private TimeSpan ParseTime(string time)
-    {
-        try
+        //To help navigation between pages to go smoother
+        protected override void OnDisappearing()
         {
-            string[] parts = time.Split(':');
-            if (parts.Length != 3) return TimeSpan.Zero;
-
-            int hours = int.Parse(parts[0]);
-            int minutes = int.Parse(parts[1]);
-            int seconds = int.Parse(parts[2]);
-
-            return new TimeSpan(hours, minutes, seconds);
+            base.OnDisappearing();
+           // MessageCenter.Unsubscribe<ActivityViewModel>(this, "ActivityUpdated");
         }
-        catch
-        {
-            return TimeSpan.Zero; // Default if parsing fails
-        }
+
+
+
     }
-
-    // ✅ Converts TimeSpan to a readable format like "6h10min"
-    private string FormatTimeSpan(TimeSpan time)
-    {
-        return $"{(int)time.TotalHours}h{time.Minutes}min";
-    }
+};
 
 
 
-}
+
+
+
+
+
+
+

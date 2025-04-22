@@ -1,183 +1,253 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfChart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"  
              x:Class="RunPlan.Model.MainPage"
-             BackgroundColor="LightGray">    <!--Background color-->
-    
-    
-    
-    
+             xmlns:viewModel="clr-namespace:RunPlan.ViewModel"
+             BackgroundColor="#8260DA">
 
     <ScrollView>
-        
-        
-        <VerticalStackLayout Padding="30,0" Spacing="25">
-            <!-- Dashboard title -->
-            <Label Text="Dashboard"
-                   FontSize="Large"
-                   FontAttributes="Bold"
-                   TextColor="AliceBlue"
-                   HorizontalOptions="Start"
-                   Padding="0,10,0,20" />
+
+        <VerticalStackLayout Padding="20,0" Spacing="-20">
+
+            <!-- Header with app name and profile icon -->
+            <Grid Padding="20" ColumnDefinitions="*,Auto" VerticalOptions="Start">
+                <Label Text="Hiya Soldier!"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Image Source="logo_nobackground.png"
+                       HeightRequest="150"
+                       WidthRequest="150"
+                       VerticalOptions="End"
+                       HorizontalOptions="End"
+                       Aspect="AspectFill" />
+            </Grid>
+
+            <!-- Summary Cards Section -->
+            <VerticalStackLayout Spacing="10">
+
+                <!-- Last Activity Card -->
+                <Border BackgroundColor="#4E3689"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="15"
+                        HorizontalOptions="Fill"
+                        Stroke="#4E3689">   
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10">
+
+                        <!-- Icon -->
+                        <Image Source="pin_white.png" 
+                               HeightRequest="40"
+                               WidthRequest="40"
+                               Grid.RowSpan="2" 
+                               Grid.Column="0" 
+                               VerticalOptions="Center" />
+
+                        <!-- Title -->
+                        <Label Text="Last Activity"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               Grid.Column="1"
+                               Grid.Row="0"
+                               Grid.ColumnSpan="2" />
+
+                        <!-- Run name -->
+                        <Label x:Name="LastActivityName"
+                               Text="{Binding LastActivity.Name}"
+                               TextColor="White"
+                               Grid.Row="1"
+                               Grid.Column="1" />
+
+                        <!-- Run time + pace in same row -->
+                        <StackLayout Orientation="Horizontal"
+                                     HorizontalOptions="End"
+                                     Grid.Row="1"
+                                     Grid.Column="2"
+                                     Spacing="15">
+                            <Label x:Name="LastActivityPace"
+                                   Text="{Binding LastActivityPace}"
+                                   TextColor="White" />
+                            <Label x:Name="LastActivityTime"
+                                   Text="{Binding LastActivity.Time}"
+                                   TextColor="White" /> 
+                            <Label x:Name="LastActivityDistance"
+                                   Text="{Binding LastActivity.Distance, StringFormat='{}{0} km'}"
+                                   TextColor="White" />    
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+                
+                <!-- Weekly Summary Card -->
+                <Border BackgroundColor="#4E3689"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="15"
+                        HorizontalOptions="Fill"
+                        Stroke="#4E3689">
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10">
+
+                        <!-- ✅ Circular Image Wrapper -->
+                        <Border StrokeShape="Ellipse"
+                            HeightRequest="50"
+                            WidthRequest="50"
+                            Padding="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Start"
+                            BackgroundColor="Transparent"
+                                Stroke="Transparent">
+                            <Image Source="https://i.etsystatic.com/5661443/r/il/12424b/5227674592/il_1588xN.5227674592_216p.jpg"
+                                   Aspect="AspectFill" 
+                                  />
+                        </Border>
+
+                        <Label Text="This Week"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               Grid.Column="1"
+                               Grid.ColumnSpan="2" />   
+
+                        <Label x:Name="WeekActivityDistance"
+                               Text="{Binding ThisWeekDistance}"
+                               TextColor="White"
+                               Grid.Row="1"
+                               Grid.Column="1" />
+
+                        <Label x:Name="WeekActivityHours"
+                               Text="{Binding ThisWeekTime}"
+                               TextColor="White"
+                               Grid.Row="1"
+                               Grid.Column="2" />   
+
+                    </Grid>
+                </Border>
+
+                
+            <BoxView HeightRequest="30" Opacity="0" />
 
 
-            <!-- Last activity box -->
-            <Border BackgroundColor="DarkGray"
-        Padding="15"
-        StrokeShape="RoundRectangle 20"
-        HorizontalOptions="Fill"
-        VerticalOptions="Start" >
+            </VerticalStackLayout>
+
+
+            
+            <!-- Weekly Running Distance Graph -->
+            <Border BackgroundColor="#6346AF"
+                    Padding="10"
+                    StrokeShape="RoundRectangle 20"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    Stroke="#6246AF">
+
                 <Border.Shadow>
                     <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
                 </Border.Shadow>
 
+                <Grid RowDefinitions="Auto, Auto, *, Auto"
+                      ColumnDefinitions="*"
+                      RowSpacing="15"
+                      ColumnSpacing="0"
+                      Padding="0,10,0,0">   
 
-                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*" Padding="5">
-                    <!-- Box Title -->
-                    <Label Text="Last Activity" 
-               FontAttributes="Bold" 
-               FontSize="18"
-               Grid.Row="0"
-               Grid.ColumnSpan="3"
-               HorizontalOptions="Start" />
+                    <!-- Chart Title -->
+                    <Label Text="Three Months Overview"
+                           FontAttributes="Bold"
+                           FontSize="30"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           Padding="13"
+                           Grid.Row="0" />  
 
-                    <!-- Name -->
-                    <Label x:Name="LastActivityName" 
-               Text="Evening Run" 
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="0"
-               HorizontalOptions="Start" />
+                    <!-- ⬆️ Move the Tooltip above the chart -->
+                    <StackLayout x:Name="TooltipPanel"
+                                 IsVisible="False"
+                                 Margin="40,0,0,0"
+                                 Spacing="6"
+                                 Grid.Row="1"
+                                 Orientation="Vertical"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalOptions="Start">
 
-                    <!-- Distance -->
-                    <Label x:Name="LastActivityDistance" 
-               Text="10 km" 
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="1"
-               HorizontalOptions="Start" />
 
-                    <!-- Pace -->
-                    <Label x:Name="LastActivityPace" 
-               Text="5:10 min/km"
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="2"
-               HorizontalOptions="Center" />
+                        <!-- Week Label -->
+                        <Label x:Name="TooltipWeek"
+                               Text="Week"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="White" />
 
-                    <!-- Duration -->
-                    <Label x:Name="LastActivityTime" 
-               Text="1h10min"
-               FontAttributes="Bold"
-               Grid.Row="1" 
-               Grid.Column="3"
-               HorizontalOptions="End" />
+                        <!-- Labels Row -->
+                        <Grid ColumnSpacing="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="Distance"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               Grid.Column="0" />
+                            <Label Text="Time"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               Grid.Column="1" />
+                        </Grid>
+
+                        <!-- Values Row -->
+                        <Grid ColumnSpacing="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label x:Name="TooltipDistance"
+                               Text="0 km"
+                               TextColor="White"
+                               Grid.Column="0" />
+                            <Label x:Name="TooltipTime"
+                       Text="0:00"
+                       TextColor="White"
+                       Grid.Column="1" />
+                        </Grid>
+
+                        
+                    </StackLayout>
+
+
+
+                    <!-- Chart Itself -->
+                    <GraphicsView x:Name="ChartCanvas"
+                      HeightRequest="300"
+                      Drawable="{Binding ChartDrawable}"
+                      BackgroundColor="Transparent"
+                      Grid.Row="2">
+                        <GraphicsView.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnChartTapped" />
+                        </GraphicsView.GestureRecognizers>
+                    </GraphicsView>
+
                 </Grid>
             </Border>
 
+            
 
+            <BoxView HeightRequest="80" Opacity="0" />
 
-            <!-- This weeks running history box -->
-        <Border BackgroundColor="White"
-              Padding="10"
-              StrokeShape="RoundRectangle 20"
-                
-                HorizontalOptions="Fill"
-              VerticalOptions="Start" >
-                <Border.Shadow>
-                    <Shadow Brush="Black" Opacity="0.5" Offset="5,5" />
-                </Border.Shadow>
-
-                <Border.Content>
-                    <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto,*,Auto, Auto" Padding="5">
-
-                        <!-- User Image -->
-                        <Image Source="https://i.etsystatic.com/5661443/r/il/12424b/5227674592/il_1588xN.5227674592_216p.jpg"
-                         WidthRequest="50"
-                         HeightRequest="50"
-                         BackgroundColor="Transparent"
-                         Aspect="AspectFill"
-                         Grid.Row="0"
-                         Grid.Column="0"
-                         Grid.RowSpan="2"
-                         VerticalOptions="Center"
-                         />
-
-
-                        <!-- Box Title -->
-                        <Label Text="Total running history for this week" 
-                          FontAttributes="Bold" 
-                          TextColor='DarkGrey'
-                          FontSize="18"
-                          Grid.Row="0"
-                          Grid.Column="1"
-                          Grid.ColumnSpan="3"
-                          HorizontalOptions="Start"
-                          VerticalOptions="Start"
-                          Padding="5" />
-
-                        <!-- Distance -->
-                        <Label x:Name="WeekActivityDistance" 
-                          Text="55 km"
-                          TextColor='DarkGrey'     
-                          FontAttributes="Bold"
-                          Grid.Row="1" 
-                          Grid.Column="1"
-                          HorizontalOptions="Start" />
-
-                        <!-- Name -->
-                         <Label x:Name="WeekActivityHours" 
-                            Text="6h10min" 
-                            TextColor='DarkGrey'
-                            FontAttributes="Bold"
-                            Grid.Row="1" 
-                            Grid.Column="2"
-                            VerticalOptions="Center"
-                            HorizontalOptions="Start" />
-
-
-                    </Grid>
-                </Border.Content>
-            </Border>
-
-
-
-
-
-
-            <!-- Input Fields -->
-            <Entry x:Name="ActivityNameEntry" Placeholder="Enter activity name" />
-            <Entry x:Name="DistanceEntry" Placeholder="Enter distance (km)" Keyboard="Numeric"/>
-            <Entry x:Name="TimeEntry" Placeholder="Enter time (hh:mm:ss)" Keyboard="Text"/>
-            <Entry x:Name="DateEntry" Placeholder="Enter date (yyyy-MM-dd)" Keyboard="Text"/>
-
-            <!-- Button to Add Activity -->
-            <Button Text="Add Activity" Clicked="OnAddActivityClicked" HorizontalOptions="Fill"/>
-
-            <!-- Display Activities with Delete Buttons -->
-            <CollectionView x:Name="ActivitiesCollectionView">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <HorizontalStackLayout Padding="10" Spacing="10">
-                            <Label Text="{Binding Name}" VerticalOptions="Center"/>
-                            <Label Text="{Binding Distance, StringFormat='{0} km'}" VerticalOptions="Center"/>
-                            <Label Text="{Binding Time}" VerticalOptions="Center"/>
-                            <Label Text="{Binding Date}" VerticalOptions="Center"/>
-
-                            <!-- Delete Button -->
-                            <Button Text="🗑" BackgroundColor="Red" TextColor="White" 
-                                    Clicked="OnDeleteActivityClicked" 
-                                    HorizontalOptions="End" 
-                                    BindingContext="{Binding}"/>
-                        </HorizontalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            
+            
 
         </VerticalStackLayout>
+        
     </ScrollView>
+
 </ContentPage>
-   
     
     
  

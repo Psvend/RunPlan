@@ -1,0 +1,200 @@
+<ContentPage
+    x:Class="RunPlan.Model.ActivityDetail"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
+    xmlns:converters="clr-namespace:RunPlan.Converters"
+    x:DataType="viewmodel:DetailViewModel"
+    Title="Activity Detail"
+    BackgroundColor="#8260DA">
+
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+
+    <ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="20">
+            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
+                <!-- Back Button -->
+				<ImageButton Source="back.png"
+						 Clicked="OnBackClicked"
+						 BackgroundColor="Transparent"
+						 HorizontalOptions="Start"
+						 HeightRequest="30"
+						 WidthRequest="30"    
+						 Grid.Column="0"/>
+                <!-- Save Button (only when editing) -->
+                <Button Text="Save"
+						FontSize="14"
+						BackgroundColor="White"
+						TextColor="MediumPurple"
+						CornerRadius="10"
+						Command="{Binding SaveChangesCommand}"
+						IsVisible="{Binding IsEditing}"
+						Grid.Column="2" />	
+
+                <ImageButton Source="edit.png"
+							 Command="{Binding OnEditClickedCommand}"
+							 BackgroundColor="Transparent"
+							 HorizontalOptions="End"
+							 HeightRequest="30"
+							 WidthRequest="30"    
+							 Grid.Column="1"/>
+            </Grid>
+
+            <!-- Title -->
+			<Label Text="{Binding Name}"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+
+			<!-- Info Grid (2x2 Boxes) -->
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
+
+				<!-- Distance Box -->
+				<Frame Grid.Row="0" Grid.Column="0"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="150"
+					   WidthRequest="180"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Distance}" FontSize="36" FontAttributes="Bold" />
+									<Span Text=" km" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
+				</Frame>
+
+				
+			
+				<!-- Time Box -->
+				<Frame Grid.Row="0" Grid.Column="1"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="150"
+					   WidthRequest="180"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Time}" FontSize="36" FontAttributes="Bold" />
+									<Span Text=" min" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
+				</Frame>
+
+
+				<!-- Pace Box -->
+				<Frame Grid.Row="1" Grid.Column="0"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="150"
+					   WidthRequest="180"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Pace, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold" />
+									<Span Text="min/km" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
+				</Frame>
+
+
+
+
+
+				<!-- Grade box -->
+				<Frame Grid.Row="1" Grid.Column="1"
+					   BackgroundColor="#4E3689"
+					   CornerRadius="12"
+					   BorderColor="#4E3689"
+					   HeightRequest="150"
+					   WidthRequest="180"
+					   HorizontalOptions="Center"
+					   VerticalOptions="Center"
+					   Padding="0"
+					   HasShadow="False">
+
+					<Grid VerticalOptions="Center" HorizontalOptions="Center">
+						<Label HorizontalTextAlignment="Center"
+							   VerticalTextAlignment="Center"
+							   TextColor="White">
+							<Label.FormattedText>
+								<FormattedString>
+									<Span Text="{Binding Grade}" FontSize="36" FontAttributes="Bold" />
+									<Span Text="" FontSize="18" />
+								</FormattedString>
+							</Label.FormattedText>
+						</Label>
+					</Grid>
+				</Frame>
+
+
+
+
+			</Grid>
+
+			<!-- Description -->
+			<Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+				   WidthRequest="390"
+                   HasShadow="False"
+                   VerticalOptions="Start">
+                
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding Description}"
+                       TextColor="#4E3689"
+                       FontSize="16" 
+                       LineBreakMode="WordWrap"
+                       VerticalOptions="Start"
+                       IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}"/>
+                <!-- Edit Mode -->
+                    <Editor Text="{Binding RunningActivity.Description}"
+						TextColor="#4E3689"
+						FontSize="16"
+						IsVisible="{Binding IsEditing}" />
+                </VerticalStackLayout>
+            </Frame>
+
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

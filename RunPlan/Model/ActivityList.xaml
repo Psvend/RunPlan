@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="RunPlan.Model.ActivityList"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:model="clr-namespace:RunPlan.Model"
+    xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
+    x:DataType="viewmodel:ActivityListViewModel"
+    Title="Activity List"
+    BackgroundColor="#8260DA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+			<Grid ColumnDefinitions="*, Auto"
+      Padding="10"
+      VerticalOptions="Center"
+      HorizontalOptions="FillAndExpand">
+				<Label Text="Your Runs!"
+					   FontAttributes="Bold"
+					   FontSize="32"
+					   TextColor="White"
+					   VerticalOptions="Center"
+					   Grid.Column="0" />
+				<ImageButton
+					Source="plus.png"
+					WidthRequest="75"
+					HeightRequest="75"
+					BackgroundColor="#BC54BD"
+					CornerRadius="55"
+					HorizontalOptions="End"
+					VerticalOptions="Center"
+					Clicked="OnAddActivityClicked"
+					Aspect="AspectFit"
+					Grid.Column="1" />
+			</Grid>
+
+
+
+			<HorizontalStackLayout HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Spacing="10"
+                       Padding="0,10">
+
+				<!-- This Week Button -->
+				<VerticalStackLayout Spacing="4" VerticalOptions="End">
+					<Label Text="" HeightRequest="16"/>
+					<!-- Fakes label spacing -->
+					<Button Text="This Week"
+							Command="{Binding FilterThisWeekCommand}"
+							BackgroundColor="#4E3689"
+							TextColor="White"
+							FontAttributes="Bold"
+							HeightRequest="50"
+							WidthRequest="110"
+							CornerRadius="25" />
+				</VerticalStackLayout>
+
+				<!-- Month Picker -->
+				<VerticalStackLayout Spacing="4" VerticalOptions="End">
+					<Label Text="  Select Month"
+						   FontSize="12"
+						   TextColor="White"
+						   HorizontalOptions="Start" />
+					<Border StrokeShape="RoundRectangle 25"
+							StrokeThickness="0"
+							Stroke="Transparent"
+							BackgroundColor="#4E3689"
+							Padding="0">
+						<Picker ItemsSource="{Binding AvailableMonths}"
+								SelectedItem="{Binding SelectedMonth}"
+								WidthRequest="140"
+								HeightRequest="50"
+								BackgroundColor="#4E3689"
+								TextColor="White"
+								TitleColor="White"
+								FontAttributes="Bold" />
+					</Border>
+				</VerticalStackLayout>
+
+				<!-- Year Picker with Rounded Corners -->
+				<VerticalStackLayout Spacing="4" VerticalOptions="End">
+					<Label Text="  Select Year"
+						   FontSize="12"
+						   TextColor="White"
+						   HorizontalOptions="Start" />
+
+					<Border StrokeShape="RoundRectangle 25"
+							BackgroundColor="#4E3689"
+							Padding="0"
+							StrokeThickness="0"
+							Stroke="Transparent"
+							>
+						<Picker ItemsSource="{Binding AvailableYears}"
+								SelectedItem="{Binding SelectedYear}"
+								WidthRequest="100"
+								HeightRequest="50"
+								BackgroundColor="Transparent"
+								TextColor="White"
+								TitleColor="White"
+								FontAttributes="Bold" />
+					</Border>
+				</VerticalStackLayout>
+
+
+			</HorizontalStackLayout>
+
+
+
+			<Label Text="List Of Activities"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   TextColor="White"
+                   HorizontalOptions="Start"
+				   Margin="0,20,0,0"
+				   />
+
+			<Border StrokeShape="RoundRectangle 20"
+					BackgroundColor="White"
+					Padding="0"
+					StrokeThickness="0"
+					Stroke="Transparent"
+					Margin="0,0,0,5">
+				<SearchBar Placeholder="Search activities..."
+						   Text="{Binding SearchQuery, Mode=TwoWay}"
+						   TextChanged="OnSearchTextChanged"
+						   BackgroundColor="Transparent"
+						   TextColor="MediumPurple"
+						   CancelButtonColor="MediumPurple" />
+			</Border>
+
+			
+			<Label Text="Empty for now – go run!"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   FontSize="16"
+                   IsVisible="{Binding IsEmptyMessageVisible}" />
+
+
+			<CollectionView ItemsSource="{Binding RunningActivities}"
+                            Margin="0,0,0,20"
+                            SelectionChanged="OnActivitySelected"
+                            SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:RunningActivity">
+                        <Border StrokeShape="RoundRectangle 10"
+                                Padding="15"
+                                BackgroundColor="#4E3689"
+                                Stroke="MediumPurple"
+                                Margin="0,6">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command= "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityListViewModel}},x:DataType=viewmodel ActivityListViewModel, Path=GoToDetailsCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,Auto"
+                                  RowDefinitions="Auto,Auto"
+                                  RowSpacing="10">
+                                <StackLayout Grid.Column="0" Grid.RowSpan="2">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" />
+                                    <Label Text="{Binding Time, StringFormat='Time: {0}'}" />
+                                    <Label Text="{Binding Date, StringFormat='Date: {0}'}" />
+                                </StackLayout>
+
+                                <ImageButton 
+                                    Source ="bin.png"    
+									Grid.Column="1"
+                                    Grid.Row="0"
+									WidthRequest="60"
+                                    HeightRequest="60"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityListViewModel}}, Path=DeleteActivityCommand}"
+                                    CommandParameter="{Binding}"
+                                    VerticalOptions="Start"
+									Aspect="AspectFit"
+                                        />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+			
+			
+
+		</VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+

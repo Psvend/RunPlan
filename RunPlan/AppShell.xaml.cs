@@ -5,10 +5,8 @@
         public AppShell()
         {
             InitializeComponent();
-            
+            Routing.RegisterRoute("ActivityDetail", typeof(ActivityDetail));
             Routing.RegisterRoute(nameof(DetailScreen), typeof(DetailScreen));
-            
-
         }
     }
 }

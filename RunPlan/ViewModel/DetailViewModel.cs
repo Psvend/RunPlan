@@ -1,4 +1,16 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RunPlan.ViewModel;
+using Microsoft.Maui.Controls;
+using System.Xml.Linq;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Globalization;
+using RunPlan.Messages;
+
+
 
 namespace RunPlan.ViewModel;
 
@@ -6,12 +18,99 @@ namespace RunPlan.ViewModel;
 
 public partial class DetailViewModel: BaseVievModel
 {
+    private readonly DatabaseService _databaseService;
 
-    public DetailViewModel() 
-    { 
-    
+    public DetailViewModel(DatabaseService databaseService)
+    {
+        _databaseService = databaseService;
     }
+
+
     [ObservableProperty]
-    RunningActivity runningActivity;
+    private RunningActivity runningActivity;
+
+    partial void OnRunningActivityChanged(RunningActivity value)
+    {
+        OnPropertyChanged(nameof(Pace));
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(Time));
+        OnPropertyChanged(nameof(Distance));
+        OnPropertyChanged(nameof(Grade));
+        OnPropertyChanged(nameof(Description));
+    }
+
+
+    //To handle editing of the page
+    [ObservableProperty]
+    private bool isEditing;
+
+
+
+    [RelayCommand]
+    public async Task SaveChanges()
+    {
+        if (RunningActivity != null)
+        {
+            await _databaseService.UpdateActivityAsync(RunningActivity); 
+            IsEditing = false;
+            WeakReferenceMessenger.Default.Send(new ActivityUpdatedMessage());
+        }
+    }
+
+
+
+    [RelayCommand]
+    public void OnEditClicked()
+    {
+        IsEditing = true;
+    }
+
+
+    public class InverseBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => !(bool)value;
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => !(bool)value;
+    }
+
+
+
+
+
+
+
+    public string Name => RunningActivity?.Name ?? "N/A";
+    public string Time => RunningActivity?.Time ?? "00:00:00";
+    public double Distance => RunningActivity?.Distance ?? 0;
+    public string Grade => RunningActivity?.Grade ?? "Empty for now";
+    public string Description => RunningActivity?.Description ?? "Nothing yet";
+
+
+
+
+
+
+    public string Pace
+    {
+        get
+        {
+            if (TimeSpan.TryParse(RunningActivity?.Time, out var time) &&
+                double.TryParse(RunningActivity?.Distance.ToString(), out var distance) &&
+                distance > 0)
+            {
+                double minutesPerKm = time.TotalMinutes / distance;
+                return $"{minutesPerKm:0.00}";
+            }
+
+            return "N/A";
+        }
+    }
+
+
+
+
+
 
 }

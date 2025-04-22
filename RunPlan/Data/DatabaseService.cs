@@ -133,16 +133,40 @@ namespace RunPlan.Data
         {
             return _dbPath;
         }
-    }
 
-    // ✅ Define the RunningActivity Model
-    public class RunningActivity
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public double Distance { get; set; }
-        public string Time { get; set; } = "00:00:00";
-        public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+
+
+        //To help edit page
+        public async Task UpdateActivityAsync(RunningActivity activity)
+        {
+            if (activity != null)
+            {
+                await _database.UpdateAsync(activity);
+                Console.WriteLine($"✅ Activity updated: {activity.Name}, ID: {activity.Id}");
+            }
+        }
+
+
+
     }
 }
+
+
+
+        /*
+        // ✅ Define the RunningActivity Model
+        public class RunningActivity
+        {
+            [PrimaryKey, AutoIncrement]
+            public int Id { get; set; }
+            public string Name { get; set; } = string.Empty;
+            public double Distance { get; set; }
+            public string Time { get; set; } = "00:00:00";
+            public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+            public string Grade { get; set; } = "N/A";
+            public string Description { get; set; } = string.Empty; // Optional field
+
+        }
+    }
+        */
+

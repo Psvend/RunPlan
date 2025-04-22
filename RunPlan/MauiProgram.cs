@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using RunPlan.Data;
-using RunPlan.Services;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
+using Syncfusion.Maui.Core.Hosting;
+using RunPlan.ViewModel;
 using RunPlan.Model;
-using LoginPage = RunPlan.Model.LoginPage;
-
+using RunPlan.Messages;
 
 namespace RunPlan;
 
@@ -16,20 +19,19 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSansRegular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
-        builder.Services.AddSingleton<App>();
-
+     
         // Register SQLite DatabaseService
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<ActivityViewModel>();
+        builder.Services.AddSingleton<ActivityList>();
         builder.Services.AddTransient<DetailViewModel>();
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<App>();
-
 
 #if DEBUG
         builder.Logging.AddDebug();
