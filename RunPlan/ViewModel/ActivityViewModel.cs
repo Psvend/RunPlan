@@ -29,6 +29,13 @@ public partial class ActivityViewModel : BaseVievModel
 
     private readonly IGeolocation _geolocation;
 
+    public ObservableCollection<String> diffeculties { get; } = new()
+    {
+        "Easy",
+        "Moderate",
+        "Hard"
+    };
+
 
 
 
@@ -70,7 +77,8 @@ public partial class ActivityViewModel : BaseVievModel
             IsBusy = false;
         }
     }
-
+    [ObservableProperty]
+    private string selectedDiffeculty;
 
 
     [RelayCommand]

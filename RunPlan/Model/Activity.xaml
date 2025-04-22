@@ -52,11 +52,19 @@
                     <Label Text="Date (yyyy-MM-dd)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
+             
+
           
             </Grid>
+            <Picker Title ="sværhed"
+                 ItemsSource="{Binding diffeculties}"
+                 SelectedItem="{Binding SelectedDiffeculty}"
+                 TitleColor="Gray"
+                 TextColor="Black"
+                 BackgroundColor="White"
+                 FontSize="16"/>
 
-        
-           
+
             <Button Text="save Activity"
                 Command="{Binding AddActivityCommand}"
                 FontSize="18"
