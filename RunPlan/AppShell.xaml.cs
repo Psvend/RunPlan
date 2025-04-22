@@ -6,7 +6,7 @@
         {
             InitializeComponent();
             Routing.RegisterRoute("ActivityDetail", typeof(ActivityDetail));
-            Routing.RegisterRoute(nameof(DetailScreen), typeof(DetailScreen));
+            Routing.RegisterRoute(nameof(ActivityDetail), typeof(ActivityDetail));
         }
     }
 }
