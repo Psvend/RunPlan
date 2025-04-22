@@ -8,6 +8,7 @@ using Microsoft.Maui.Controls;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Globalization;
+using RunPlan.Messages;
 
 
 
@@ -17,6 +18,12 @@ namespace RunPlan.ViewModel;
 
 public partial class DetailViewModel: BaseVievModel
 {
+    private readonly DatabaseService _databaseService;
+
+    public DetailViewModel(DatabaseService databaseService)
+    {
+        _databaseService = databaseService;
+    }
 
 
     [ObservableProperty]
@@ -37,12 +44,14 @@ public partial class DetailViewModel: BaseVievModel
     [ObservableProperty]
     private bool isEditing;
 
+
+
     [RelayCommand]
     public async Task SaveChanges()
     {
         if (RunningActivity != null)
         {
-            await _databaseService.UpdateActivityAsync(RunningActivity); // You must implement this in your DatabaseService
+            await _databaseService.UpdateActivityAsync(RunningActivity); 
             IsEditing = false;
             WeakReferenceMessenger.Default.Send(new ActivityUpdatedMessage());
         }

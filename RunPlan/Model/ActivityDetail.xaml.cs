@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Syncfusion.Maui.Core.Carousel;
 
 
+
 namespace RunPlan.Model;
 
 public partial class ActivityDetail : ContentPage, INotifyPropertyChanged

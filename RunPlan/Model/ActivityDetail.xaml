@@ -39,7 +39,7 @@
 						Grid.Column="2" />	
 
                 <ImageButton Source="edit.png"
-							 Clicked="OnEditClicked"
+							 Command="{Binding OnEditClickedCommand}"
 							 BackgroundColor="Transparent"
 							 HorizontalOptions="End"
 							 HeightRequest="30"
@@ -179,18 +179,20 @@
 				   WidthRequest="390"
                    HasShadow="False"
                    VerticalOptions="Start">
-				
-                <Label Text="{Binding Description}"
+                
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding Description}"
                        TextColor="#4E3689"
                        FontSize="16" 
                        LineBreakMode="WordWrap"
                        VerticalOptions="Start"
                        IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}"/>
                 <!-- Edit Mode -->
-                <Editor Text="{Binding RunningActivity.Description}"
+                    <Editor Text="{Binding RunningActivity.Description}"
 						TextColor="#4E3689"
 						FontSize="16"
 						IsVisible="{Binding IsEditing}" />
+                </VerticalStackLayout>
             </Frame>
 
 		</VerticalStackLayout>

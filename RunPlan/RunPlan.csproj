@@ -61,6 +61,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="NewFolder\**" />
+	  <EmbeddedResource Remove="NewFolder\**" />
+	  <MauiCss Remove="NewFolder\**" />
+	  <MauiXaml Remove="NewFolder\**" />
+	  <None Remove="NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="3.9.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.40" />
@@ -90,7 +98,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Model\NewFolder\" />
-	  <Folder Include="NewFolder\" />
 	</ItemGroup>
 
 </Project>
