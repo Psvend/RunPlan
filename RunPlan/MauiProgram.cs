@@ -36,6 +36,7 @@ public static class MauiProgram
         builder.Services.AddTransient<MainViewModel>();
         builder.Services.AddTransient<ActivityViewModel>();
         builder.Services.AddTransient<ActivityListViewModel>();
+        builder.Services.AddTransient<ActivityDetail>();
         builder.Services.AddSingleton<MappingViewModel>();
 
 
