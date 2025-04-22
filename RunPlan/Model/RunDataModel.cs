@@ -17,5 +17,7 @@ namespace RunPlan.Model
         public int WeekNumber { get; set; }   
       
         public string Time { get; set; }
+        public string Grade { get; set; }
+        public string Description { get; set; }
     }
 };

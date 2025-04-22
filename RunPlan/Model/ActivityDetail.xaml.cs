@@ -11,7 +11,8 @@ using Syncfusion.Maui.Core.Carousel;
 
 namespace RunPlan.Model;
 
-[QueryProperty(nameof(RunningActivity), "RunningActivity")]
+//[QueryProperty(nameof(RunningActivity), "RunningActivity")]
+
 public partial class ActivityDetail : ContentPage, INotifyPropertyChanged
 {
     private RunningActivity _activity;
@@ -44,6 +45,8 @@ public partial class ActivityDetail : ContentPage, INotifyPropertyChanged
     private async void OnBackClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//ActivityList");
+       
+
     }
 
 

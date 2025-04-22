@@ -132,6 +132,8 @@ namespace RunPlan.Data
         public double Distance { get; set; }
         public string Time { get; set; } = "00:00:00";
         public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
-      
+        public string Grade { get; set; } = "N/A"; 
+        public string Description { get; set; } = string.Empty; // Optional field
+
     }
 }

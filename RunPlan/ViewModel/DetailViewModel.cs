@@ -16,12 +16,9 @@ namespace RunPlan.ViewModel;
 public partial class DetailViewModel: BaseVievModel
 {
 
-    public DetailViewModel() 
-    { 
-    
-    }
+
     [ObservableProperty]
-    RunningActivity runningActivity;
+    private RunningActivity runningActivity;
 
     partial void OnRunningActivityChanged(RunningActivity value)
     {
@@ -29,13 +26,15 @@ public partial class DetailViewModel: BaseVievModel
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Time));
         OnPropertyChanged(nameof(Distance));
-       // OnPropertyChanged(nameof(Description));
+        OnPropertyChanged(nameof(Grade));
+        OnPropertyChanged(nameof(Description));
     }
 
     public string Name => RunningActivity?.Name ?? "N/A";
     public string Time => RunningActivity?.Time ?? "00:00:00";
     public double Distance => RunningActivity?.Distance ?? 0;
-   // public string Description => RunningActivity?.Description ?? "";
+    public string Grade => RunningActivity?.Grade ?? "Empty for now";
+    public string Description => RunningActivity?.Description ?? "Nothing yet";
 
 
 

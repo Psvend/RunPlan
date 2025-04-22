@@ -7,20 +7,21 @@
               ios:Page.UseSafeArea="True"
              x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
-             BackgroundColor="Orange">
+             BackgroundColor="#8260DA">
              
              
 
 
     <ScrollView>
         <VerticalStackLayout Padding="30" Spacing="25">
-            <Button Text="Back"
-             Clicked="OnBackClicked"
-             BackgroundColor="Transparent"
-             TextColor="White"
-             HorizontalOptions="Start"
-            FontSize="16"
-             Padding="0,0,0,10"/>
+            <!-- Back Button -->
+            <ImageButton Source="back.png"
+		                 Clicked="OnBackClicked"
+		                 BackgroundColor="Transparent"
+		                 HorizontalOptions="Start"
+		                 HeightRequest="30"
+                         WidthRequest="30"    
+		                 Padding="0,0,0,10"/>
             <!-- Title -->
             <Entry Text="{Binding ActivityName}" 
                Placeholder="Activity Title"

@@ -308,6 +308,10 @@ namespace RunPlan.ViewModel
         public string DistanceText { get; set; }
         public string Time { get; set; }
         public string Date { get; set; }
+        public string Grade { get; set; }
+        public string Pace { get; set; }
+        public string Description { get; set; }
+
     }
 
 

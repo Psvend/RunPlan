@@ -13,14 +13,15 @@
 		<VerticalStackLayout Padding="20" Spacing="20">
 
 			<!-- Back Button -->
-			<ImageButton Source="back.png"
-                         WidthRequest="30"
-                         HeightRequest="30"
-                         BackgroundColor="Transparent"
-                         Clicked="OnBackClicked"
-                         HorizontalOptions="Start" />
+            <ImageButton Source="back.png"
+					 Clicked="OnBackClicked"
+					 BackgroundColor="Transparent"
+					 HorizontalOptions="Start"
+					 HeightRequest="30"
+                     WidthRequest="30"    
+					 Padding="0,0,0,10"/>	
 
-			<!-- Title -->
+            <!-- Title -->
 			<Label Text="{Binding Name}"
                    FontSize="32"
                    FontAttributes="Bold"
@@ -114,7 +115,7 @@
 
 
 
-				<!-- Future Box -->
+				<!-- Grade box -->
 				<Frame Grid.Row="1" Grid.Column="1"
 					   BackgroundColor="#4E3689"
 					   CornerRadius="12"
@@ -132,8 +133,8 @@
 							   TextColor="White">
 							<Label.FormattedText>
 								<FormattedString>
-									<Span Text="" FontSize="36" FontAttributes="Bold" />
-									<Span Text=" empty for now" FontSize="18" />
+									<Span Text="{Binding Grade}" FontSize="36" FontAttributes="Bold" />
+									<Span Text="" FontSize="18" />
 								</FormattedString>
 							</Label.FormattedText>
 						</Label>
@@ -149,12 +150,14 @@
 			<Frame BackgroundColor="White"
                    CornerRadius="15"
                    Padding="20"
-				   HeightRequest="80"
 				   WidthRequest="390"
-                   HasShadow="False">
+                   HasShadow="False"
+                   VerticalOptions="Start">
 				<Label Text="{Binding Description}"
                        TextColor="#4E3689"
-                       FontSize="16" />
+                       FontSize="16" 
+                       LineBreakMode="WordWrap"
+                       VerticalOptions="Start"/>
 			</Frame>
 
 		</VerticalStackLayout>
