@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices; // Detect OS
+using System.Runtime.InteropServices;
+using BCrypt.Net; // Detect OS
 
 #if ANDROID
 using Android.App;  // ✅ Ensures correct Application class is used
@@ -117,16 +118,19 @@ namespace RunPlan.Data
         public async Task<bool> RegisterUserAsync(string email, string password)
         {
             var existing = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
-            if(existing != null) return false;
-            var user = new User { Email = email, Password = password };
+            if (existing != null) return false;
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            var user = new User { Email = email, PasswordHash = hashedPassword };
             await _database.InsertAsync(user);
-            Console.WriteLine("User registrered!");
+            Console.WriteLine("User registered with hash password");
             return true;
         }
         public async Task<bool>ValidateUserAsync(string email, string password)
         {
-            var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
-            return user != null;
+            var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return false;
+            return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
         }
         // ✅ Get database path (for debugging)
         public string GetDbPath()
