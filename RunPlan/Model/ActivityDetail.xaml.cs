@@ -11,8 +11,6 @@ using Syncfusion.Maui.Core.Carousel;
 
 namespace RunPlan.Model;
 
-//[QueryProperty(nameof(RunningActivity), "RunningActivity")]
-
 public partial class ActivityDetail : ContentPage, INotifyPropertyChanged
 {
     private RunningActivity _activity;

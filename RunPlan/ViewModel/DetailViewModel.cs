@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using RunPlan.ViewModel;
 using Microsoft.Maui.Controls;
 using System.Xml.Linq;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Globalization;
 
 
 
@@ -30,11 +32,52 @@ public partial class DetailViewModel: BaseVievModel
         OnPropertyChanged(nameof(Description));
     }
 
+
+    //To handle editing of the page
+    [ObservableProperty]
+    private bool isEditing;
+
+    [RelayCommand]
+    public async Task SaveChanges()
+    {
+        if (RunningActivity != null)
+        {
+            await _databaseService.UpdateActivityAsync(RunningActivity); // You must implement this in your DatabaseService
+            IsEditing = false;
+            WeakReferenceMessenger.Default.Send(new ActivityUpdatedMessage());
+        }
+    }
+
+
+
+    [RelayCommand]
+    public void OnEditClicked()
+    {
+        IsEditing = true;
+    }
+
+
+    public class InverseBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => !(bool)value;
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => !(bool)value;
+    }
+
+
+
+
+
+
+
     public string Name => RunningActivity?.Name ?? "N/A";
     public string Time => RunningActivity?.Time ?? "00:00:00";
     public double Distance => RunningActivity?.Distance ?? 0;
     public string Grade => RunningActivity?.Grade ?? "Empty for now";
     public string Description => RunningActivity?.Description ?? "Nothing yet";
+
 
 
 

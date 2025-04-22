@@ -3,23 +3,49 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
+    xmlns:converters="clr-namespace:RunPlan.Converters"
     x:DataType="viewmodel:DetailViewModel"
     Title="Activity Detail"
     BackgroundColor="#8260DA">
 
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
 
-	<ScrollView>
+
+    <ScrollView>
 		<VerticalStackLayout Padding="20" Spacing="20">
+            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
+                <!-- Back Button -->
+				<ImageButton Source="back.png"
+						 Clicked="OnBackClicked"
+						 BackgroundColor="Transparent"
+						 HorizontalOptions="Start"
+						 HeightRequest="30"
+						 WidthRequest="30"    
+						 Grid.Column="0"/>
+                <!-- Save Button (only when editing) -->
+                <Button Text="Save"
+						FontSize="14"
+						BackgroundColor="White"
+						TextColor="MediumPurple"
+						CornerRadius="10"
+						Command="{Binding SaveChangesCommand}"
+						IsVisible="{Binding IsEditing}"
+						Grid.Column="2" />	
 
-			<!-- Back Button -->
-            <ImageButton Source="back.png"
-					 Clicked="OnBackClicked"
-					 BackgroundColor="Transparent"
-					 HorizontalOptions="Start"
-					 HeightRequest="30"
-                     WidthRequest="30"    
-					 Padding="0,0,0,10"/>	
+                <ImageButton Source="edit.png"
+							 Clicked="OnEditClicked"
+							 BackgroundColor="Transparent"
+							 HorizontalOptions="End"
+							 HeightRequest="30"
+							 WidthRequest="30"    
+							 Grid.Column="1"/>
+            </Grid>
 
             <!-- Title -->
 			<Label Text="{Binding Name}"
@@ -153,12 +179,19 @@
 				   WidthRequest="390"
                    HasShadow="False"
                    VerticalOptions="Start">
-				<Label Text="{Binding Description}"
+				
+                <Label Text="{Binding Description}"
                        TextColor="#4E3689"
                        FontSize="16" 
                        LineBreakMode="WordWrap"
-                       VerticalOptions="Start"/>
-			</Frame>
+                       VerticalOptions="Start"
+                       IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}"/>
+                <!-- Edit Mode -->
+                <Editor Text="{Binding RunningActivity.Description}"
+						TextColor="#4E3689"
+						FontSize="16"
+						IsVisible="{Binding IsEditing}" />
+            </Frame>
 
 		</VerticalStackLayout>
 	</ScrollView>
