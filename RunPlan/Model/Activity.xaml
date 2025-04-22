@@ -7,7 +7,7 @@
               ios:Page.UseSafeArea="True"
              x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
-             BackgroundColor="#8260DA">
+             BackgroundColor="Orange">
              
              
 

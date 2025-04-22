@@ -145,7 +145,7 @@ public partial class ActivityListViewModel : BaseVievModel
     {
         if (activity == null) return;
 
-        await Shell.Current.GoToAsync(nameof(DetailScreen), true, new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(ActivityDetail), true, new Dictionary<string, object>
         {
             { "RunningActivity", activity }
         });
