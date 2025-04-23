@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="RunPlan.Model.CreateTraining"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:model="clr-namespace:RunPlan.Model"
+    xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
+    x:DataType="viewmodel:CreateTrainingViewModel"
+    Title="Create Training"
+    BackgroundColor="#8260DA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Top Bar -->
+            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
+                <ImageButton Source="back.png"
+                             Clicked="OnBackClicked"
+                             BackgroundColor="Transparent"
+                             HeightRequest="30"
+                             WidthRequest="30"
+                             Grid.Column="0"/>
+                <Button Text="Save"
+                        FontSize="14"
+                        BackgroundColor="White"
+                        TextColor="MediumPurple"
+                        CornerRadius="10"
+                        Command="{Binding SaveTrainingCommand}"
+                        Grid.Column="2" />
+            </Grid>
+
+            <!-- Title Input -->
+            <Entry Placeholder="Training Title"
+                   Text="{Binding Name}"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+
+            <!-- 2x2 Grid for Inputs -->
+            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions="Center">
+
+                <!-- Duration -->
+                <Frame Grid.Row="0" Grid.Column="0"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       HeightRequest="150" WidthRequest="180"
+                       HasShadow="False">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Entry Text="{Binding Time}"
+                               FontSize="36"
+                               WidthRequest="100"
+                               Keyboard="Numeric"
+                               HorizontalTextAlignment="Center"
+                               TextColor="White"
+                               BackgroundColor="Transparent" />
+                        <Label Text="min"
+                               FontSize="18"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Grade -->
+                <Frame Grid.Row="0" Grid.Column="1"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       HeightRequest="150" WidthRequest="180"
+                       HasShadow="False">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Entry Text="{Binding Grade}"
+                               FontSize="36"
+                               WidthRequest="100"
+                               Keyboard="Numeric"
+                               HorizontalTextAlignment="Center"
+                               TextColor="White"
+                               BackgroundColor="Transparent" />
+                        <Label Text="Grade"
+                               FontSize="18"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Optional Spacer or Info Slot -->
+                <Frame Grid.Row="1" Grid.ColumnSpan="2"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       HeightRequest="150" WidthRequest="370"
+                       HasShadow="False">
+                    <Label Text="Customize more fields here..."
+                           FontSize="16"
+                           TextColor="White"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Frame>
+            </Grid>
+
+            <!-- Description -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="15"
+                   Padding="20"
+                   WidthRequest="390"
+                   HasShadow="False"
+                   VerticalOptions="StartAndExpand">
+                <Editor Placeholder="Add description..."
+                        Text="{Binding Description}"
+                        TextColor="#4E3689"
+                        FontSize="16"
+                        AutoSize="TextChanges"
+                        HeightRequest="100"
+                        BackgroundColor="Transparent"
+                        VerticalOptions="FillAndExpand" />
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -29,7 +29,7 @@ namespace RunPlan.Model
             if (isNavigating) return;
             isNavigating = true;
 
-            await Shell.Current.GoToAsync("//Training"); // Route to your AddTraining page
+            await Shell.Current.GoToAsync("//CreateTraining"); // Route to your AddTraining page
 
             isNavigating = false;
         }

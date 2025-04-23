@@ -24,6 +24,8 @@ public static class MauiProgram
                 fonts.AddFont("OpenSansRegular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+        
+        
         builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
         builder.Services.AddSingleton<IGeolocation>(Geolocation.Default);
         builder.Services.AddSingleton<IMap>(Map.Default);
@@ -40,7 +42,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<MappingViewModel>();
         builder.Services.AddSingleton<TrainingListViewModel>();
         builder.Services.AddSingleton<TrainingList>();
-
+        builder.Services.AddTransient<CreateTrainingViewModel>();
+        builder.Services.AddTransient<CreateTraining>();
 
 
 

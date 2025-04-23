@@ -91,6 +91,9 @@
 	  <MauiXaml Update="Model\ActivityList.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Model\CreateTraining.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Model\Stats.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
