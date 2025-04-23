@@ -18,6 +18,16 @@ namespace RunPlan.Model
         {
             await Shell.Current.GoToAsync("//TrainingList");
         }
+
+
+
+
+
+
+
+
+
+
     }
 
 }

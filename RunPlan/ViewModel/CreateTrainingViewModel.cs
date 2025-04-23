@@ -9,6 +9,8 @@ using CommunityToolkit.Mvvm.Input;
 using RunPlan.Data;
 using RunPlan.Model;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using RunPlan.Messages;
 
 
 
@@ -33,17 +35,25 @@ namespace RunPlan.ViewModel
 
 
 
+
         [RelayCommand]
         public async Task SaveTraining()
         {
             if (int.TryParse(Time, out int timeInt) && int.TryParse(Grade, out int gradeInt))
             {
                 await _db.InsertTrainingAsync(Name, Description, timeInt, gradeInt);
-                await Shell.Current.GoToAsync("..");
+
+                // 🔁 Notify the app that a new training was added
+                WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
+
+                // 🔙 Go back to the TrainingList
+                await Shell.Current.GoToAsync("//TrainingList");
             }
         }
 
-        
+
+
+
 
     }
 }

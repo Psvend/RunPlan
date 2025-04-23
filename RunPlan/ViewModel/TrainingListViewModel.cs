@@ -8,6 +8,8 @@ using CommunityToolkit.Mvvm.Input;
 using RunPlan.Data;
 using RunPlan.Model;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
+using RunPlan.Messages; 
 
 
 namespace RunPlan.ViewModel
@@ -21,6 +23,12 @@ namespace RunPlan.ViewModel
             _databaseService = databaseService;
             Trainings = new ObservableCollection<Training>();
             AllTrainings = new List<Training>();
+            
+            // Listen for update messages
+            WeakReferenceMessenger.Default.Register<TrainingUpdatedMessage>(this, async (r, m) =>
+            {
+                await LoadTrainingsAsync();
+            });
         }
 
         [ObservableProperty]

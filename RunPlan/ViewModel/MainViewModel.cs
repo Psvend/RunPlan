@@ -34,7 +34,6 @@ namespace RunPlan.ViewModel
         .FirstOrDefault();
 
 
-
         private string _thisWeekTime;
         private string _thisWeekDistance;
 

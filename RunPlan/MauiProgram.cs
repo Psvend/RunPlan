@@ -7,7 +7,6 @@ using Syncfusion.Maui.Core.Hosting;
 using RunPlan.ViewModel;
 using RunPlan.Model;
 using RunPlan.Messages;
-
 namespace RunPlan;
 
 public static class MauiProgram
@@ -22,13 +21,13 @@ public static class MauiProgram
                 fonts.AddFont("OpenSansRegular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
-        
-        
+
+        // ✅ Services
         builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
         builder.Services.AddSingleton<IGeolocation>(Geolocation.Default);
         builder.Services.AddSingleton<IMap>(Map.Default);
-        // Register SQLite DatabaseService
         builder.Services.AddSingleton<DatabaseService>();
+
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<ActivityList>();
         builder.Services.AddTransient<DetailViewModel>();
@@ -45,29 +44,29 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<App>();
 
-
-
-
-
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 
+        // ✅ Build the app
         var app = builder.Build();
-        Task.Run(async () => await InitializeDatabaseAsync(app));
+
+        // ✅ Await database initialization before returning app
+        InitializeDatabaseBlocking(app);
 
         return app;
     }
 
-    private static async Task InitializeDatabaseAsync(MauiApp app)
+    // This blocks the main thread *once* during setup to avoid Task.Run hacks
+    private static void InitializeDatabaseBlocking(MauiApp app)
     {
         var dbService = app.Services.GetRequiredService<DatabaseService>();
 
-        // Insert a test activity
-        //await dbService.InsertRunningActivity("Evening Run", 7.5, "00:40:00","2025-02-24");
+        // Run DB initialization synchronously
+        dbService.InitializeAsync().GetAwaiter().GetResult();
 
-        // Fetch and print activities
-        var activities = await dbService.GetAllActivitiesAsync();
+        // Optionally: log existing activities
+        var activities = dbService.GetAllActivitiesAsync().GetAwaiter().GetResult();
         foreach (var activity in activities)
         {
             Console.WriteLine($"📌 {activity.Name}, {activity.Distance} km, {activity.Time}, {activity.Date}");

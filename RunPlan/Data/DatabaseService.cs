@@ -4,79 +4,66 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Runtime.InteropServices;
-using BCrypt.Net; 
+using BCrypt.Net;
+
 
 #if ANDROID
-using Android.App;  // ✅ Ensures correct Application class is used
+using Android.App;
 using Android.OS;
 #endif
 #if IOS
 using Foundation;
 #endif
 
+
+
+
 namespace RunPlan.Data
 {
     public class DatabaseService
     {
-        private readonly SQLiteAsyncConnection _database;
+        private SQLiteAsyncConnection _database;
         private readonly string _dbPath;
+        private readonly SemaphoreSlim _lock = new(1, 1);
 
         public DatabaseService()
         {
             _dbPath = GetDatabasePath();
-
             Console.WriteLine($"📌 SQLite database path: {_dbPath}");
-
-            try
-            {
-                _database = new SQLiteAsyncConnection(_dbPath);
-                _database.CreateTableAsync<RunningActivity>().Wait();
-                _database.CreateTableAsync<Training>().Wait();
-                _database.CreateTableAsync<User>().Wait();
-
-
-                // ✅ Ensure database exists by adding a test record if empty
-                EnsureDatabaseInitialized().Wait();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Database initialization failed: {ex.Message}");
-            }
         }
 
+        public async Task InitializeAsync()
+        {
+            _database = new SQLiteAsyncConnection(_dbPath);
+            await _database.CreateTableAsync<RunningActivity>();
+            await _database.CreateTableAsync<Training>();
+            await _database.CreateTableAsync<User>();
+            await EnsureDatabaseInitialized();
+        }
 
         private string GetDatabasePath()
         {
-            string dbFileName = "database.db"; // Default name
+            string dbFileName = "database.db";
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                // ✅ Windows: Store in a shared "Data" folder inside the project
-                string projectFolder = Path.Combine(Directory.GetCurrentDirectory(), "Data");
-
-                // ✅ Ensure directory exists
-                if (!Directory.Exists(projectFolder))
-                {
-                    Directory.CreateDirectory(projectFolder);
-                }
-
-                return Path.Combine(projectFolder, dbFileName);
-            }
-
-            // ✅ Android & iOS: Store in app’s internal storage
+#if WINDOWS
+            string projectFolder = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            if (!Directory.Exists(projectFolder))
+                Directory.CreateDirectory(projectFolder);
+            return Path.Combine(projectFolder, dbFileName);
+#else
             string folderPath;
 
 #if ANDROID
             folderPath = Android.App.Application.Context.GetExternalFilesDir(null).AbsolutePath;
-            dbFileName = "database_android.db";  // ✅ Android gets a separate database
-            string androidDbPath = Path.Combine(folderPath, dbFileName);
-
-            return androidDbPath;
+            dbFileName = "database_android.db";
+            return Path.Combine(folderPath, dbFileName);
 #else
-            folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData); // Default fallback
+            folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 #endif
             return Path.Combine(folderPath, dbFileName);
+#endif
         }
 
         private async Task EnsureDatabaseInitialized()
@@ -96,25 +83,46 @@ namespace RunPlan.Data
             }
         }
 
-        // ✅ Insert a new activity
         public async Task InsertRunningActivity(string name, double distance, string time, string date)
         {
             var activity = new RunningActivity { Name = name, Distance = distance, Time = time, Date = date };
-            await _database.InsertAsync(activity);
-            Console.WriteLine("✅ Activity added to SQLite!");
+            await _lock.WaitAsync();
+            try
+            {
+                await _database.InsertAsync(activity);
+                Console.WriteLine("✅ Activity added to SQLite!");
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
-        // ✅ Retrieve all activities
         public async Task<List<RunningActivity>> GetAllActivitiesAsync()
         {
-            return await _database.Table<RunningActivity>().ToListAsync();
+            await _lock.WaitAsync();
+            try
+            {
+                return await _database.Table<RunningActivity>().ToListAsync();
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
-        // ✅ Delete an activity
         public async Task DeleteActivity(int id)
         {
-            await _database.DeleteAsync<RunningActivity>(id);
-            Console.WriteLine($"🗑️ Deleted activity with ID: {id}");
+            await _lock.WaitAsync();
+            try
+            {
+                await _database.DeleteAsync<RunningActivity>(id);
+                Console.WriteLine($"🗑️ Deleted activity with ID: {id}");
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
         public async Task<bool> RegisterUserAsync(string email, string password)
@@ -127,88 +135,100 @@ namespace RunPlan.Data
             Console.WriteLine("User registered with hash password");
             return true;
         }
-        public async Task<bool>ValidateUserAsync(string email, string password)
+
+        public async Task<bool> ValidateUserAsync(string email, string password)
         {
             var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
             if (user == null) return false;
-            if(string.IsNullOrEmpty(user.PasswordHash))
-            { Console.WriteLine("Password hash is empty"); return false; }
+            if (string.IsNullOrEmpty(user.PasswordHash))
+            {
+                Console.WriteLine("Password hash is empty");
+                return false;
+            }
             return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-
-        }
-        // ✅ Get database path (for debugging)
-        public string GetDbPath()
-        {
-            return _dbPath;
         }
 
+        public string GetDbPath() => _dbPath;
 
-
-        //To help edit page
         public async Task UpdateActivityAsync(RunningActivity activity)
         {
             if (activity != null)
             {
-                await _database.UpdateAsync(activity);
-                Console.WriteLine($"✅ Activity updated: {activity.Name}, ID: {activity.Id}");
+                await _lock.WaitAsync();
+                try
+                {
+                    await _database.UpdateAsync(activity);
+                    Console.WriteLine($"✅ Activity updated: {activity.Name}, ID: {activity.Id}");
+                }
+                finally
+                {
+                    _lock.Release();
+                }
             }
         }
 
-
         public async Task<RunningActivity> GetActivityByIdAsync(int id)
         {
-            return await _database.Table<RunningActivity>()
-                                  .FirstOrDefaultAsync(a => a.Id == id);
+            return await _database.Table<RunningActivity>().FirstOrDefaultAsync(a => a.Id == id);
         }
 
-
-
-        // Insert a new training session
         public async Task InsertTrainingAsync(string name, string description, int time, int grade)
         {
-            var training = new Training
+            var training = new Training { Name = name, Description = description, Time = time, Grade = grade };
+            await _lock.WaitAsync();
+            try
             {
-                Name = name,
-                Description = description,
-                Time = time,
-                Grade = grade
-            };
-
-            await _database.InsertAsync(training);
-            Console.WriteLine($"✅ Training added: {training.Name}");
+                await _database.InsertAsync(training);
+                Console.WriteLine($"✅ Training added: {training.Name}");
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
-        // Retrieve all trainings
         public async Task<List<Training>> GetAllTrainingsAsync()
         {
-            return await _database.Table<Training>().ToListAsync();
+            await _lock.WaitAsync();
+            try
+            {
+                return await _database.Table<Training>().ToListAsync();
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
-        // Delete a training
         public async Task DeleteTrainingAsync(int id)
         {
-            await _database.DeleteAsync<Training>(id);
-            Console.WriteLine($"🗑️ Training deleted: ID {id}");
+            await _lock.WaitAsync();
+            try
+            {
+                await _database.DeleteAsync<Training>(id);
+                Console.WriteLine($"🗑️ Training deleted: ID {id}");
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
-        // Update training
         public async Task UpdateTrainingAsync(Training training)
         {
             if (training != null)
             {
-                await _database.UpdateAsync(training);
-                Console.WriteLine($"✅ Training updated: {training.Name}, ID: {training.Id}");
+                await _lock.WaitAsync();
+                try
+                {
+                    await _database.UpdateAsync(training);
+                    Console.WriteLine($"✅ Training updated: {training.Name}, ID: {training.Id}");
+                }
+                finally
+                {
+                    _lock.Release();
+                }
             }
         }
-
-
-
-
-
-
     }
 }
-
-
-
-
