@@ -28,7 +28,7 @@ public partial class LoginViewModel : ObservableObject
         bool valid = await _db.ValidateUserAsync(Email, Password);
         if (valid)
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new AppShell() );
+            await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
         }
         else
         {
