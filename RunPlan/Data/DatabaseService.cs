@@ -129,6 +129,8 @@ namespace RunPlan.Data
         {
             var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
             if (user == null) return false;
+            if(string.IsNullOrEmpty(user.PasswordHash))
+            { Console.WriteLine("Password hash is empty"); return false; }
             return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 
         }
