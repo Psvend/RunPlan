@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices; // Detect OS
+using System.Runtime.InteropServices;
+using BCrypt.Net; 
 
 #if ANDROID
 using Android.App;  // ✅ Ensures correct Application class is used
@@ -31,7 +32,8 @@ namespace RunPlan.Data
             {
                 _database = new SQLiteAsyncConnection(_dbPath);
                 _database.CreateTableAsync<RunningActivity>().Wait();
-                _database.CreateTableAsync<Training>().Wait(); 
+                _database.CreateTableAsync<Training>().Wait();
+                _database.CreateTableAsync<User>().Wait();
 
 
                 // ✅ Ensure database exists by adding a test record if empty
@@ -115,6 +117,25 @@ namespace RunPlan.Data
             Console.WriteLine($"🗑️ Deleted activity with ID: {id}");
         }
 
+        public async Task<bool> RegisterUserAsync(string email, string password)
+        {
+            var existing = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (existing != null) return false;
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            var user = new User { Email = email, PasswordHash = hashedPassword };
+            await _database.InsertAsync(user);
+            Console.WriteLine("User registered with hash password");
+            return true;
+        }
+        public async Task<bool>ValidateUserAsync(string email, string password)
+        {
+            var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return false;
+            if(string.IsNullOrEmpty(user.PasswordHash))
+            { Console.WriteLine("Password hash is empty"); return false; }
+            return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+        }
         // ✅ Get database path (for debugging)
         public string GetDbPath()
         {

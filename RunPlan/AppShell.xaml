@@ -6,9 +6,13 @@
     xmlns:local="clr-namespace:RunPlan.Model"
     
     Title="RunPlan">
+
+    <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" Route="LoginPage"/>
+   
+
     <TabBar>
         <Tab Title="Home" Icon="appicon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
         </Tab>
         
         <Tab Title="Statistics" Icon="coffee.png">
@@ -17,6 +21,7 @@
 
         <Tab Title="Activity List" Icon="list.png">
             <ShellContent ContentTemplate="{DataTemplate local:ActivityList}" Route="ActivityList" />
+            
         </Tab>
        
         <Tab Title="Training List" Icon="list.png">
@@ -28,7 +33,7 @@
 
 
     <!-- Navigation-only pages -->
-    <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity" />
+    <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity"/>
     <ShellContent ContentTemplate="{DataTemplate local:ActivityDetail}" Route="ActivityDetail" />
     <ShellContent ContentTemplate="{DataTemplate local:CreateTraining}" Route="CreateTraining" />
     

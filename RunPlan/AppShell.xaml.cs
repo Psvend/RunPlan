@@ -5,7 +5,6 @@
         public AppShell()
         {
             InitializeComponent();
-
             Routing.RegisterRoute("ActivityDetail", typeof(ActivityDetail));
         }
     }
