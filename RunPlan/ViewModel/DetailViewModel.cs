@@ -9,6 +9,8 @@ using System.Xml.Linq;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Globalization;
 using RunPlan.Messages;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 
 
@@ -16,7 +18,7 @@ namespace RunPlan.ViewModel;
 
 [QueryProperty(nameof(RunningActivity), "RunningActivity")]
 
-public partial class DetailViewModel: BaseVievModel
+public partial class DetailViewModel: ObservableObject
 {
     private readonly DatabaseService _databaseService;
 
@@ -51,17 +53,25 @@ public partial class DetailViewModel: BaseVievModel
     {
         if (RunningActivity != null)
         {
-            await _databaseService.UpdateActivityAsync(RunningActivity); 
+
+            await _databaseService.UpdateActivityAsync(RunningActivity);
+
+            // Reload the updated object from DB
+            var updated = await _databaseService.GetActivityByIdAsync(RunningActivity.Id);
+            RunningActivity = updated;
+
+
             IsEditing = false;
             WeakReferenceMessenger.Default.Send(new ActivityUpdatedMessage());
         }
     }
-
+    
 
 
     [RelayCommand]
-    public void OnEditClicked()
+    public void Edit()
     {
+        Console.WriteLine("Edit button clicked!");
         IsEditing = true;
     }
 

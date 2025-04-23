@@ -7,6 +7,9 @@ using RunPlan.Data;
 using Microsoft.Maui.Controls;
 using System.ComponentModel;
 using Syncfusion.Maui.Core.Carousel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
 
 
 

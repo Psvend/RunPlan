@@ -132,6 +132,13 @@ namespace RunPlan.Data
         }
 
 
+        public async Task<RunningActivity> GetActivityByIdAsync(int id)
+        {
+            return await _database.Table<RunningActivity>()
+                                  .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+
 
     }
 }
