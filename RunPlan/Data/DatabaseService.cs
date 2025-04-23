@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using BCrypt.Net; // Detect OS
+using BCrypt.Net; 
 
 #if ANDROID
 using Android.App;  // ✅ Ensures correct Application class is used
