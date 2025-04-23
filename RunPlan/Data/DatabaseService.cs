@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices; // Detect OS
+using System.Runtime.InteropServices;
+using BCrypt.Net; 
 
 #if ANDROID
 using Android.App;  // ✅ Ensures correct Application class is used
@@ -31,6 +32,9 @@ namespace RunPlan.Data
             {
                 _database = new SQLiteAsyncConnection(_dbPath);
                 _database.CreateTableAsync<RunningActivity>().Wait();
+                _database.CreateTableAsync<Training>().Wait();
+                _database.CreateTableAsync<User>().Wait();
+
 
                 // ✅ Ensure database exists by adding a test record if empty
                 EnsureDatabaseInitialized().Wait();
@@ -113,27 +117,98 @@ namespace RunPlan.Data
             Console.WriteLine($"🗑️ Deleted activity with ID: {id}");
         }
 
+        public async Task<bool> RegisterUserAsync(string email, string password)
+        {
+            var existing = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (existing != null) return false;
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            var user = new User { Email = email, PasswordHash = hashedPassword };
+            await _database.InsertAsync(user);
+            Console.WriteLine("User registered with hash password");
+            return true;
+        }
+        public async Task<bool>ValidateUserAsync(string email, string password)
+        {
+            var user = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return false;
+            if(string.IsNullOrEmpty(user.PasswordHash))
+            { Console.WriteLine("Password hash is empty"); return false; }
+            return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+        }
         // ✅ Get database path (for debugging)
         public string GetDbPath()
         {
             return _dbPath;
         }
-    }
+
+
+
+        //To help edit page
+        public async Task UpdateActivityAsync(RunningActivity activity)
+        {
+            if (activity != null)
+            {
+                await _database.UpdateAsync(activity);
+                Console.WriteLine($"✅ Activity updated: {activity.Name}, ID: {activity.Id}");
+            }
+        }
+
+
+        public async Task<RunningActivity> GetActivityByIdAsync(int id)
+        {
+            return await _database.Table<RunningActivity>()
+                                  .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+
+
+        // Insert a new training session
+        public async Task InsertTrainingAsync(string name, string description, int time, int grade)
+        {
+            var training = new Training
+            {
+                Name = name,
+                Description = description,
+                Time = time,
+                Grade = grade
+            };
+
+            await _database.InsertAsync(training);
+            Console.WriteLine($"✅ Training added: {training.Name}");
+        }
+
+        // Retrieve all trainings
+        public async Task<List<Training>> GetAllTrainingsAsync()
+        {
+            return await _database.Table<Training>().ToListAsync();
+        }
+
+        // Delete a training
+        public async Task DeleteTrainingAsync(int id)
+        {
+            await _database.DeleteAsync<Training>(id);
+            Console.WriteLine($"🗑️ Training deleted: ID {id}");
+        }
+
+        // Update training
+        public async Task UpdateTrainingAsync(Training training)
+        {
+            if (training != null)
+            {
+                await _database.UpdateAsync(training);
+                Console.WriteLine($"✅ Training updated: {training.Name}, ID: {training.Id}");
+            }
+        }
 
 
 
 
-    // ✅ Define the RunningActivity Model
-    public class RunningActivity
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public double Distance { get; set; }
-        public string Time { get; set; } = "00:00:00";
-        public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
-        public string Grade { get; set; } = "N/A"; 
-        public string Description { get; set; } = string.Empty; // Optional field
+
 
     }
 }
+
+
+
+

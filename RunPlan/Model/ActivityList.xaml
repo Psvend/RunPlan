@@ -3,7 +3,7 @@
     x:Class="RunPlan.Model.ActivityList"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:model="clr-namespace:RunPlan.Data"
+    xmlns:model="clr-namespace:RunPlan.Model"
     xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
     x:DataType="viewmodel:ActivityListViewModel"
     Title="Activity List"

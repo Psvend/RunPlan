@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using RunPlan.ViewModel;
 using Microsoft.Maui.Controls;
 using System.Xml.Linq;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Globalization;
+using RunPlan.Messages;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 
 
@@ -13,8 +18,14 @@ namespace RunPlan.ViewModel;
 
 [QueryProperty(nameof(RunningActivity), "RunningActivity")]
 
-public partial class DetailViewModel: BaseVievModel
+public partial class DetailViewModel: ObservableObject
 {
+    private readonly DatabaseService _databaseService;
+
+    public DetailViewModel(DatabaseService databaseService)
+    {
+        _databaseService = databaseService;
+    }
 
 
     [ObservableProperty]
@@ -30,11 +41,62 @@ public partial class DetailViewModel: BaseVievModel
         OnPropertyChanged(nameof(Description));
     }
 
+
+    //To handle editing of the page
+    [ObservableProperty]
+    private bool isEditing;
+
+
+
+    [RelayCommand]
+    public async Task SaveChanges()
+    {
+        if (RunningActivity != null)
+        {
+
+            await _databaseService.UpdateActivityAsync(RunningActivity);
+
+            // Reload the updated object from DB
+            var updated = await _databaseService.GetActivityByIdAsync(RunningActivity.Id);
+            RunningActivity = updated;
+
+
+            IsEditing = false;
+            WeakReferenceMessenger.Default.Send(new ActivityUpdatedMessage());
+        }
+    }
+    
+
+
+    [RelayCommand]
+    public void Edit()
+    {
+        Console.WriteLine("Edit button clicked!");
+        IsEditing = true;
+    }
+
+
+    public class InverseBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => !(bool)value;
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => !(bool)value;
+    }
+
+
+
+
+
+
+
     public string Name => RunningActivity?.Name ?? "N/A";
     public string Time => RunningActivity?.Time ?? "00:00:00";
     public double Distance => RunningActivity?.Distance ?? 0;
     public string Grade => RunningActivity?.Grade ?? "Empty for now";
     public string Description => RunningActivity?.Description ?? "Nothing yet";
+
 
 
 

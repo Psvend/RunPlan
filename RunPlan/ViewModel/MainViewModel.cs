@@ -242,7 +242,8 @@ namespace RunPlan.ViewModel
             var thisWeek = lastThreeMonthsData.LastOrDefault();
             if (thisWeek != null)
             {
-                ThisWeekDistance = $"{thisWeek.Distance} km";
+               // ThisWeekDistance = $"{thisWeek.Distance} km";
+                ThisWeekDistance = $"{(thisWeek.Distance < 0.05 ? 0 : thisWeek.Distance):0} km";
                 ThisWeekTime = thisWeek.Time;
             }
 
