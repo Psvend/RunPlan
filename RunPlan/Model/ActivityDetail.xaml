@@ -21,7 +21,7 @@
 		<VerticalStackLayout Padding="20" Spacing="20">
             <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
                 <!-- Back Button -->
-				<ImageButton Source="back.png"
+                <ImageButton Source="back.png"
 						 Clicked="OnBackClicked"
 						 BackgroundColor="Transparent"
 						 HorizontalOptions="Start"
@@ -36,10 +36,10 @@
 						CornerRadius="10"
 						Command="{Binding SaveChangesCommand}"
 						IsVisible="{Binding IsEditing}"
-						Grid.Column="2" />	
+						Grid.Column="2" />
 
                 <ImageButton Source="edit.png"
-							 Command="{Binding OnEditClickedCommand}"
+							 Command="{Binding EditCommand}"
 							 BackgroundColor="Transparent"
 							 HorizontalOptions="End"
 							 HeightRequest="30"
@@ -48,13 +48,25 @@
             </Grid>
 
             <!-- Title -->
-			<Label Text="{Binding Name}"
-                   FontSize="32"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+            <StackLayout Spacing="5">
+                <!-- View Mode -->
+                <Label Text="{Binding RunningActivity.Name}"
+					   FontSize="32"
+					   FontAttributes="Bold"
+					   TextColor="White"
+					   HorizontalOptions="Center"
+					   IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}" />
 
-			<!-- Info Grid (2x2 Boxes) -->
+                <!-- Edit Mode -->
+                <Entry Text="{Binding RunningActivity.Name, Mode=TwoWay}"
+					   FontSize="32"
+					   TextColor="White"
+					   FontAttributes="Bold"
+					   HorizontalOptions="Center"
+					   IsVisible="{Binding IsEditing}" />
+            </StackLayout>
+
+            <!-- Info Grid (2x2 Boxes) -->
 			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
 
 				<!-- Distance Box -->
@@ -69,9 +81,12 @@
 					   Padding="0"
 					   HasShadow="False">
 					<Grid VerticalOptions="Center" HorizontalOptions="Center">
-						<Label HorizontalTextAlignment="Center"
+
+                        <!-- View Mode -->
+                        <Label HorizontalTextAlignment="Center"
 							   VerticalTextAlignment="Center"
-							   TextColor="White">
+							   TextColor="White"
+                               IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
 							<Label.FormattedText>
 								<FormattedString>
 									<Span Text="{Binding Distance}" FontSize="36" FontAttributes="Bold" />
@@ -79,7 +94,24 @@
 								</FormattedString>
 							</Label.FormattedText>
 						</Label>
-					</Grid>
+
+                        <!-- Edit Mode -->
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}">
+                            <Entry Text="{Binding RunningActivity.Distance, Mode=TwoWay}"
+								   FontSize="36"
+								   WidthRequest="100"
+								   Keyboard="Numeric"
+								   HorizontalTextAlignment="Center"
+								   TextColor="White"
+								   BackgroundColor="Transparent" />
+											<Label Text="km"
+								   FontSize="18"
+								   TextColor="White"
+								   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
+
+                    </Grid>
 				</Frame>
 
 				
@@ -97,9 +129,12 @@
 					   HasShadow="False">
 
 					<Grid VerticalOptions="Center" HorizontalOptions="Center">
-						<Label HorizontalTextAlignment="Center"
+
+                        <!-- View Mode -->
+                        <Label HorizontalTextAlignment="Center"
 							   VerticalTextAlignment="Center"
-							   TextColor="White">
+							   TextColor="White"
+                               IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
 							<Label.FormattedText>
 								<FormattedString>
 									<Span Text="{Binding Time}" FontSize="36" FontAttributes="Bold" />
@@ -107,7 +142,24 @@
 								</FormattedString>
 							</Label.FormattedText>
 						</Label>
-					</Grid>
+
+                        <!-- Edit Mode -->
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}">
+                            <Entry Text="{Binding RunningActivity.Time, Mode=TwoWay}"
+								   FontSize="36"
+								   WidthRequest="100"
+								   Keyboard="Numeric"
+								   HorizontalTextAlignment="Center"
+								   TextColor="White"
+								   BackgroundColor="Transparent" />
+                            <Label Text="min"
+								   FontSize="18"
+								   TextColor="White"
+								   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
+
+                    </Grid>
 				</Frame>
 
 
@@ -123,18 +175,18 @@
 					   Padding="0"
 					   HasShadow="False">
 
-					<Grid VerticalOptions="Center" HorizontalOptions="Center">
-						<Label HorizontalTextAlignment="Center"
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label HorizontalTextAlignment="Center"
 							   VerticalTextAlignment="Center"
 							   TextColor="White">
-							<Label.FormattedText>
-								<FormattedString>
-									<Span Text="{Binding Pace, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold" />
-									<Span Text="min/km" FontSize="18" />
-								</FormattedString>
-							</Label.FormattedText>
-						</Label>
-					</Grid>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Pace, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold" />
+                                    <Span Text="min/km" FontSize="18" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
 				</Frame>
 
 
@@ -154,17 +206,38 @@
 					   HasShadow="False">
 
 					<Grid VerticalOptions="Center" HorizontalOptions="Center">
-						<Label HorizontalTextAlignment="Center"
+                        <!-- View Mode -->
+                        <Label HorizontalTextAlignment="Center"
 							   VerticalTextAlignment="Center"
-							   TextColor="White">
-							<Label.FormattedText>
+							   TextColor="White"
+                               IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
+                            <Label.FormattedText>
 								<FormattedString>
 									<Span Text="{Binding Grade}" FontSize="36" FontAttributes="Bold" />
 									<Span Text="" FontSize="18" />
 								</FormattedString>
 							</Label.FormattedText>
 						</Label>
-					</Grid>
+
+                        <!-- Edit Mode -->
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}">
+                            <Entry Text="{Binding RunningActivity.Grade, Mode=TwoWay}"
+								   FontSize="36"
+								   WidthRequest="100"
+								   Keyboard="Numeric"
+								   HorizontalTextAlignment="Center"
+								   TextColor="White"
+								   BackgroundColor="Transparent" />
+                            <Label Text=""
+								   FontSize="18"
+								   TextColor="White"
+								   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
+
+
+
+                    </Grid>
 				</Frame>
 
 
@@ -181,17 +254,23 @@
                    VerticalOptions="Start">
                 
                 <VerticalStackLayout Spacing="10">
+                    <!-- View Mode -->
                     <Label Text="{Binding Description}"
                        TextColor="#4E3689"
                        FontSize="16" 
                        LineBreakMode="WordWrap"
                        VerticalOptions="Start"
                        IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}"/>
-                <!-- Edit Mode -->
+                    
+                    <!-- Edit Mode -->
                     <Editor Text="{Binding RunningActivity.Description}"
-						TextColor="#4E3689"
-						FontSize="16"
-						IsVisible="{Binding IsEditing}" />
+							TextColor="#4E3689"
+							FontSize="16"
+							IsVisible="{Binding IsEditing}"
+							AutoSize="TextChanges"
+							HeightRequest="100"
+							BackgroundColor="Transparent"
+                            VerticalOptions="StartAndExpand"/>
                 </VerticalStackLayout>
             </Frame>
 
