@@ -42,7 +42,7 @@
             </Border>
 
             <!-- Empty message -->
-            <Label Text="No trainings yet — start planning!"
+            <Label Text="No trainings yet..start planning"
                    FontSize="16"
                    TextColor="White"
                    HorizontalOptions="Center"
