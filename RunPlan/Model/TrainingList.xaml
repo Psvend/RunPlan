@@ -1,0 +1,83 @@
+<ContentPage
+    x:Class="RunPlan.Model.TrainingList"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:model="clr-namespace:RunPlan.Model"
+    xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
+    x:DataType="viewmodel:TrainingListViewModel"
+    Title="Training List"
+    BackgroundColor="#8260DA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Title & Add Button -->
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Text="Your Trainings!"
+                       FontAttributes="Bold"
+                       FontSize="32"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <ImageButton
+                    Source="plus.png"
+                    WidthRequest="75"
+                    HeightRequest="75"
+                    BackgroundColor="#BC54BD"
+                    CornerRadius="55"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center"
+                    Clicked="OnAddTrainingClicked" />
+            </Grid>
+
+            <!-- Search Bar -->
+            <Border BackgroundColor="White"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 20">
+                <SearchBar Placeholder="Search training..."
+                           Text="{Binding SearchQuery}"
+                           BackgroundColor="Transparent"
+                           TextColor="MediumPurple"
+                           CancelButtonColor="MediumPurple"
+                           TextChanged="OnSearchTextChanged" />
+            </Border>
+
+            <!-- Empty message -->
+            <Label Text="No trainings yet — start planning!"
+                   FontSize="16"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   IsVisible="{Binding IsEmpty}" />
+
+            <!-- List -->
+            <CollectionView ItemsSource="{Binding Trainings}"
+                            SelectionMode="Single"
+                            SelectionChanged="OnTrainingSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Training">
+                        <Border BackgroundColor="#4E3689"
+                                Padding="15"
+                                StrokeShape="RoundRectangle 10"
+                                Margin="0,6"
+                                Stroke="MediumPurple">
+                            <Grid ColumnDefinitions="*,Auto" RowSpacing="10">
+                                <StackLayout>
+                                    <Label Text="{Binding name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding description}" />
+                                    <Label Text="{Binding time, StringFormat='Time: {0} min'}" />
+                                    <Label Text="{Binding grade, StringFormat='Grade: {0}'}" />
+                                </StackLayout>
+                                <ImageButton Source="bin.png"
+                                             WidthRequest="60"
+                                             HeightRequest="60"
+                                             BackgroundColor="Transparent"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TrainingListViewModel}}, Path=DeleteCommand}"
+                                             CommandParameter="{Binding}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -31,6 +31,8 @@ namespace RunPlan.Data
             {
                 _database = new SQLiteAsyncConnection(_dbPath);
                 _database.CreateTableAsync<RunningActivity>().Wait();
+                _database.CreateTableAsync<Training>().Wait(); 
+
 
                 // ✅ Ensure database exists by adding a test record if empty
                 EnsureDatabaseInitialized().Wait();
@@ -140,25 +142,52 @@ namespace RunPlan.Data
 
 
 
+        // Insert a new training session
+        public async Task InsertTrainingAsync(string name, string description, int time, int grade)
+        {
+            var training = new Training
+            {
+                Name = name,
+                Description = description,
+                Time = time,
+                Grade = grade
+            };
+
+            await _database.InsertAsync(training);
+            Console.WriteLine($"✅ Training added: {training.Name}");
+        }
+
+        // Retrieve all trainings
+        public async Task<List<Training>> GetAllTrainingsAsync()
+        {
+            return await _database.Table<Training>().ToListAsync();
+        }
+
+        // Delete a training
+        public async Task DeleteTrainingAsync(int id)
+        {
+            await _database.DeleteAsync<Training>(id);
+            Console.WriteLine($"🗑️ Training deleted: ID {id}");
+        }
+
+        // Update training
+        public async Task UpdateTrainingAsync(Training training)
+        {
+            if (training != null)
+            {
+                await _database.UpdateAsync(training);
+                Console.WriteLine($"✅ Training updated: {training.Name}, ID: {training.Id}");
+            }
+        }
+
+
+
+
+
+
     }
 }
 
 
 
-        /*
-        // ✅ Define the RunningActivity Model
-        public class RunningActivity
-        {
-            [PrimaryKey, AutoIncrement]
-            public int Id { get; set; }
-            public string Name { get; set; } = string.Empty;
-            public double Distance { get; set; }
-            public string Time { get; set; } = "00:00:00";
-            public string Date { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
-            public string Grade { get; set; } = "N/A";
-            public string Description { get; set; } = string.Empty; // Optional field
-
-        }
-    }
-        */
 

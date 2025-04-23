@@ -18,6 +18,10 @@
         <Tab Title="Activity List" Icon="list.png">
             <ShellContent ContentTemplate="{DataTemplate local:ActivityList}" Route="ActivityList" />
         </Tab>
+       
+        <Tab Title="Training List" Icon="list.png">
+            <ShellContent ContentTemplate="{DataTemplate local:TrainingList}" Route="TrainingList" />
+        </Tab>
 
 
     </TabBar>
@@ -26,5 +30,5 @@
     <!-- Navigation-only pages -->
     <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity" />
     <ShellContent ContentTemplate="{DataTemplate local:ActivityDetail}" Route="ActivityDetail" />
-
+    
 </Shell>
