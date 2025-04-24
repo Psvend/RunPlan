@@ -24,7 +24,7 @@ namespace RunPlan.ViewModel
             // Trigger training loading right away
             _databaseService = databaseService;
             _ = LoadTrainingsAsync();
-            Task.Run(LoadTrainingsAsync);
+            Task.Run(async () => await LoadTrainingsAsync());
 
         }
 
