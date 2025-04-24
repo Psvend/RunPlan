@@ -55,6 +55,8 @@ public partial class ActivityViewModel : BaseVievModel
     [ObservableProperty] private string distanceText;
     [ObservableProperty] private string time;
     [ObservableProperty] private string date;
+    [ObservableProperty] private string grade;
+    [ObservableProperty] private string description;
 
     [RelayCommand]
     public async Task LoadActivities()

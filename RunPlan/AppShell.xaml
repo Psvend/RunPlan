@@ -33,8 +33,8 @@
 
 
     <!-- Navigation-only pages -->
-    <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity"/>
-    <ShellContent ContentTemplate="{DataTemplate local:ActivityDetail}" Route="ActivityDetail" />
-    <ShellContent ContentTemplate="{DataTemplate local:CreateTraining}" Route="CreateTraining" />
+    <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity" Shell.TabBarIsVisible="False"/>
+    <ShellContent ContentTemplate="{DataTemplate local:ActivityDetail}" Route="ActivityDetail" Shell.TabBarIsVisible="False" />
+    <ShellContent ContentTemplate="{DataTemplate local:CreateTraining}" Route="CreateTraining" Shell.TabBarIsVisible="False"/>
     
 </Shell>

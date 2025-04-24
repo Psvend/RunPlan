@@ -51,18 +51,36 @@
                     <Entry Text="{Binding Date}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
                     <Label Text="Date (yyyy-MM-dd)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-
-             
-
+                <VerticalStackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="Center">
+                    <Picker Title ="Diffeculties"
+                            ItemsSource="{Binding diffeculties}"
+                            SelectedItem="{Binding SelectedDiffeculty}"
+                            TitleColor="Gray"
+                            TextColor="Black"
+                            BackgroundColor="White"
+                            FontSize="16"/>
+                </VerticalStackLayout>
+                                     
           
             </Grid>
-            <Picker Title ="sværhed"
-                 ItemsSource="{Binding diffeculties}"
-                 SelectedItem="{Binding SelectedDiffeculty}"
-                 TitleColor="Gray"
-                 TextColor="Black"
-                 BackgroundColor="White"
-                 FontSize="16"/>
+           
+            <Frame BackgroundColor="White"
+             CornerRadius="15"
+             Padding="20"
+	         WidthRequest="390"
+             HasShadow="False"
+             VerticalOptions="Start">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Entry Text="{Binding Description}" 
+                        Placeholder="Description"
+                        FontSize="18"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        BackgroundColor="#F0F0F0"/>
+                </VerticalStackLayout>
+            </Frame>
 
 
             <Button Text="save Activity"
