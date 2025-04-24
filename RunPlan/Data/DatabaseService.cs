@@ -96,6 +96,11 @@ namespace RunPlan.Data
             }
         }
 
+
+
+
+        //ACTIVITY RELATED
+
         // ✅ Insert a new activity
         public async Task InsertRunningActivity(string name, double distance, string time, string date)
         {
@@ -110,6 +115,10 @@ namespace RunPlan.Data
             return await _database.Table<RunningActivity>().ToListAsync();
         }
 
+
+
+
+
         // ✅ Delete an activity
         public async Task DeleteActivity(int id)
         {
@@ -117,6 +126,32 @@ namespace RunPlan.Data
             Console.WriteLine($"🗑️ Deleted activity with ID: {id}");
         }
 
+
+
+
+        //To help edit page
+        public async Task UpdateActivityAsync(RunningActivity activity)
+        {
+            if (activity != null)
+            {
+                await _database.UpdateAsync(activity);
+                Console.WriteLine($"✅ Activity updated: {activity.Name}, ID: {activity.Id}");
+            }
+        }
+
+
+        public async Task<RunningActivity> GetActivityByIdAsync(int id)
+        {
+            return await _database.Table<RunningActivity>()
+                                  .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+
+
+
+
+
+        //USER RELATED
         public async Task<bool> RegisterUserAsync(string email, string password)
         {
             var existing = await _database.Table<User>().FirstOrDefaultAsync(u => u.Email == email);
@@ -144,24 +179,9 @@ namespace RunPlan.Data
 
 
 
-        //To help edit page
-        public async Task UpdateActivityAsync(RunningActivity activity)
-        {
-            if (activity != null)
-            {
-                await _database.UpdateAsync(activity);
-                Console.WriteLine($"✅ Activity updated: {activity.Name}, ID: {activity.Id}");
-            }
-        }
 
 
-        public async Task<RunningActivity> GetActivityByIdAsync(int id)
-        {
-            return await _database.Table<RunningActivity>()
-                                  .FirstOrDefaultAsync(a => a.Id == id);
-        }
-
-
+        //TRAINING RELATED
 
         // Insert a new training session
         public async Task InsertTrainingAsync(string name, string description, int time, int grade)
@@ -178,11 +198,18 @@ namespace RunPlan.Data
             Console.WriteLine($"✅ Training added: {training.Name}");
         }
 
+
+
+
         // Retrieve all trainings
         public async Task<List<Training>> GetAllTrainingsAsync()
         {
             return await _database.Table<Training>().ToListAsync();
         }
+
+
+
+
 
         // Delete a training
         public async Task DeleteTrainingAsync(int id)

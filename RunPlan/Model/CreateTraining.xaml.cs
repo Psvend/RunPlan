@@ -8,10 +8,19 @@ namespace RunPlan.Model
 {
     public partial class CreateTraining : ContentPage
     {
+
+        private readonly CreateTrainingViewModel _viewModel;
+
+
         public CreateTraining(CreateTrainingViewModel vm)
         {
             InitializeComponent();
-            BindingContext = vm;
+            _viewModel = vm;
+            BindingContext = _viewModel;
+
+            //Triggers training to load manually
+            Loaded += async (_, _) => await _viewModel.LoadTrainingsAsync();
+
         }
 
         private async void OnBackClicked(object sender, EventArgs e)
@@ -24,8 +33,8 @@ namespace RunPlan.Model
         {
             base.OnAppearing();
 
-            if (BindingContext is CreateTrainingViewModel vm)
-                await vm.LoadTrainingsAsync();
+            if (_viewModel.LoadTrainingsCommand.CanExecute(null))
+                _viewModel.LoadTrainingsCommand.Execute(null);
         }
 
 
