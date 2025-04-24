@@ -178,6 +178,4 @@ public partial class ActivityViewModel : BaseVievModel
     }
 
 
-
-
 }

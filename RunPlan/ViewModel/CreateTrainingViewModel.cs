@@ -10,6 +10,10 @@ using RunPlan.Data;
 using RunPlan.Model;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
+using RunPlan.Messages;
+
+
 
 namespace RunPlan.ViewModel
 {
@@ -69,5 +73,48 @@ namespace RunPlan.ViewModel
                 IsBusy = false;
             }
         }
+
+
+
+
+
+
+        //To make save function work
+        [RelayCommand]
+        public async Task SaveTraining()
+        {
+            if (string.IsNullOrWhiteSpace(Name) ||
+                string.IsNullOrWhiteSpace(Time) ||
+                string.IsNullOrWhiteSpace(Grade) ||
+                string.IsNullOrWhiteSpace(Description))
+            {
+                await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
+                return;
+            }
+
+            if (!int.TryParse(Time, out int timeInt))
+            {
+                await Shell.Current.DisplayAlert("Error", "Time must be a valid number.", "OK");
+                return;
+            }
+
+            
+
+            await _databaseService.InsertTrainingAsync(Name, Description, timeInt, Grade);
+
+            // Clear inputs
+            Name = Description = Time = Grade = string.Empty;
+
+            await LoadTrainingsAsync();
+
+            // Notify other components (if needed)
+            WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
+        }
+
+
+
+
+
+
     }
 }
