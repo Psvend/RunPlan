@@ -68,15 +68,16 @@
                        HeightRequest="150" WidthRequest="180"
                        HasShadow="False">
                     <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Entry Text="{Binding Grade}"
-                               FontSize="36"
+                        <Picker Title="Select Grade"
+                                ItemsSource="{Binding AvailableGrades}"
+                                SelectedItem="{Binding Grade}"
+                               FontSize="15"
                                WidthRequest="100"
-                               Keyboard="Numeric"
                                HorizontalTextAlignment="Center"
                                TextColor="White"
                                BackgroundColor="Transparent" />
-                        <Label Text="Grade"
-                               FontSize="18"
+                        <Label Text=""
+                               FontSize="1"
                                TextColor="White"
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>

@@ -41,6 +41,15 @@ namespace RunPlan.ViewModel
         [ObservableProperty] private ObservableCollection<Training> existingTrainings = new();
 
         [ObservableProperty] private bool isBusy;
+        [ObservableProperty]
+        private List<string> availableGrades = new()
+        {
+            "Super Easy",
+            "Easy",
+            "Medium",
+            "Hard",
+            "Extra Hard"
+        };
 
 
 
@@ -98,7 +107,7 @@ namespace RunPlan.ViewModel
                 return;
             }
 
-            
+
 
             await _databaseService.InsertTrainingAsync(Name, Description, timeInt, Grade);
 
@@ -110,8 +119,6 @@ namespace RunPlan.ViewModel
             // Notify other components (if needed)
             WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
         }
-
-
 
 
 
