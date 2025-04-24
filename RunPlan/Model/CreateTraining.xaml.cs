@@ -18,6 +18,18 @@ namespace RunPlan.Model
         {
             await Shell.Current.GoToAsync("//TrainingList");
         }
+
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is CreateTrainingViewModel vm)
+                await vm.LoadTrainingsAsync();
+        }
+
+
+
     }
 
 }

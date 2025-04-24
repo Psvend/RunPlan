@@ -21,6 +21,7 @@ namespace RunPlan.ViewModel
         public CreateTrainingViewModel(DatabaseService databaseService)
         {
             _db = databaseService;
+            LoadTrainingsAsync();
             //Training = new Training();
         }
 
@@ -43,7 +44,23 @@ namespace RunPlan.ViewModel
             }
         }
 
-        
+
+
+        [ObservableProperty]
+        private ObservableCollection<Training> existingTrainings = new();
+
+        public async Task LoadTrainingsAsync()
+        {
+            var trainingsFromDb = await _db.GetAllTrainingsAsync();
+            ExistingTrainings.Clear();
+
+            foreach (var t in trainingsFromDb)
+                ExistingTrainings.Add(t);
+        }
+
+
+
+
 
     }
 }
