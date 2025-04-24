@@ -38,10 +38,32 @@
                    HorizontalOptions="Center" />
 
             <!-- 2x2 Grid for Inputs -->
-            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions="Center">
+            <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto,Auto, Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions="Center">
+
+                <!-- Distance -->
+                <Frame Grid.Row="0" Grid.Column="0"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       HeightRequest="150" WidthRequest="180"
+                       HasShadow="False">
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                           <Entry Text="{Binding Distance}"
+                                               FontSize="36"
+                                               WidthRequest="100"
+                                               Keyboard="Numeric"
+                                               HorizontalTextAlignment="Center"
+                                               TextColor="White"
+                                               BackgroundColor="Transparent" />
+                            <Label Text="km"
+                                               FontSize="18"
+                                               TextColor="White"
+                                               HorizontalOptions="Center" />                                         
+                    </VerticalStackLayout>
+                </Frame>
+
 
                 <!-- Duration -->
-                <Frame Grid.Row="0" Grid.Column="0"
+                <Frame Grid.Row="0" Grid.Column="1"
                        BackgroundColor="#4E3689"
                        CornerRadius="12"
                        HeightRequest="150" WidthRequest="180"
@@ -62,7 +84,7 @@
                 </Frame>
 
                 <!-- Grade -->
-                <Frame Grid.Row="0" Grid.Column="1"
+                <Frame Grid.Row="0" Grid.Column="2"
                        BackgroundColor="#4E3689"
                        CornerRadius="12"
                        HeightRequest="150" WidthRequest="180"
@@ -139,6 +161,7 @@
                                 <Label Text="{Binding Description}" TextColor="White" FontSize="14"/>
                                 <Label Text="{Binding Time, StringFormat='Time: {0}'}" TextColor="White" FontSize="14"/>
                                 <Label Text="{Binding Grade, StringFormat='Grade: {0}'}" TextColor="White" FontSize="14"/>
+                                <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" TextColor="White" FontSize="14"/>
                             </StackLayout>
                         </Frame>
                     </DataTemplate>

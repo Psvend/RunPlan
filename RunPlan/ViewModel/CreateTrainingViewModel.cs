@@ -37,6 +37,7 @@ namespace RunPlan.ViewModel
         [ObservableProperty] private string description;
         [ObservableProperty] private string time;
         [ObservableProperty] private string grade;
+        [ObservableProperty] private string distance;
 
         [ObservableProperty] private ObservableCollection<Training> existingTrainings = new();
 
@@ -95,7 +96,9 @@ namespace RunPlan.ViewModel
             if (string.IsNullOrWhiteSpace(Name) ||
                 string.IsNullOrWhiteSpace(Time) ||
                 string.IsNullOrWhiteSpace(Grade) ||
-                string.IsNullOrWhiteSpace(Description))
+                string.IsNullOrWhiteSpace(Description) ||
+                string.IsNullOrWhiteSpace(Distance) 
+                )
             {
                 await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
                 return;
@@ -107,12 +110,18 @@ namespace RunPlan.ViewModel
                 return;
             }
 
+            if (!int.TryParse(Distance, out int distanceInt))
+            {
+                await Shell.Current.DisplayAlert("Error", "Distance must be a valid number.", "OK");
+                return;
+            }
 
 
-            await _databaseService.InsertTrainingAsync(Name, Description, timeInt, Grade);
+
+            await _databaseService.InsertTrainingAsync(Name, Description, timeInt, Grade, distanceInt);
 
             // Clear inputs
-            Name = Description = Time = Grade = string.Empty;
+            Name = Description = Time = Grade = Distance = string.Empty;
 
             await LoadTrainingsAsync();
 

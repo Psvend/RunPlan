@@ -184,14 +184,15 @@ namespace RunPlan.Data
         //TRAINING RELATED
 
         // Insert a new training session
-        public async Task InsertTrainingAsync(string name, string description, int time, string grade)
+        public async Task InsertTrainingAsync(string name, string description, int time, string grade, int distance)
         {
             var training = new Training
             {
                 Name = name,
                 Description = description,
                 Time = time,
-                Grade = grade
+                Grade = grade,
+                Distance = distance
             };
 
             await _database.InsertAsync(training);

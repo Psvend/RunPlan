@@ -16,5 +16,6 @@ namespace RunPlan.Model
         public string Description { get; set; } = string.Empty;
         public int Time { get; set; }
         public string Grade { get; set; } = string.Empty;
+        public int Distance { get; set; }
     }
 }
