@@ -54,7 +54,7 @@
                 <VerticalStackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="Center">
                     <Picker Title ="Diffeculties"
                             ItemsSource="{Binding diffeculties}"
-                            SelectedItem="{Binding SelectedDiffeculty}"
+                            SelectedItem="{Binding Grade}"
                             TitleColor="Gray"
                             TextColor="Black"
                             BackgroundColor="White"
