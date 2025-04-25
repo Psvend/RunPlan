@@ -89,7 +89,9 @@ public partial class ActivityViewModel : BaseVievModel
         if (string.IsNullOrWhiteSpace(ActivityName) ||
             string.IsNullOrWhiteSpace(DistanceText) ||
             string.IsNullOrWhiteSpace(Time) ||
-            string.IsNullOrWhiteSpace(Date))
+            string.IsNullOrWhiteSpace(Date) ||
+            string.IsNullOrWhiteSpace(Grade) ||
+            string.IsNullOrWhiteSpace(Description))
         {
             await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
             return;
@@ -101,7 +103,7 @@ public partial class ActivityViewModel : BaseVievModel
             return;
         }
 
-        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date);
+        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
 
         // Clear inputs
         ActivityName = DistanceText = Time = Date = string.Empty;

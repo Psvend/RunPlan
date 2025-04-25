@@ -104,7 +104,7 @@ namespace RunPlan.ViewModel
         {
             Console.WriteLine("Add Activity Button Clicked!");
 
-            if (string.IsNullOrEmpty(ActivityName) || string.IsNullOrEmpty(DistanceText) || string.IsNullOrEmpty(Time) || string.IsNullOrEmpty(Date))
+            if (string.IsNullOrEmpty(ActivityName) || string.IsNullOrEmpty(DistanceText) || string.IsNullOrEmpty(Time) || string.IsNullOrEmpty(Date) || string.IsNullOrEmpty(Grade) || string.IsNullOrEmpty(Description))
             {
                 Console.WriteLine("❌ Error: Please fill in all fields.");
                 return;
@@ -116,7 +116,7 @@ namespace RunPlan.ViewModel
                 return;
             }
 
-            await _dbService.InsertRunningActivity(ActivityName, distance, Time, Date);
+            await _dbService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
 
             Console.WriteLine("✅ New Activity Added! Refreshing Chart...");
             await LoadActivities(); // Refresh UI

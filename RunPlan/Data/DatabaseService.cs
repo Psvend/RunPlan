@@ -97,9 +97,9 @@ namespace RunPlan.Data
         }
 
         // ✅ Insert a new activity
-        public async Task InsertRunningActivity(string name, double distance, string time, string date)
+        public async Task InsertRunningActivity(string name, double distance, string time, string date, string grade, string describtion)
         {
-            var activity = new RunningActivity { Name = name, Distance = distance, Time = time, Date = date };
+            var activity = new RunningActivity { Name = name, Distance = distance, Time = time, Date = date, Grade = grade, Description = describtion };
             await _database.InsertAsync(activity);
             Console.WriteLine("✅ Activity added to SQLite!");
         }
