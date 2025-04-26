@@ -29,7 +29,8 @@
 				   FontSize="32"
 				   TextColor="White"
 				   FontAttributes="Bold"
-				   HorizontalOptions="Center" />
+				   HorizontalOptions="Center"
+                       Placeholder="Activity name"/>
             </StackLayout>
 
             <!-- Info Grid (2x2 Boxes) -->
@@ -54,7 +55,8 @@
 							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
 							   TextColor="White"
-							   BackgroundColor="Transparent" />
+							   BackgroundColor="Transparent" 
+                                   Placeholder="Title"/>
                             <Label Text="km"
 							   FontSize="18"
 							   TextColor="White"
@@ -87,7 +89,8 @@
 							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
 							   TextColor="White"
-							   BackgroundColor="Transparent" />
+							   BackgroundColor="Transparent"
+                               Placeholder="Time (hh:mm:ss)"/>
                             <Label Text="min"
 							   FontSize="18"
 							   TextColor="White"
@@ -97,14 +100,35 @@
 
                     </Grid>
                 </Frame>
+                <Frame Grid.Row="1" Grid.Column="0"
+				   BackgroundColor="#4E3689"
+				   CornerRadius="12"
+				   BorderColor="#4E3689"
+				   HeightRequest="150"
+				   WidthRequest="180"
+				   HorizontalOptions="Center"
+				   VerticalOptions="Center"
+				   Padding="0"
+				   HasShadow="False">
+
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                        <VerticalStackLayout>
+                            <Entry HorizontalTextAlignment="Center"
+						   VerticalTextAlignment="Center"
+						   TextColor="White"
+                               Text="{Binding Date, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold"
+                                   Placeholder="Date (yyyy-MM-dd)"/>
 
 
+                        <Label Text="Date"
+	                    FontSize="18"
+	                    TextColor="White"
+	                    HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
 
 
-
-
-
-                <!-- Grade box -->
                 <Frame Grid.Row="1" Grid.Column="1"
 				   BackgroundColor="#4E3689"
 				   CornerRadius="12"
@@ -117,16 +141,16 @@
 				   HasShadow="False">
 
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                        <!-- Edit Mode -->
+                      
                         <VerticalStackLayout >
-                            <Picker Title ="Diffeculties"
+                            <Picker Title =""
                             ItemsSource="{Binding diffeculties}"
                             SelectedItem="{Binding Grade}"
                             TitleColor="Gray"
                             TextColor="Black"
                             BackgroundColor="White"
                             FontSize="18"/>
-                            <Label Text=""
+                            <Label Text="Diffeculties"
 							   FontSize="18"
 							   TextColor="White"
 							   HorizontalOptions="Center" />
@@ -159,7 +183,8 @@
 						AutoSize="TextChanges"
 						HeightRequest="100"
 						BackgroundColor="Transparent"
-                        VerticalOptions="StartAndExpand"/>
+                        VerticalOptions="StartAndExpand"
+                            Placeholder="A lovely run"/>
                 </VerticalStackLayout>
             </Frame>
 
