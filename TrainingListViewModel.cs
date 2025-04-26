@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RunPlan.Data;
 using RunPlan.Model;
@@ -64,10 +64,7 @@ namespace RunPlan.ViewModel
             }
         }
 
-        // Defining declaration for the partial method
-        partial void OnSearchQueryChanged(string value);
-
-        // Implementing declaration for the partial method
+        // Implement the partial method
         partial void OnSearchQueryChanged(string value)
         {
             FilterTrainings();
@@ -86,13 +83,6 @@ namespace RunPlan.ViewModel
                 Trainings.Clear();
                 IsEmpty = true;
             }
-        }
-        public void DeleteTraining(Training training)
-        {
-            if (training == null) return;
-            Trainings.Remove(training);
-            allTrainings.Remove(training);
-            IsEmpty = Trainings.Count == 0;
         }
     }
 }

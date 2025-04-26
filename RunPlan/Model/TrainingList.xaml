@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="RunPlan.Model.TrainingList"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -11,13 +12,17 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
-            <!-- Title & Add Button -->
-            <Grid ColumnDefinitions="*,Auto">
+            <!-- Title + Plus Button -->
+            <Grid ColumnDefinitions="*,Auto"
+                  Padding="10"
+                  VerticalOptions="Center"
+                  HorizontalOptions="FillAndExpand">
                 <Label Text="Your Trainings!"
                        FontAttributes="Bold"
                        FontSize="32"
                        TextColor="White"
-                       VerticalOptions="Center" />
+                       VerticalOptions="Center"
+                       Grid.Column="0" />
                 <ImageButton
                     Source="plus.png"
                     WidthRequest="75"
@@ -26,52 +31,69 @@
                     CornerRadius="55"
                     HorizontalOptions="End"
                     VerticalOptions="Center"
-                    Clicked="OnAddTrainingClicked" />
+                    Clicked="OnAddTrainingClicked"
+                    Aspect="AspectFit"
+                    Grid.Column="1" />
             </Grid>
 
-            <!-- Search Bar -->
-            <Border BackgroundColor="White"
+            <!-- Search -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="White"
+                    Padding="0"
+                    StrokeThickness="0"
                     Stroke="Transparent"
-                    StrokeShape="RoundRectangle 20">
+                    Margin="0,10,0,5">
                 <SearchBar Placeholder="Search training..."
                            Text="{Binding SearchQuery}"
                            BackgroundColor="Transparent"
                            TextColor="MediumPurple"
-                           CancelButtonColor="MediumPurple"
-                           TextChanged="OnSearchTextChanged" />
+                           CancelButtonColor="MediumPurple" />
             </Border>
 
-            <!-- Empty message -->
-            <Label Text="No trainings yet..start planning"
+            <!-- Empty Text -->
+            <Label Text="No trainings found  create one!"
                    FontSize="16"
                    TextColor="White"
                    HorizontalOptions="Center"
                    IsVisible="{Binding IsEmpty}" />
 
-            <!-- List -->
+            <!-- Training List -->
             <CollectionView ItemsSource="{Binding Trainings}"
-                            SelectionMode="Single"
-                            SelectionChanged="OnTrainingSelected">
+                            Margin="0,0,0,20"
+                            SelectionChanged="OnTrainingSelected"
+                            SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Training">
-                        <Border BackgroundColor="#4E3689"
+                        <Border StrokeShape="RoundRectangle 10"
                                 Padding="15"
-                                StrokeShape="RoundRectangle 10"
-                                Margin="0,6"
-                                Stroke="MediumPurple">
-                            <Grid ColumnDefinitions="*,Auto" RowSpacing="10">
-                                <StackLayout>
-                                    <Label Text="{Binding name}" FontAttributes="Bold" />
-                                    <Label Text="{Binding description}" />
-                                    <Label Text="{Binding time, StringFormat='Time: {0} min'}" />
-                                    <Label Text="{Binding grade, StringFormat='Grade: {0}'}" />
+                                BackgroundColor="#4E3689"
+                                Stroke="MediumPurple"
+                                Margin="0,6">
+                            <Grid ColumnDefinitions="*,Auto"
+                                  RowDefinitions="Auto,Auto"
+                                  RowSpacing="10">
+                                <StackLayout Grid.Column="0" Grid.RowSpan="2">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="White" />
+                                    <Label Text="{Binding Description}" TextColor="White" />
+                                    <Label Text="{Binding Time, StringFormat='Time: {0} min'}" TextColor="White" />
+                                    <Label Text="{Binding Grade, StringFormat='Grade: {0}'}" TextColor="White" />
                                 </StackLayout>
-                                <ImageButton Source="bin.png"
-                                             WidthRequest="60"
-                                             HeightRequest="60"
-                                             BackgroundColor="Transparent"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TrainingListViewModel}}, Path=DeleteCommand}"
-                                             CommandParameter="{Binding}" />
+
+                                <ImageButton
+                                    Source="bin.png"
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    WidthRequest="60"
+                                    HeightRequest="60"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Start"
+                                    Aspect="AspectFit"
+                                    Clicked="OnDeleteTrainingClicked"
+                                    CommandParameter="{Binding .}" />
                             </Grid>
                         </Border>
                     </DataTemplate>

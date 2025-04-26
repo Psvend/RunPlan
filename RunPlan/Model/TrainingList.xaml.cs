@@ -1,62 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
+﻿using Microsoft.Maui.Controls;
 using RunPlan.ViewModel;
-
-
-
+using RunPlan.Model;
+using System.Collections.Generic;
 
 namespace RunPlan.Model
 {
     public partial class TrainingList : ContentPage
     {
-        private bool isNavigating = false;
+        private readonly TrainingListViewModel _viewModel;
 
         public TrainingList(TrainingListViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = viewModel;
+            BindingContext = _viewModel = viewModel;
         }
 
-
-
-        // Add training button clicked
-        private async void OnAddTrainingClicked(object sender, EventArgs e)
-        {
-            if (isNavigating) return;
-            isNavigating = true;
-
-            await Shell.Current.GoToAsync("//CreateTraining"); // Route to your AddTraining page
-
-            isNavigating = false;
-        }
-
-
-
-        // Refresh on appearing
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            if (BindingContext is TrainingListViewModel vm)
-                await vm.LoadTrainingsAsync();
+            if (_viewModel != null)
+                await _viewModel.LoadTrainingsAsync();
         }
 
-
-
-        // Search bar updated
-        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        private async void OnAddTrainingClicked(object sender, EventArgs e)
         {
-            if (BindingContext is TrainingListViewModel vm)
-            {
-                vm.FilterTrainingsBySearch();
-            }
+            await Shell.Current.GoToAsync("//CreateTraining");
         }
 
-        // When a training is tapped
         private async void OnTrainingSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Training selected)
@@ -67,6 +37,14 @@ namespace RunPlan.Model
                 });
 
                 ((CollectionView)sender).SelectedItem = null;
+            }
+        }
+
+        private void OnDeleteTrainingClicked (object sender, EventArgs e)
+        {
+            if(sender is ImageButton button && button.CommandParameter is Training trainingToDelete)
+            {
+                _viewModel.DeleteTraining(trainingToDelete);
             }
         }
     }
