@@ -6,6 +6,7 @@
         {
             InitializeComponent();
             Routing.RegisterRoute("ActivityDetail", typeof(ActivityDetail));
+            Routing.RegisterRoute("TrainingDetail", typeof(TrainingDetailPage));
         }
     }
 }

@@ -36,5 +36,6 @@
     <ShellContent ContentTemplate="{DataTemplate local:Activity}" Route="Activity"/>
     <ShellContent ContentTemplate="{DataTemplate local:ActivityDetail}" Route="ActivityDetail" />
     <ShellContent ContentTemplate="{DataTemplate local:CreateTraining}" Route="CreateTraining" />
-    
+    <ShellContent ContentTemplate="{DataTemplate local:TrainingDetailPage}" Route="TrainingDetail" />
+
 </Shell>

@@ -44,6 +44,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<App>();
+        builder.Services.AddTransient<TrainingListDetailViewModel>();
+
 
 
 

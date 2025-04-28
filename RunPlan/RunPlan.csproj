@@ -96,6 +96,9 @@
 	  <MauiXaml Update="Model\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Model\TrainingDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Model\Stats.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -109,6 +112,12 @@
 
 	<ItemGroup>
 	  <Folder Include="Model\NewFolder\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Model\TrainingDetailPage.xaml.cs">
+	    <DependentUpon>TrainingDetailPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>
