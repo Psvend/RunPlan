@@ -1,17 +1,67 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:RunPlan.ViewModel"
-             x:DataType="vm:LoginViewModel"
-             x:Class="RunPlan.Model.LoginPage"
-             Title="Login">
-    <VerticalStackLayout Padding="30" Spacing="15" VerticalOptions="Center">
-        <Label Text="RunPlan Login" FontSize="24" HorizontalOptions="Center"/>
-        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email"/>
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
+<ContentPage
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:vm="clr-namespace:RunPlan.ViewModel"
+        x:DataType="vm:LoginViewModel"
+        x:Class="RunPlan.Model.LoginPage"
+        BackgroundColor="#8260DA"
+        Title="Login">
 
-        <Button Text="Login" Command="{Binding LoginCommand}" />
-        <Button Text="Register" Command="{Binding RegisterCommand}" />
-        <Label Text="{Binding Message}" TextColor="Red"/>
+    <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="CenterAndExpand">
+
+        <Image Source="runnerman.png"
+               HorizontalOptions="End"
+               VerticalOptions="Start"
+               HeightRequest="120"
+               WidthRequest="120"
+               Margin="0,20,0,0"/>
+        <!--Title-->
+        <Label Text="RunPlan Login"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"/>
+        <!--Login Card -->
+        <Frame BackgroundColor="White"
+                   CornerRadius="20"
+                   Padding="25"
+                   HasShadow="True">
+            <VerticalStackLayout Spacing="20">
+                <Frame CornerRadius="10" BackgroundColor="#F5F5F5" Padding="0">
+                    <Entry Placeholder="Email"
+                          Text="{Binding Email}"
+                          Keyboard="Email"
+                          BackgroundColor="Transparent"
+                          HeightRequest="50" />
+                </Frame>
+                <Frame CornerRadius="10" BackgroundColor="#F5F5F5" Padding="0">
+                    <Entry Placeholder="Password"
+                           Text="{Binding Password}"
+                           IsPassword="True"
+                           BackgroundColor="Transparent"
+                           HeightRequest="50" />
+                </Frame>
+                <Button Text="Login"
+                        Command="{Binding LoginCommand}"
+                        BackgroundColor="#7B61FF"
+                        TextColor="White"
+                        CornerRadius="20"
+                        FontAttributes="Bold"
+                        HeightRequest="50" />
+                <Button Text="Register"
+                        Command="{Binding RegisterCommand}"
+                        BackgroundColor="White"
+                        BorderColor="#7B61FF"
+                        TextColor="#7B61FF"
+                        BorderWidth="2"
+                        CornerRadius="20"
+                        FontAttributes="Bold"
+                        HeightRequest="50" />
+                <Label Text="{Binding Message}"
+                       TextColor="Red"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Frame>
     </VerticalStackLayout>
 </ContentPage>

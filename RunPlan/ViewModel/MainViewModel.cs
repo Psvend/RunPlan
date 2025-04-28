@@ -15,7 +15,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace RunPlan.ViewModel
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public partial class MainViewModel : INotifyPropertyChanged
     {
         public readonly DatabaseService _dbService;
         public ObservableCollection<RunningDataModel> WeeklyRunningData { get; set; }
@@ -60,6 +60,12 @@ namespace RunPlan.ViewModel
             _ = LoadActivities();
         }
 
+
+        [RelayCommand]
+        public async Task Logout()
+        {
+            await Shell.Current.GoToAsync("//LoginPage");
+        }
 
         public async Task LoadActivities()
         {

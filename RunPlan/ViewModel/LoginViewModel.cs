@@ -1,45 +1,54 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RunPlan.Data;
+using RunPlan.Model;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
-using RunPlan.Model;
-namespace RunPlan.ViewModel;
 
-public partial class LoginViewModel : ObservableObject
+namespace RunPlan.ViewModel
 {
-    private readonly DatabaseService _db;
-    private readonly MainPage _mainPage;
-
-    [ObservableProperty] string email;
-    [ObservableProperty] string password;
-    [ObservableProperty] string message;
-
-
-    public LoginViewModel(DatabaseService db, MainPage mainPage)
+    public partial class LoginViewModel: ObservableObject
     {
-        _db = db;
-        _mainPage = mainPage;
-    }
+        private readonly DatabaseService _db;
+        [ObservableProperty]
+        string email;
+        [ObservableProperty]
+        string password;
+        [ObservableProperty]
+        string message;
 
-    [RelayCommand]
-    public async Task Login()
-    {
-        bool valid = await _db.ValidateUserAsync(Email, Password);
-        if (valid)
+       public LoginViewModel(DatabaseService db)
         {
-            await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+            _db = db;
         }
-        else
+
+        [RelayCommand]
+
+        public async Task Login()
         {
-            Message = "Login failed. Check Email or Password";
+            bool valid = await _db.ValidateUserAsync(Email, Password);
+            if(valid)
+            {
+                await Shell.Current.GoToAsync("//MainPage");
+            }
+            else
+            {
+                Message = "Invalid email or password";
+               
+            }
+
+
+        }
+        [RelayCommand]
+        public async Task Register()
+        {
+            bool success = await _db.RegisterUserAsync(Email, Password);
+            Message = success ? "Registration successful" : "Registration failed";
+        }
+        [RelayCommand]
+        public async Task Logout()
+        {
+            await Shell.Current.GoToAsync("//LoginPage");
         }
     }
-    [RelayCommand]
-    public async Task Register()
-    { 
-    bool success = await _db.RegisterUserAsync(Email, Password);
-    Message= success? "User made!" : "Email already exist";
-        }
 }
-

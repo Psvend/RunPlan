@@ -33,7 +33,7 @@
                         StrokeShape="RoundRectangle 20"
                         Padding="15"
                         HorizontalOptions="Fill"
-                        Stroke="#4E3689">   
+                        Stroke="#4E3689">
                     <Grid ColumnDefinitions="Auto,*,Auto"
                           RowDefinitions="Auto,Auto"
                           ColumnSpacing="10">
@@ -73,15 +73,15 @@
                                    TextColor="White" />
                             <Label x:Name="LastActivityTime"
                                    Text="{Binding LastActivity.Time}"
-                                   TextColor="White" /> 
+                                   TextColor="White" />
                             <Label x:Name="LastActivityDistance"
                                    Text="{Binding LastActivity.Distance, StringFormat='{}{0} km'}"
-                                   TextColor="White" />    
+                                   TextColor="White" />
                         </StackLayout>
                     </Grid>
                 </Border>
 
-                
+
                 <!-- Weekly Summary Card -->
                 <Border BackgroundColor="#4E3689"
                         StrokeShape="RoundRectangle 20"
@@ -113,7 +113,7 @@
                                FontAttributes="Bold"
                                TextColor="White"
                                Grid.Column="1"
-                               Grid.ColumnSpan="2" />   
+                               Grid.ColumnSpan="2" />
 
                         <Label x:Name="WeekActivityDistance"
                                Text="{Binding ThisWeekDistance}"
@@ -125,19 +125,32 @@
                                Text="{Binding ThisWeekTime}"
                                TextColor="White"
                                Grid.Row="1"
-                               Grid.Column="2" />   
+                               Grid.Column="2" />
 
                     </Grid>
                 </Border>
+                <!-- Logout button-->
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,10">
+                    <Button Text="Logout"
+                                               Command="{Binding LogoutCommand}"
+                                               BackgroundColor="White"
+                                               TextColor="#7B61FF"
+                                               BorderColor="#7B61FF"
+                                               BorderWidth="2"
+                                               FontAttributes="Bold"
+                                               CornerRadius="20"
+                                               WidthRequest="200"
+                                               HeightRequest="50"/>
+                </HorizontalStackLayout>
 
-                
-            <BoxView HeightRequest="30" Opacity="0" />
+
+                <BoxView HeightRequest="30" Opacity="0" />
 
 
             </VerticalStackLayout>
 
 
-            
+
             <!-- Weekly Running Distance Graph -->
             <Border BackgroundColor="#6346AF"
                     Padding="10"
@@ -154,7 +167,7 @@
                       ColumnDefinitions="*"
                       RowSpacing="15"
                       ColumnSpacing="0"
-                      Padding="0,10,0,0">   
+                      Padding="0,10,0,0">
 
                     <!-- Chart Title -->
                     <Label Text="Three Months Overview"
@@ -163,7 +176,7 @@
                            TextColor="White"
                            HorizontalOptions="Center"
                            Padding="13"
-                           Grid.Row="0" />  
+                           Grid.Row="0" />
 
                     <!-- ⬆️ Move the Tooltip above the chart -->
                     <StackLayout x:Name="TooltipPanel"
@@ -172,7 +185,7 @@
                                  Spacing="6"
                                  Grid.Row="1"
                                  Orientation="Vertical"
-                                 HorizontalOptions="FillAndExpand"
+                                 HorizontalOptions="Fill"
                                  VerticalOptions="Start">
 
 
@@ -217,7 +230,7 @@
                        Grid.Column="1" />
                         </Grid>
 
-                        
+
                     </StackLayout>
 
 
@@ -236,18 +249,15 @@
                 </Grid>
             </Border>
 
-            
+
 
             <BoxView HeightRequest="80" Opacity="0" />
 
-            
-            
+
+
 
         </VerticalStackLayout>
-        
+
     </ScrollView>
 
 </ContentPage>
-    
-    
- 
