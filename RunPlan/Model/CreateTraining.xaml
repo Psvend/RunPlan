@@ -18,13 +18,14 @@
                              Clicked="OnBackClicked"
                              BackgroundColor="Transparent"
                              HeightRequest="30"
-                             WidthRequest="30"
+                             WidthRequest="50"
                              Grid.Column="0"/>
                 <Button Text="Save"
                         FontSize="14"
+                        FontAttributes="Bold"
                         BackgroundColor="White"
                         TextColor="MediumPurple"
-                        CornerRadius="10"
+                        CornerRadius="15"
                         Command="{Binding SaveTrainingCommand}"
                         Grid.Column="2" />
             </Grid>
@@ -105,37 +106,67 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Optional Spacer or Info Slot -->
-                <Frame Grid.Row="1" Grid.ColumnSpan="2"
-                       BackgroundColor="#4E3689"
-                       CornerRadius="12"
-                       HeightRequest="150" WidthRequest="370"
-                       HasShadow="False">
-                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                
+                
+
+                <!-- Training Text Fields -->
+                <Grid Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center" WidthRequest="370">
                         <!-- each custom field drives an Entry bound to its Text property -->
-                        <CollectionView ItemsSource="{Binding CustomFields}">
+                        <CollectionView ItemsSource="{Binding CustomFields}"
+                                        ItemsLayout="VerticalList"
+                                        HorizontalOptions="Center">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="model:TrainingField">
-                                    <Entry Text="{Binding Text, Mode=TwoWay}"
-                                           Placeholder="Field value..."
-                                           BackgroundColor="White"
-                                           TextColor="#4E3689"
-                                           WidthRequest="350" />
+                                    <Grid WidthRequest="350" HeightRequest="45" Margin="0,20,0,5">
+                                        <Frame BackgroundColor="White"
+                                               CornerRadius="8"
+                                               Padding="10,0,40,0"
+                                               HasShadow="False"
+                                               HeightRequest="45">
+                                            <Entry Text="{Binding Text, Mode=TwoWay}"
+                                                   Placeholder="Write your training section here"
+                                                   TextColor="#4E3689"
+                                                   BackgroundColor="Transparent"
+                                                   FontSize="16"
+                                                   VerticalTextAlignment="Center"
+                                                   HeightRequest="45"/>
+                                        </Frame>
+
+                                        <ImageButton Source="bin2.png"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CreateTrainingViewModel}}, Path=DeleteFieldCommand}"
+                                                     CommandParameter="{Binding .}"
+                                                     BackgroundColor="Transparent"
+                                                     HeightRequest="20"
+                                                     WidthRequest="20"
+                                                     Margin="0,0,10,0"
+                                                     HorizontalOptions="End"
+                                                     VerticalOptions="Center"
+                                                     Padding="0"
+                                                     Aspect="AspectFit"
+                                                     Scale="0.8"/>
+
+                                    </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
 
                         <!-- add-field button -->
-                        <Button Text="+ Add field"
+                        <Button Text="Add Section"
                                 Command="{Binding AddFieldCommand}"
                                 BackgroundColor="White"
                                 TextColor="MediumPurple"
                                 CornerRadius="12"
-                                WidthRequest="150"/>
+                                WidthRequest="150"
+                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Grid>
+
             </Grid>
 
+            
+            
+            
             <!-- Description -->
             <Frame BackgroundColor="White"
                    CornerRadius="15"

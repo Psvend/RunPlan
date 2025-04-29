@@ -22,14 +22,11 @@ namespace RunPlan.ViewModel
         private readonly DatabaseService _databaseService;
         private List<Training> allTrainings = new();
 
-
         public CreateTrainingViewModel(DatabaseService databaseService)
         {
-            // Trigger training loading right away
             _databaseService = databaseService;
             _ = LoadTrainingsAsync();
             Task.Run(async () => await LoadTrainingsAsync());
-
         }
 
         // Form inputs
@@ -40,21 +37,18 @@ namespace RunPlan.ViewModel
         [ObservableProperty] private string distance;
 
         [ObservableProperty] private ObservableCollection<Training> existingTrainings = new();
-
         [ObservableProperty] private bool isBusy;
+
         [ObservableProperty]
         private List<string> availableGrades = new()
         {
-            "Super Easy",
-            "Easy",
-            "Medium",
-            "Hard",
-            "Extra Hard"
+            "Super Easy", "Easy", "Medium", "Hard", "Extra Hard"
         };
+
         [ObservableProperty] private ObservableCollection<TrainingField> customFields = new();
         [ObservableProperty] private Training currentTraining;
-
-
+       
+        const int MaxCustomFields = 10;
 
 
 
@@ -67,12 +61,9 @@ namespace RunPlan.ViewModel
             try
             {
                 IsBusy = true;
-
                 allTrainings = await _databaseService.GetAllTrainingsAsync();
-
-                //await _databaseService.GetAllActivitiesAsync();
-
                 ExistingTrainings.Clear();
+
                 foreach (var t in allTrainings)
                     ExistingTrainings.Add(t);
             }
@@ -86,12 +77,7 @@ namespace RunPlan.ViewModel
             }
         }
 
-
-
-
-
-
-        //To make save function work
+        // ✅ Refactored SaveTraining method using composite DB transaction
         [RelayCommand]
         public async Task SaveTraining()
         {
@@ -99,63 +85,42 @@ namespace RunPlan.ViewModel
                 string.IsNullOrWhiteSpace(Time) ||
                 string.IsNullOrWhiteSpace(Grade) ||
                 string.IsNullOrWhiteSpace(Description) ||
-                string.IsNullOrWhiteSpace(Distance) 
-                )
+                string.IsNullOrWhiteSpace(Distance))
             {
                 await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
                 return;
             }
 
-            if (!int.TryParse(Time, out int timeInt))
+            if (!int.TryParse(Time, out int timeInt) || !int.TryParse(Distance, out int distanceInt))
             {
-                await Shell.Current.DisplayAlert("Error", "Time must be a valid number.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Time and Distance must be valid numbers.", "OK");
                 return;
             }
 
-            if (!int.TryParse(Distance, out int distanceInt))
+            var training = new Training
             {
-                await Shell.Current.DisplayAlert("Error", "Distance must be a valid number.", "OK");
-                return;
-            }
+                Name = Name,
+                Description = Description,
+                Time = timeInt,
+                Grade = Grade,
+                Distance = distanceInt
+            };
 
+            var fieldList = CustomFields.ToList();
 
-
-            await _databaseService.InsertTrainingAsync(Name, Description, timeInt, Grade, distanceInt);
-
-
-            // Fetch the newly inserted training to get the ID
-            var trainings = await _databaseService.GetAllTrainingsAsync();
-            CurrentTraining = trainings.OrderByDescending(t => t.Id).FirstOrDefault();
-
-            // Save custom fields now that we know the TrainingId
-            if (CurrentTraining != null)
-            {
-                for (int i = 0; i < CustomFields.Count; i++)
-                {
-                    var f = CustomFields[i];
-                    f.TrainingId = CurrentTraining.Id;
-                    f.SortOrder = i;
-
-                    await _databaseService.InsertTrainingFieldAsync(f);
-                }
-            }
-
+            int newId = await _databaseService.InsertTrainingWithFieldsAsync(training, fieldList);
+            training.Id = newId;
+            CurrentTraining = training;
 
             // Clear inputs
             Name = Description = Time = Grade = Distance = string.Empty;
             CustomFields.Clear();
+
             await LoadTrainingsAsync();
 
-            // Notify other components (if needed)
             WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
         }
 
-
-
-
-        const int MaxCustomFields = 10;
-
-        // Called when page loads or after SaveTraining
         [RelayCommand]
         public async Task LoadCustomFields(int trainingId)
         {
@@ -165,9 +130,6 @@ namespace RunPlan.ViewModel
                 CustomFields.Add(f);
         }
 
-
-
-        // Add a brand-new empty field (up to 10)
         [RelayCommand]
         public void AddField()
         {
@@ -178,7 +140,7 @@ namespace RunPlan.ViewModel
 
             var field = new TrainingField
             {
-                TrainingId = 0, // Temporary ID — will be set after SaveTraining
+                TrainingId = 0, // Temporary until saved
                 Text = string.Empty,
                 SortOrder = nextIndex
             };
@@ -186,10 +148,6 @@ namespace RunPlan.ViewModel
             CustomFields.Add(field);
         }
 
-
-
-
-        // Save all fields back to database
         [RelayCommand]
         public async Task SaveCustomFields()
         {
@@ -204,6 +162,15 @@ namespace RunPlan.ViewModel
             }
         }
 
+
+
+
+        [RelayCommand]
+        public void DeleteField(TrainingField field)
+        {
+            if (CustomFields.Contains(field))
+                CustomFields.Remove(field);
+        }
 
 
 

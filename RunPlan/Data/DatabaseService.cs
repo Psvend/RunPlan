@@ -229,7 +229,31 @@ namespace RunPlan.Data
         public async Task DeleteTrainingFieldAsync(int fieldId)
             => await _database.DeleteAsync<TrainingField>(fieldId);
 
-       
+
+
+        //To link training and trainingField together
+        public async Task<int> InsertTrainingWithFieldsAsync(Training training, List<TrainingField> fields)
+        {
+            int trainingId = 0;
+
+            await _database.RunInTransactionAsync(conn =>
+            {
+                conn.Insert(training);
+                trainingId = training.Id;
+
+                foreach (var field in fields)
+                {
+                    field.TrainingId = trainingId;
+                    conn.Insert(field);
+                }
+            });
+
+            return trainingId;
+        }
+
+
+
+
     }
 }
 
