@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
+using RunPlan.Model;
+using RunPlan.ViewModel;
 
 
 namespace RunPlan.Model

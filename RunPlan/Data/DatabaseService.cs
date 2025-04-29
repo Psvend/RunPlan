@@ -25,20 +25,19 @@ namespace RunPlan.Data
         public DatabaseService()
         {
             _dbPath = GetDatabasePath();
-
             Console.WriteLine($"📌 SQLite database path: {_dbPath}");
+            _database = new SQLiteAsyncConnection(_dbPath);
+        }
 
+        public async Task InitializeAsync()
+        {
             try
             {
-                _database = new SQLiteAsyncConnection(_dbPath);
-                _database.CreateTableAsync<RunningActivity>().Wait();
-                _database.CreateTableAsync<Training>().Wait();
-                _database.CreateTableAsync<User>().Wait();
-                _database.CreateTableAsync<TrainingField>().Wait();
-
-
-                // ✅ Ensure database exists by adding a test record if empty
-                EnsureDatabaseInitialized().Wait();
+                await _database.CreateTableAsync<RunningActivity>();
+                await _database.CreateTableAsync<Training>();
+                await _database.CreateTableAsync<User>();
+                await _database.CreateTableAsync<TrainingField>();
+                await EnsureDatabaseInitialized();
             }
             catch (Exception ex)
             {
