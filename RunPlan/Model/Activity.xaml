@@ -8,8 +8,8 @@
              x:DataType="viewmodel:ActivityViewModel"
              x:Class="RunPlan.Model.Activity"
              BackgroundColor="#8260DA">
-             
-             
+
+
 
 
     <ScrollView>
@@ -23,41 +23,174 @@
                          WidthRequest="30"    
 		                 Padding="0,0,0,10"/>
             <!-- Title -->
-            <Entry Text="{Binding ActivityName}" 
-               Placeholder="Activity Title"
-               FontSize="24"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               HorizontalTextAlignment="Center"
-               TextColor="Black" />
+            <StackLayout Spacing="5">
 
-            <!-- Grid for Distance / Time / Pace / Intensity -->
-            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" ColumnSpacing="30" RowSpacing="20">
+                <Entry Text="{Binding ActivityName}"
+				   FontSize="32"
+				   TextColor="White"
+				   FontAttributes="Bold"
+				   HorizontalOptions="Center"
+                       Placeholder="Activity name"/>
+            </StackLayout>
 
-                <!-- Distance -->
-                <VerticalStackLayout Grid.Row="0" Grid.Column="0" HorizontalOptions="Center">
-                    <Entry Text="{Binding DistanceText}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
-                    <Label Text="Distance (km)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
+            <!-- Info Grid (2x2 Boxes) -->
+            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
 
-                <!-- Time -->
-                <VerticalStackLayout Grid.Row="0" Grid.Column="1" HorizontalOptions="Center">
-                    <Entry Text="{Binding Time}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
-                    <Label Text="Time (hh:mm:ss)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
+                <!-- Distance Box -->
+                <Frame Grid.Row="0" Grid.Column="0"
+				   BackgroundColor="#4E3689"
+				   CornerRadius="12"
+				   BorderColor="#4E3689"
+				   HeightRequest="150"
+				   WidthRequest="180"
+				   HorizontalOptions="Center"
+				   VerticalOptions="Center"
+				   Padding="0"
+				   HasShadow="False">
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                        <VerticalStackLayout >
+                            <Entry Text="{Binding DistanceText}"
+							   FontSize="36"
+							   WidthRequest="100"
+							   Keyboard="Numeric"
+							   HorizontalTextAlignment="Center"
+							   TextColor="White"
+							   BackgroundColor="Transparent" 
+                                   Placeholder="Title"/>
+                            <Label Text="km"
+							   FontSize="18"
+							   TextColor="White"
+							   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
 
-                <!-- Pace -->
-                <VerticalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
-                    <Entry Text="{Binding Date}" FontSize="22" HorizontalOptions="Center" BackgroundColor="#F0F0F0"/>
-                    <Label Text="Date (yyyy-MM-dd)" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
 
-          
+                    </Grid>
+                </Frame>
+
+
+
+                <!-- Time Box -->
+                <Frame Grid.Row="0" Grid.Column="1"
+				   BackgroundColor="#4E3689"
+				   CornerRadius="12"
+				   BorderColor="#4E3689"
+				   HeightRequest="150"
+				   WidthRequest="180"
+				   HorizontalOptions="Center"
+				   VerticalOptions="Center"
+				   Padding="0"
+				   HasShadow="False">
+
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                        <VerticalStackLayout >
+                            <Entry Text="{Binding Time}"
+							   FontSize="36"
+							   WidthRequest="100"
+							   Keyboard="Numeric"
+							   HorizontalTextAlignment="Center"
+							   TextColor="White"
+							   BackgroundColor="Transparent"
+                               Placeholder="Time (hh:mm:ss)"/>
+                            <Label Text="min"
+							   FontSize="18"
+							   TextColor="White"
+							   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
+
+                    </Grid>
+                </Frame>
+                <Frame Grid.Row="1" Grid.Column="0"
+				   BackgroundColor="#4E3689"
+				   CornerRadius="12"
+				   BorderColor="#4E3689"
+				   HeightRequest="150"
+				   WidthRequest="180"
+				   HorizontalOptions="Center"
+				   VerticalOptions="Center"
+				   Padding="0"
+				   HasShadow="False">
+
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                        <VerticalStackLayout>
+                            <Entry HorizontalTextAlignment="Center"
+						   VerticalTextAlignment="Center"
+						   TextColor="White"
+                               Text="{Binding Date, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold"
+                                   Placeholder="Date (yyyy-MM-dd)"/>
+
+
+                        <Label Text="Date"
+	                    FontSize="18"
+	                    TextColor="White"
+	                    HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+
+                <Frame Grid.Row="1" Grid.Column="1"
+				   BackgroundColor="#4E3689"
+				   CornerRadius="12"
+				   BorderColor="#4E3689"
+				   HeightRequest="150"
+				   WidthRequest="180"
+				   HorizontalOptions="Center"
+				   VerticalOptions="Center"
+				   Padding="0"
+				   HasShadow="False">
+
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                      
+                        <VerticalStackLayout >
+                            <Picker Title =""
+                            ItemsSource="{Binding diffeculties}"
+                            SelectedItem="{Binding Grade}"
+                            TitleColor="Gray"
+                            TextColor="Black"
+                            BackgroundColor="White"
+                            FontSize="18"/>
+                            <Label Text="Diffeculties"
+							   FontSize="18"
+							   TextColor="White"
+							   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
+
+
+
+                    </Grid>
+                </Frame>
+
+
+
+
             </Grid>
 
-        
-           
-            <Button Text="save Activity"
+            <!-- Description -->
+            <Frame BackgroundColor="White"
+               CornerRadius="15"
+               Padding="20"
+			   WidthRequest="390"
+               HasShadow="False"
+               VerticalOptions="Start">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Editor Text="{Binding Description}"
+						TextColor="#4E3689"
+						FontSize="16"
+						AutoSize="TextChanges"
+						HeightRequest="100"
+						BackgroundColor="Transparent"
+                        VerticalOptions="StartAndExpand"
+                            Placeholder="A lovely run"/>
+                </VerticalStackLayout>
+            </Frame>
+
+
+
+        <Button Text="save Activity"
                 Command="{Binding AddActivityCommand}"
                 FontSize="18"
                 TextColor="White"
@@ -65,26 +198,24 @@
                 CornerRadius="15"
                 HorizontalOptions="Fill" />
 
-            <Button Text="Start Tracking Automatically"
+        <Button Text="Start Tracking Automatically"
              Command="{Binding StartTrackingCommand}"
              BackgroundColor="DarkViolet"
             TextColor="White"
-            CornerRadius="10" />
-            <Button Text="Stop Tracking"
+            CornerRadius="10" 
+                IsVisible="{Binding StartButtonVisible}"/>
+        <Button Text="Stop Tracking"
              Command="{Binding StopTrackingCommand}"
             BackgroundColor="Gray"
             TextColor="White"
-            CornerRadius="10" />
+            CornerRadius="10"
+                IsVisible="{Binding StopButtonVisible}"/>
 
         </VerticalStackLayout>
     </ScrollView>
 
-
-
-
-
-
-
 </ContentPage>
+
+
 
 
