@@ -111,11 +111,28 @@
                        CornerRadius="12"
                        HeightRequest="150" WidthRequest="370"
                        HasShadow="False">
-                    <Label Text="Customize more fields here..."
-                           FontSize="16"
-                           TextColor="White"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center" />
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <!-- each custom field drives an Entry bound to its Text property -->
+                        <CollectionView ItemsSource="{Binding CustomFields}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:TrainingField">
+                                    <Entry Text="{Binding Text, Mode=TwoWay}"
+                                           Placeholder="Field value..."
+                                           BackgroundColor="White"
+                                           TextColor="#4E3689"
+                                           WidthRequest="350" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <!-- add-field button -->
+                        <Button Text="+ Add field"
+                                Command="{Binding AddFieldCommand}"
+                                BackgroundColor="White"
+                                TextColor="MediumPurple"
+                                CornerRadius="12"
+                                WidthRequest="150"/>
+                    </VerticalStackLayout>
                 </Frame>
             </Grid>
 

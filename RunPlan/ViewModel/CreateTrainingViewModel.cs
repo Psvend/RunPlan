@@ -51,6 +51,8 @@ namespace RunPlan.ViewModel
             "Hard",
             "Extra Hard"
         };
+        [ObservableProperty] private ObservableCollection<TrainingField> customFields = new();
+        [ObservableProperty] private Training currentTraining;
 
 
 
@@ -120,14 +122,90 @@ namespace RunPlan.ViewModel
 
             await _databaseService.InsertTrainingAsync(Name, Description, timeInt, Grade, distanceInt);
 
+
+            // Fetch the newly inserted training to get the ID
+            var trainings = await _databaseService.GetAllTrainingsAsync();
+            CurrentTraining = trainings.OrderByDescending(t => t.Id).FirstOrDefault();
+
+            // Save custom fields now that we know the TrainingId
+            if (CurrentTraining != null)
+            {
+                for (int i = 0; i < CustomFields.Count; i++)
+                {
+                    var f = CustomFields[i];
+                    f.TrainingId = CurrentTraining.Id;
+                    f.SortOrder = i;
+
+                    await _databaseService.InsertTrainingFieldAsync(f);
+                }
+            }
+
+
             // Clear inputs
             Name = Description = Time = Grade = Distance = string.Empty;
-
+            CustomFields.Clear();
             await LoadTrainingsAsync();
 
             // Notify other components (if needed)
             WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
         }
+
+
+
+
+        const int MaxCustomFields = 10;
+
+        // Called when page loads or after SaveTraining
+        [RelayCommand]
+        public async Task LoadCustomFields(int trainingId)
+        {
+            var fields = await _databaseService.GetFieldsForTrainingAsync(trainingId);
+            CustomFields.Clear();
+            foreach (var f in fields)
+                CustomFields.Add(f);
+        }
+
+
+
+        // Add a brand-new empty field (up to 10)
+        [RelayCommand]
+        public void AddField()
+        {
+            if (CustomFields.Count >= MaxCustomFields)
+                return;
+
+            var nextIndex = CustomFields.Count;
+
+            var field = new TrainingField
+            {
+                TrainingId = 0, // Temporary ID — will be set after SaveTraining
+                Text = string.Empty,
+                SortOrder = nextIndex
+            };
+
+            CustomFields.Add(field);
+        }
+
+
+
+
+        // Save all fields back to database
+        [RelayCommand]
+        public async Task SaveCustomFields()
+        {
+            for (int i = 0; i < CustomFields.Count; i++)
+            {
+                var f = CustomFields[i];
+                f.SortOrder = i;
+                if (f.Id == 0)
+                    await _databaseService.InsertTrainingFieldAsync(f);
+                else
+                    await _databaseService.UpdateTrainingFieldAsync(f);
+            }
+        }
+
+
+
 
 
 
