@@ -202,12 +202,14 @@
              Command="{Binding StartTrackingCommand}"
              BackgroundColor="DarkViolet"
             TextColor="White"
-            CornerRadius="10" />
+            CornerRadius="10" 
+                IsVisible="{Binding StartButtonVisible}"/>
         <Button Text="Stop Tracking"
              Command="{Binding StopTrackingCommand}"
             BackgroundColor="Gray"
             TextColor="White"
-            CornerRadius="10" />
+            CornerRadius="10"
+                IsVisible="{Binding StopButtonVisible}"/>
 
         </VerticalStackLayout>
     </ScrollView>

@@ -58,6 +58,10 @@ public partial class ActivityViewModel : BaseVievModel
     [ObservableProperty] private string grade;
     [ObservableProperty] private string description;
 
+    [ObservableProperty] private bool startButtonVisible = true;
+    [ObservableProperty] private bool stopButtonVisible = false;
+
+
     [RelayCommand]
     public async Task LoadActivities()
     {
@@ -146,6 +150,8 @@ public partial class ActivityViewModel : BaseVievModel
     {
         var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
         _isTracking = true;
+        StartButtonVisible = false;
+        StopButtonVisible = true;
         _startTime = DateTime.Now;
         _previousLocation = null;
         DistanceText = "0";
@@ -158,6 +164,8 @@ public partial class ActivityViewModel : BaseVievModel
     private void StopTracking()
     {
         _isTracking = false;
+        StartButtonVisible = true;
+        StopButtonVisible = false;
         _timer?.Dispose();
         Time = (DateTime.Now - _startTime).ToString(@"hh\:mm\:ss");
     }
