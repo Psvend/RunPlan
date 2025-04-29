@@ -17,7 +17,7 @@ namespace RunPlan.Model;
 
 public partial class ActivityDetail : ContentPage, INotifyPropertyChanged
 {
-    private RunningActivity _activity;
+    //private RunningActivity _activity;
     public event PropertyChangedEventHandler PropertyChanged;
     public DetailViewModel ViewModel { get; }
     

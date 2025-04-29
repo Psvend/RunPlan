@@ -43,6 +43,8 @@ public partial class ActivityListViewModel : BaseVievModel
     [ObservableProperty] private string distanceText;
     [ObservableProperty] private string time;
     [ObservableProperty] private string date;
+    [ObservableProperty] private string grade;
+    [ObservableProperty] private string description;
     [ObservableProperty] private bool isEmptyMessageVisible;
     [ObservableProperty] private List<int> availableYears;
     [ObservableProperty] private int selectedYear;
@@ -100,7 +102,9 @@ public partial class ActivityListViewModel : BaseVievModel
         if (string.IsNullOrWhiteSpace(ActivityName) ||
             string.IsNullOrWhiteSpace(DistanceText) ||
             string.IsNullOrWhiteSpace(Time) ||
-            string.IsNullOrWhiteSpace(Date))
+            string.IsNullOrWhiteSpace(Date) ||
+            string.IsNullOrWhiteSpace(Grade) ||
+            string.IsNullOrWhiteSpace(Description))
         {
             await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
             return;
@@ -112,7 +116,7 @@ public partial class ActivityListViewModel : BaseVievModel
             return;
         }
 
-        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date);
+        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
 
         // Clear inputs
         ActivityName = DistanceText = Time = Date = string.Empty;

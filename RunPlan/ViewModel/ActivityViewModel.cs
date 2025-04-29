@@ -29,6 +29,13 @@ public partial class ActivityViewModel : BaseVievModel
 
     private readonly IGeolocation _geolocation;
 
+    public ObservableCollection<String> diffeculties { get; } = new()
+    {
+        "Easy",
+        "Moderate",
+        "Hard"
+    };
+
 
 
 
@@ -48,6 +55,12 @@ public partial class ActivityViewModel : BaseVievModel
     [ObservableProperty] private string distanceText;
     [ObservableProperty] private string time;
     [ObservableProperty] private string date;
+    [ObservableProperty] private string grade;
+    [ObservableProperty] private string description;
+
+    [ObservableProperty] private bool startButtonVisible = true;
+    [ObservableProperty] private bool stopButtonVisible = false;
+
 
     [RelayCommand]
     public async Task LoadActivities()
@@ -70,7 +83,8 @@ public partial class ActivityViewModel : BaseVievModel
             IsBusy = false;
         }
     }
-
+    [ObservableProperty]
+    private string selectedDiffeculty;
 
 
     [RelayCommand]
@@ -79,7 +93,9 @@ public partial class ActivityViewModel : BaseVievModel
         if (string.IsNullOrWhiteSpace(ActivityName) ||
             string.IsNullOrWhiteSpace(DistanceText) ||
             string.IsNullOrWhiteSpace(Time) ||
-            string.IsNullOrWhiteSpace(Date))
+            string.IsNullOrWhiteSpace(Date) ||
+            string.IsNullOrWhiteSpace(Grade) ||
+            string.IsNullOrWhiteSpace(Description))
         {
             await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
             return;
@@ -91,7 +107,7 @@ public partial class ActivityViewModel : BaseVievModel
             return;
         }
 
-        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date);
+        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
 
         // Clear inputs
         ActivityName = DistanceText = Time = Date = string.Empty;
@@ -134,6 +150,8 @@ public partial class ActivityViewModel : BaseVievModel
     {
         var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
         _isTracking = true;
+        StartButtonVisible = false;
+        StopButtonVisible = true;
         _startTime = DateTime.Now;
         _previousLocation = null;
         DistanceText = "0";
@@ -146,6 +164,8 @@ public partial class ActivityViewModel : BaseVievModel
     private void StopTracking()
     {
         _isTracking = false;
+        StartButtonVisible = true;
+        StopButtonVisible = false;
         _timer?.Dispose();
         Time = (DateTime.Now - _startTime).ToString(@"hh\:mm\:ss");
     }
