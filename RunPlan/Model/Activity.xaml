@@ -14,14 +14,22 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="30" Spacing="25">
-            <!-- Back Button -->
-            <ImageButton Source="back.png"
-		                 Clicked="OnBackClicked"
-		                 BackgroundColor="Transparent"
-		                 HorizontalOptions="Start"
-		                 HeightRequest="30"
-                         WidthRequest="30"    
-		                 Padding="0,0,0,10"/>
+
+            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
+                <ImageButton Source="back.png"
+                      Clicked="OnBackClicked"
+                      BackgroundColor="Transparent"
+                      HeightRequest="30"
+                      WidthRequest="30"
+                      Grid.Column="0"/>
+                <Button Text="Save"
+                 FontSize="14"
+                 BackgroundColor="White"
+                 TextColor="MediumPurple"
+                 CornerRadius="10"
+                 Command="{Binding AddActivityCommand}"
+                 Grid.Column="2" />
+            </Grid>
             <!-- Title -->
             <StackLayout Spacing="5">
 
@@ -150,7 +158,7 @@
                             TextColor="Black"
                             BackgroundColor="White"
                             FontSize="18"/>
-                            <Label Text="Diffeculties"
+                            <Label Text="Grade"
 							   FontSize="18"
 							   TextColor="White"
 							   HorizontalOptions="Center" />
@@ -189,14 +197,6 @@
             </Frame>
 
 
-
-        <Button Text="save Activity"
-                Command="{Binding AddActivityCommand}"
-                FontSize="18"
-                TextColor="White"
-                BackgroundColor="MediumPurple"
-                CornerRadius="15"
-                HorizontalOptions="Fill" />
 
         <Button Text="Start Tracking Automatically"
              Command="{Binding StartTrackingCommand}"
