@@ -36,6 +36,7 @@
                    FontSize="32"
                    FontAttributes="Bold"
                    TextColor="White"
+                   PlaceholderColor="LightGray"
                    HorizontalOptions="Center" />
 
             <!-- 2x2 Grid for Inputs -->
@@ -95,7 +96,7 @@
                                 ItemsSource="{Binding AvailableGrades}"
                                 SelectedItem="{Binding Grade}"
                                FontSize="15"
-                               WidthRequest="100"
+                               WidthRequest="150"
                                HorizontalTextAlignment="Center"
                                TextColor="White"
                                BackgroundColor="Transparent" />
