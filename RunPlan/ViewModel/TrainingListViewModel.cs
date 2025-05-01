@@ -6,42 +6,24 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Google.Protobuf.WellKnownTypes;
+using System.Globalization;
+
 
 namespace RunPlan.ViewModel
 {
     public partial class TrainingListViewModel : ObservableObject
     {
         private readonly DatabaseService _databaseService;
-
-        // Use partial properties instead of [ObservableProperty] for AOT compatibility
-        private ObservableCollection<Training> _trainings = new();
-        public ObservableCollection<Training> Trainings
-        {
-            get => _trainings;
-            set => SetProperty(ref _trainings, value);
-        }
-
-        private string _searchQuery = string.Empty;
-        public string SearchQuery
-        {
-            get => _searchQuery;
-            set
-            {
-                if (SetProperty(ref _searchQuery, value))
-                {
-                    OnSearchQueryChanged(value); // Call the partial method
-                }
-            }
-        }
-
-        private bool _isEmpty = true;
-        public bool IsEmpty
-        {
-            get => _isEmpty;
-            set => SetProperty(ref _isEmpty, value);
-        }
-
         private List<Training> allTrainings = new();
+
+        public ObservableCollection<Training> Trainings { get; } = new();
+
+        [ObservableProperty] private string searchQuery = string.Empty;
+        [ObservableProperty] private List<string> availableGrades = new();
+        [ObservableProperty] private string selectedGrade = "All";
+
+        [ObservableProperty] private bool isEmpty = true;
 
         public TrainingListViewModel(DatabaseService databaseService)
         {
@@ -55,8 +37,21 @@ namespace RunPlan.ViewModel
             {
                 var list = await _databaseService.GetAllTrainingsAsync() ?? new List<Training>();
                 allTrainings = list;
-                Trainings.Clear();
-                IsEmpty = true;
+
+                // Get available grades from trainings (distinct)
+                var grades = allTrainings
+                    .Select(t => t.Grade)
+                    .Where(g => !string.IsNullOrEmpty(g))
+                    .Distinct()
+                    .OrderBy(g => g)
+                    .ToList();
+
+                grades.Insert(0, "All"); // Add "All" at the top
+                AvailableGrades = grades;
+
+                SelectedGrade = "All";
+
+                ApplyFilter(allTrainings);
             }
             catch (Exception ex)
             {
@@ -64,32 +59,42 @@ namespace RunPlan.ViewModel
             }
         }
 
-        // Defining declaration for the partial method
-        partial void OnSearchQueryChanged(string value);
+        partial void OnSelectedGradeChanged(string value)
+        {
+            ApplyFilter(allTrainings);
+        }
 
-        // Implementing declaration for the partial method
         partial void OnSearchQueryChanged(string value)
         {
-            FilterTrainings();
+            ApplyFilter(allTrainings);
         }
 
-        private void FilterTrainings()
+        private void ApplyFilter(IEnumerable<Training> trainings)
         {
+            var filtered = trainings;
+
+            if (SelectedGrade != "All")
+            {
+                filtered = filtered.Where(t => t.Grade == SelectedGrade);
+            }
+
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
-                var filtered = allTrainings.Where(t => t.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
-                Trainings = new ObservableCollection<Training>(filtered);
-                IsEmpty = Trainings.Count == 0;
+                filtered = filtered.Where(t => t.Name != null &&
+                                               t.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
             }
-            else
-            {
-                Trainings.Clear();
-                IsEmpty = true;
-            }
+
+            Trainings.Clear();
+            foreach (var t in filtered)
+                Trainings.Add(t);
+
+            IsEmpty = Trainings.Count == 0;
         }
+
         public void DeleteTraining(Training training)
         {
             if (training == null) return;
+
             Trainings.Remove(training);
             allTrainings.Remove(training);
             IsEmpty = Trainings.Count == 0;

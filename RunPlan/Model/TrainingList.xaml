@@ -36,6 +36,46 @@
                     Grid.Column="1" />
             </Grid>
 
+
+            <VerticalStackLayout Spacing="4" VerticalOptions="End">
+                <Label Text="  Select Grade"
+					   FontSize="12"
+					   TextColor="White"
+					   HorizontalOptions="Start" />
+
+                <Border StrokeShape="RoundRectangle 25"
+						BackgroundColor="#4E3689"
+						Padding="0"
+						StrokeThickness="0"
+						Stroke="Transparent"
+                        WidthRequest="130"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        
+						>
+                    <Picker ItemsSource="{Binding AvailableGrades}"
+							SelectedItem="{Binding SelectedGrade}"
+							WidthRequest="130"
+							HeightRequest="50"
+							BackgroundColor="#4E3689"
+							TextColor="White"
+							TitleColor="White"
+							FontAttributes="Bold" />
+                </Border>
+            </VerticalStackLayout>
+
+
+
+          
+
+            <Label Text="List Of Training Sessions"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   TextColor="White"
+                   HorizontalOptions="Start"
+	               Margin="0,20,0,0"
+	               />
+
             <!-- Search -->
             <Border StrokeShape="RoundRectangle 20"
                     BackgroundColor="White"
