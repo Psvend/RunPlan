@@ -175,7 +175,7 @@
                    WidthRequest="390"
                    HasShadow="False"
                    VerticalOptions="StartAndExpand">
-                <Editor Placeholder="Write any extra things here.."
+                <Editor Placeholder="Add notes here..."
                         Text="{Binding Description}"
                         TextColor="#4E3689"
                         FontSize="16"
