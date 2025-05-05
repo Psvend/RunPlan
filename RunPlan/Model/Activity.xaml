@@ -58,7 +58,7 @@
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                         <VerticalStackLayout >
                             <Entry Text="{Binding DistanceText}"
-							   FontSize="36"
+							   FontSize="20"
 							   WidthRequest="100"
 							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
@@ -92,7 +92,7 @@
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                         <VerticalStackLayout >
                             <Entry Text="{Binding Time}"
-							   FontSize="36"
+							   FontSize="20"
 							   WidthRequest="100"
 							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
@@ -124,7 +124,7 @@
                             <Entry HorizontalTextAlignment="Center"
 						   VerticalTextAlignment="Center"
 						   TextColor="White"
-                               Text="{Binding Date, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold"
+                               Text="{Binding Date, StringFormat='{0}'}" FontSize="20" FontAttributes="Bold"
                                    Placeholder="Date (yyyy-MM-dd)"/>
 
 
