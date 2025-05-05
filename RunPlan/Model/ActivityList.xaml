@@ -93,9 +93,9 @@
 							>
 						<Picker ItemsSource="{Binding AvailableYears}"
 								SelectedItem="{Binding SelectedYear}"
-								WidthRequest="100"
+								WidthRequest="140"
 								HeightRequest="50"
-								BackgroundColor="Transparent"
+								BackgroundColor="#4E3689"
 								TextColor="White"
 								TitleColor="White"
 								FontAttributes="Bold" />

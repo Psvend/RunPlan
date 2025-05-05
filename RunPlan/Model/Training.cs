@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite;
+using SQLiteNetExtensions.Attributes;
+using RunPlan.Model;
+using RunPlan.ViewModel;
 
 
 namespace RunPlan.Model
@@ -17,5 +20,11 @@ namespace RunPlan.Model
         public int Time { get; set; }
         public string Grade { get; set; } = string.Empty;
         public int Distance { get; set; }
+        public string Date { get; set; }
+
+
+        // <-- tell the library “I have many TrainingField children”
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<TrainingField> Fields { get; set; }
     }
 }

@@ -122,7 +122,17 @@ namespace RunPlan.ViewModel
                 return;
             }
 
-            await _dbService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
+            // Ensure format before inserting activity
+            if (!TimeSpan.TryParse(Time, out var parsedTime))
+            {
+                // invalid format → reject input
+                await Shell.Current.DisplayAlert("Error", "Invalid time format. Please use hh:mm:ss.", "OK");
+                return;
+            }
+
+            string properTime = parsedTime.ToString(@"hh\:mm\:ss");
+
+            await _dbService.InsertRunningActivity(ActivityName, distance, properTime, Date, Grade, Description);
 
             Console.WriteLine("✅ New Activity Added! Refreshing Chart...");
             await LoadActivities(); // Refresh UI
@@ -172,6 +182,7 @@ namespace RunPlan.ViewModel
 
 
 
+
         public void UpdateChartForLastThreeMonths()
         {
             var lastThreeMonthsData = new List<RunningDataModel>();
@@ -192,7 +203,7 @@ namespace RunPlan.ViewModel
 
             // Step 2: Map distances to week start
             Dictionary<DateTime, double> weeklySums = allWeeks.ToDictionary(w => w, w => 0.0);
-            Dictionary<DateTime, TimeSpan> weeklyTimes = allWeeks.ToDictionary(w => w, w => TimeSpan.Zero); //new one 
+            Dictionary<DateTime, TimeSpan> weeklyTimes = allWeeks.ToDictionary(w => w, w => TimeSpan.Zero);
             Dictionary<DateTime, string> weekMonthMap = new(); // Used to label correctly
 
             foreach (var activity in filteredActivities)
@@ -202,8 +213,6 @@ namespace RunPlan.ViewModel
                     int delta = (7 + (int)parsedDate.DayOfWeek - (int)DayOfWeek.Monday) % 7;
                     DateTime weekStart = parsedDate.AddDays(-delta);
 
-
-                    //new one
                     if (weeklySums.ContainsKey(weekStart))
                     {
                         weeklySums[weekStart] += activity.Distance;
@@ -213,9 +222,8 @@ namespace RunPlan.ViewModel
                             weeklyTimes[weekStart] += activityTime;
                         }
 
-                        weekMonthMap[weekStart] = parsedDate.ToString("yyyy-MM");
+                        weekMonthMap[weekStart] = parsedDate.ToString("MMMM");  // ✅ FIXED: Save proper month name here
                     }
-
                 }
             }
 
@@ -223,37 +231,35 @@ namespace RunPlan.ViewModel
             foreach (var weekStart in allWeeks)
             {
                 double distance = weeklySums[weekStart];
-                string monthKey = weekMonthMap.ContainsKey(weekStart)
+
+                // ✅ FIXED: Use the weekStart's month as fallback instead of ugly "yyyy-MM"
+                string monthName = weekMonthMap.ContainsKey(weekStart)
                     ? weekMonthMap[weekStart]
-                    : weekStart.ToString("yyyy-MM"); // fallback
+                    : weekStart.ToString("MMMM");
 
                 lastThreeMonthsData.Add(new RunningDataModel
                 {
                     WeekLabel = $"Week {ISOWeek.GetWeekOfYear(weekStart)}",
                     Distance = distance == 0 ? 0.05 : distance,
                     WeekNumber = ISOWeek.GetWeekOfYear(weekStart),
-                    MonthKey = monthKey,
+                    MonthKey = monthName, // ✅ Fixed
                     Time = weeklyTimes[weekStart].ToString(@"hh\:mm\:ss")
                 });
             }
 
             // Step 4: Sort and update chart
             lastThreeMonthsData = lastThreeMonthsData
-                .OrderBy(d => d.MonthKey)
+                .OrderBy(d=> GetMonthOrder(d.MonthKey))
                 .ThenBy(d => d.WeekNumber)
                 .ToList();
-
 
             // Updates "This Week" stats (latest week)
             var thisWeek = lastThreeMonthsData.LastOrDefault();
             if (thisWeek != null)
             {
-               // ThisWeekDistance = $"{thisWeek.Distance} km";
                 ThisWeekDistance = $"{(thisWeek.Distance < 0.05 ? 0 : thisWeek.Distance):0} km";
                 ThisWeekTime = thisWeek.Time;
             }
-
-
 
             WeeklyRunningData.Clear();
             foreach (var item in lastThreeMonthsData)
@@ -263,10 +269,16 @@ namespace RunPlan.ViewModel
 
             ChartDrawable.Data = lastThreeMonthsData;
             OnPropertyChanged(nameof(ChartDrawable));
-           
 
             Console.WriteLine($"✅ Chart updated with {lastThreeMonthsData.Count} weekly bars.");
         }
+
+        int GetMonthOrder(string monthName)
+        {
+            return DateTime.ParseExact(monthName, "MMMM", CultureInfo.InvariantCulture).Month;
+        }
+
+
 
 
 
@@ -301,7 +313,7 @@ namespace RunPlan.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        
 
 
         public event PropertyChangedEventHandler PropertyChanged;

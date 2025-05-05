@@ -25,19 +25,19 @@ namespace RunPlan.Data
         public DatabaseService()
         {
             _dbPath = GetDatabasePath();
-
             Console.WriteLine($"📌 SQLite database path: {_dbPath}");
+            _database = new SQLiteAsyncConnection(_dbPath);
+        }
 
+        public async Task InitializeAsync()
+        {
             try
             {
-                _database = new SQLiteAsyncConnection(_dbPath);
-                _database.CreateTableAsync<RunningActivity>().Wait();
-                _database.CreateTableAsync<Training>().Wait();
-                _database.CreateTableAsync<User>().Wait();
-
-
-                // ✅ Ensure database exists by adding a test record if empty
-                EnsureDatabaseInitialized().Wait();
+                await _database.CreateTableAsync<RunningActivity>();
+                await _database.CreateTableAsync<Training>();
+                await _database.CreateTableAsync<User>();
+                await _database.CreateTableAsync<TrainingField>();
+                await EnsureDatabaseInitialized();
             }
             catch (Exception ex)
             {
@@ -205,6 +205,51 @@ namespace RunPlan.Data
         }
 
 
+
+        //TRAINING FIELD FEATURE
+        // to insert a new field:
+        public async Task InsertTrainingFieldAsync(TrainingField field)
+        {
+            await _database.InsertAsync(field);
+        }
+
+        // to load all fields for one training, ordered by SortOrder:
+        public async Task<List<TrainingField>> GetFieldsForTrainingAsync(int trainingId)
+        {
+            return await _database.Table<TrainingField>()
+                                  .Where(f => f.TrainingId == trainingId)
+                                  .OrderBy(f => f.SortOrder)
+                                  .ToListAsync();
+        }
+
+        // to update or delete, same pattern...
+        public async Task UpdateTrainingFieldAsync(TrainingField field)
+            => await _database.UpdateAsync(field);
+
+        public async Task DeleteTrainingFieldAsync(int fieldId)
+            => await _database.DeleteAsync<TrainingField>(fieldId);
+
+
+
+        //To link training and trainingField together
+        public async Task<int> InsertTrainingWithFieldsAsync(Training training, List<TrainingField> fields)
+        {
+            int trainingId = 0;
+
+            await _database.RunInTransactionAsync(conn =>
+            {
+                conn.Insert(training);
+                trainingId = training.Id;
+
+                foreach (var field in fields)
+                {
+                    field.TrainingId = trainingId;
+                    conn.Insert(field);
+                }
+            });
+
+            return trainingId;
+        }
 
 
 
