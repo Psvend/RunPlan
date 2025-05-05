@@ -31,7 +31,7 @@
                  Grid.Column="2" />
             </Grid>
             <!-- Title -->
-            <StackLayout Spacing="5">
+            <StackLayout Spacing="5" Margin="0,0,0,20">
 
                 <Entry Text="{Binding ActivityName}"
 				   FontSize="32"
@@ -42,7 +42,11 @@
             </StackLayout>
 
             <!-- Info Grid (2x2 Boxes) -->
-            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
+            <Grid ColumnDefinitions="Auto,Auto" 
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="20" RowSpacing="20"
+                  HorizontalOptions ="Center"
+                  Margin="0,0,0,30">
 
                 <!-- Distance Box -->
                 <Frame Grid.Row="0" Grid.Column="0"
@@ -98,7 +102,7 @@
 							   HorizontalTextAlignment="Center"
 							   TextColor="White"
 							   BackgroundColor="Transparent"
-                               Placeholder="Time (hh:mm:ss)"/>
+                               Placeholder="hh:mm:ss"/>
                             <Label Text="min"
 							   FontSize="18"
 							   TextColor="White"
@@ -125,7 +129,7 @@
 						   VerticalTextAlignment="Center"
 						   TextColor="White"
                                Text="{Binding Date, StringFormat='{0}'}" FontSize="20" FontAttributes="Bold"
-                                   Placeholder="Date (yyyy-MM-dd)"/>
+                                   Placeholder="yyyy-MM-dd"/>
 
 
                         <Label Text="Date"
@@ -181,7 +185,8 @@
                Padding="20"
 			   WidthRequest="390"
                HasShadow="False"
-               VerticalOptions="Start">
+               VerticalOptions="Start"
+                   Margin="0,0,0,30">
 
                 <VerticalStackLayout Spacing="10">
 
