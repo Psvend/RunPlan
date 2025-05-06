@@ -8,8 +8,9 @@
         Title="Login">
 
     <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="CenterAndExpand">
+        <!--Logo-->
 
-        <Image Source="runnerman.png"
+        <Image Source="logo.png"
                HorizontalOptions="End"
                VerticalOptions="Start"
                HeightRequest="120"
@@ -58,9 +59,10 @@
                         FontAttributes="Bold"
                         HeightRequest="50" />
                 <Label Text="{Binding Message}"
-                       TextColor="Red"
+                       TextColor="{Binding MessageColor}"
                        FontSize="14"
-                       HorizontalOptions="Center" />
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"/>
             </VerticalStackLayout>
         </Frame>
     </VerticalStackLayout>

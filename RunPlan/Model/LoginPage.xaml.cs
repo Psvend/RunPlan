@@ -11,4 +11,13 @@ public partial class LoginPage : ContentPage
 		ViewModel = vm;
 		BindingContext = vm;
 	}
+
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+		ViewModel.Email = string.Empty;
+		ViewModel.Password = string.Empty;
+		ViewModel.Message = string.Empty;
+    }
 }
