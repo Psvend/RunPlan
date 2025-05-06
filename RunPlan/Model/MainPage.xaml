@@ -8,30 +8,24 @@
 
     <ScrollView>
 
-        <VerticalStackLayout Padding="20,0" Spacing="-20">
+        <VerticalStackLayout Padding="20,50" Spacing="-20">
 
             <!-- Header with app name and profile icon -->
-            <Grid Padding="20" ColumnDefinitions="*,Auto" VerticalOptions="Start">
+            <Grid Padding="20" ColumnDefinitions="*, Auto" VerticalOptions="Start">
                 <Label Text="Hiya Soldier!"
                        FontSize="32"
                        FontAttributes="Bold"
                        TextColor="White"
+                       Grid.Column="0"
                        VerticalOptions="Center" />
-                <Image Source="logo_nobackground.png"
-                       HeightRequest="150"
-                       WidthRequest="150"
-                       VerticalOptions="End"
-                       HorizontalOptions="End"
-                       Aspect="AspectFill"
-                       Grid.Row="0"
-                       Grid.Column="0"/>
-                
-                <!--Logout button -->
+               
+                <Grid Grid.Column="1" RowDefinitions="Auto,Auto">
+
+                    <!--Logout button -->
                 <Button Text="Logout"
                         Command="{Binding LogoutCommand}"
                         BackgroundColor="White"
                         TextColor="#7B61FF"
-                        BorderColor="#7B61FF"
                         BorderWidth="2"
                         FontAttributes="Bold"
                         CornerRadius="20"
@@ -40,9 +34,18 @@
                         FontSize="12"
                         HorizontalOptions="End"
                         VerticalOptions="Start"
-                        Margin="0,10,0,0"
-                        Grid.Row="1"
-                        Grid.Column="1" />
+                        Margin="0,-50,20,0"
+                        Grid.Column="0" />
+                
+                <Image Source="logo_nobackground.png"
+                       HeightRequest="150"
+                       WidthRequest="150"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Aspect="AspectFill"
+                       Grid.Column="1"/>
+                </Grid>
+                
             </Grid>
 
             <!-- Summary Cards Section -->

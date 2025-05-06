@@ -6,17 +6,18 @@
         x:Class="RunPlan.Model.LoginPage"
         BackgroundColor="#8260DA"
         Title="Login">
+   
     <ScrollView>
 
         <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="CenterAndExpand">
         <!--Logo-->
 
-        <Image Source="logo.png"
-               HorizontalOptions="End"
-               VerticalOptions="Start"
-               HeightRequest="120"
-               WidthRequest="120"
-               Margin="0,20,0,0"/>
+            <Image Source="logo_nobackground.png"
+                   HorizontalOptions="End"
+                   VerticalOptions="Start"
+                   HeightRequest="150"
+                   WidthRequest="150"
+                   Margin="0,20,0,0"/>
         <!--Title-->
         <Label Text="RunPlan Login"
                    FontSize="32"

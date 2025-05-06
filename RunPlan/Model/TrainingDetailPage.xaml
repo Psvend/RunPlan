@@ -106,6 +106,21 @@
                 </Border>
             </Grid>
 
+            <!-- Training fields -->
+            <CollectionView ItemsSource="{Binding TrainingFields}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" BackgroundColor="#5E3DAC" CornerRadius="10">
+                            <Label Text="{Binding Text}" TextColor="White" FontSize="16"/>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+
+
+
             <!-- Description -->
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 15"
