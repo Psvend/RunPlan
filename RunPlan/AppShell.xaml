@@ -15,9 +15,6 @@
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
         </Tab>
         
-        <Tab Title="Statistics" Icon="coffee.png">
-            <ShellContent ContentTemplate="{DataTemplate local:Mapping}" />
-        </Tab>
 
         <Tab Title="Activity List" Icon="list.png">
             <ShellContent ContentTemplate="{DataTemplate local:ActivityList}" Route="ActivityList" />

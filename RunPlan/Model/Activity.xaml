@@ -14,16 +14,24 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="30" Spacing="25">
-            <!-- Back Button -->
-            <ImageButton Source="back.png"
-		                 Clicked="OnBackClicked"
-		                 BackgroundColor="Transparent"
-		                 HorizontalOptions="Start"
-		                 HeightRequest="30"
-                         WidthRequest="30"    
-		                 Padding="0,0,0,10"/>
+
+            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
+                <ImageButton Source="back.png"
+                      Clicked="OnBackClicked"
+                      BackgroundColor="Transparent"
+                      HeightRequest="30"
+                      WidthRequest="30"
+                      Grid.Column="0"/>
+                <Button Text="Save"
+                 FontSize="14"
+                 BackgroundColor="White"
+                 TextColor="MediumPurple"
+                 CornerRadius="10"
+                 Command="{Binding AddActivityCommand}"
+                 Grid.Column="2" />
+            </Grid>
             <!-- Title -->
-            <StackLayout Spacing="5">
+            <StackLayout Spacing="5" Margin="0,0,0,20">
 
                 <Entry Text="{Binding ActivityName}"
 				   FontSize="32"
@@ -34,7 +42,11 @@
             </StackLayout>
 
             <!-- Info Grid (2x2 Boxes) -->
-            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
+            <Grid ColumnDefinitions="Auto,Auto" 
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="20" RowSpacing="20"
+                  HorizontalOptions ="Center"
+                  Margin="0,0,0,30">
 
                 <!-- Distance Box -->
                 <Frame Grid.Row="0" Grid.Column="0"
@@ -50,7 +62,7 @@
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                         <VerticalStackLayout >
                             <Entry Text="{Binding DistanceText}"
-							   FontSize="36"
+							   FontSize="20"
 							   WidthRequest="100"
 							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
@@ -84,13 +96,13 @@
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                         <VerticalStackLayout >
                             <Entry Text="{Binding Time}"
-							   FontSize="36"
+							   FontSize="20"
 							   WidthRequest="100"
 							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
 							   TextColor="White"
 							   BackgroundColor="Transparent"
-                               Placeholder="Time (hh:mm:ss)"/>
+                               Placeholder="hh:mm:ss"/>
                             <Label Text="min"
 							   FontSize="18"
 							   TextColor="White"
@@ -116,8 +128,8 @@
                             <Entry HorizontalTextAlignment="Center"
 						   VerticalTextAlignment="Center"
 						   TextColor="White"
-                               Text="{Binding Date, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold"
-                                   Placeholder="Date (yyyy-MM-dd)"/>
+                               Text="{Binding Date, StringFormat='{0}'}" FontSize="20" FontAttributes="Bold"
+                                   Placeholder="yyyy-MM-dd"/>
 
 
                         <Label Text="Date"
@@ -150,7 +162,7 @@
                             TextColor="Black"
                             BackgroundColor="White"
                             FontSize="18"/>
-                            <Label Text="Diffeculties"
+                            <Label Text="Grade"
 							   FontSize="18"
 							   TextColor="White"
 							   HorizontalOptions="Center" />
@@ -173,7 +185,8 @@
                Padding="20"
 			   WidthRequest="390"
                HasShadow="False"
-               VerticalOptions="Start">
+               VerticalOptions="Start"
+                   Margin="0,0,0,30">
 
                 <VerticalStackLayout Spacing="10">
 
@@ -189,14 +202,6 @@
             </Frame>
 
 
-
-        <Button Text="save Activity"
-                Command="{Binding AddActivityCommand}"
-                FontSize="18"
-                TextColor="White"
-                BackgroundColor="MediumPurple"
-                CornerRadius="15"
-                HorizontalOptions="Fill" />
 
         <Button Text="Start Tracking Automatically"
              Command="{Binding StartTrackingCommand}"
