@@ -6,6 +6,7 @@
     xmlns:viewmodel="clr-namespace:RunPlan.ViewModel"
     xmlns:converters="clr-namespace:RunPlan.Converters"
     x:DataType="viewmodel:TrainingListDetailViewModel"
+    xmlns:model="clr-namespace:RunPlan.Model"
     Title="Training Detail"
     BackgroundColor="#8260DA">
 
@@ -109,13 +110,23 @@
             <!-- Training fields -->
             <CollectionView ItemsSource="{Binding TrainingFields}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="10" Margin="5" BackgroundColor="#5E3DAC" CornerRadius="10">
-                            <Label Text="{Binding Text}" TextColor="White" FontSize="16"/>
-                        </Frame>
+                    <DataTemplate x:DataType="model:TrainingField">
+                        <Border Stroke="#5E3DAC"
+                                BackgroundColor="#5E3DAC"
+                                StrokeShape="RoundRectangle 10"
+                                Margin="5"
+                                WidthRequest="250"
+                                Padding="14">
+                            <Label Text="{Binding Text}" 
+                                   TextColor="White" 
+                                   FontSize="16" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"/>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
 
 
 
