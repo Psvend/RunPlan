@@ -6,8 +6,9 @@
         x:Class="RunPlan.Model.LoginPage"
         BackgroundColor="#8260DA"
         Title="Login">
+    <ScrollView>
 
-    <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="CenterAndExpand">
+        <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="CenterAndExpand">
         <!--Logo-->
 
         <Image Source="logo.png"
@@ -66,4 +67,5 @@
             </VerticalStackLayout>
         </Frame>
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
