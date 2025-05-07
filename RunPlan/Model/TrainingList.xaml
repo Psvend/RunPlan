@@ -17,7 +17,7 @@
                   Padding="10"
                   VerticalOptions="Center"
                   HorizontalOptions="FillAndExpand">
-                <Label Text="Your Trainings!"
+                <Label Text="Your Training Plans!"
                        FontAttributes="Bold"
                        FontSize="32"
                        TextColor="White"
@@ -68,7 +68,7 @@
 
           
 
-            <Label Text="List Of Training Sessions"
+            <Label Text="List Of Training Plans"
                    FontAttributes="Bold"
                    FontSize="18"
                    TextColor="White"
@@ -83,7 +83,7 @@
                     StrokeThickness="0"
                     Stroke="Transparent"
                     Margin="0,10,0,5">
-                <SearchBar Placeholder="Search training..."
+                <SearchBar Placeholder="Search training plan..."
                            Text="{Binding SearchQuery}"
                            BackgroundColor="Transparent"
                            TextColor="MediumPurple"
@@ -91,7 +91,7 @@
             </Border>
 
             <!-- Empty Text -->
-            <Label Text="No trainings found  create one!"
+            <Label Text="No training plans found  create one!"
                    FontSize="16"
                    TextColor="White"
                    HorizontalOptions="Center"
