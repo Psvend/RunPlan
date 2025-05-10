@@ -26,6 +26,7 @@ namespace RunPlan.Data
         {
             _dbPath = GetDatabasePath();
             Console.WriteLine($"📌 SQLite database path: {_dbPath}");
+            CopySeedDatabaseIfNeeded().Wait();
             _database = new SQLiteAsyncConnection(_dbPath);
         }
 
@@ -42,6 +43,24 @@ namespace RunPlan.Data
             catch (Exception ex)
             {
                 Console.WriteLine($"❌ Database initialization failed: {ex.Message}");
+            }
+        }
+
+        private async Task CopySeedDatabaseIfNeeded()
+        {
+            if (!File.Exists(_dbPath))
+            {
+                try
+                {
+                    using var stream = await FileSystem.OpenAppPackageFileAsync("database.db");
+                    using var dest = File.Create(_dbPath);
+                    await stream.CopyToAsync(dest);
+                    Console.WriteLine("✅ Copied bundled DB to app storage.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Failed to copy DB: {ex.Message}");
+                }
             }
         }
 
@@ -68,13 +87,13 @@ namespace RunPlan.Data
             string folderPath;
 
 #if ANDROID
-            folderPath = Android.App.Application.Context.GetExternalFilesDir(null).AbsolutePath;
+            folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             dbFileName = "database.db";  // ✅ Android gets a separate database
             string androidDbPath = Path.Combine(folderPath, dbFileName);
 
             return androidDbPath;
 #else
-            folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData); // Default fallback
+            folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData); // Default fallback
 #endif
             return Path.Combine(folderPath, dbFileName);
         }
