@@ -74,7 +74,8 @@
                         <Entry Text="{Binding Time}"
                                FontSize="36"
                                WidthRequest="100"
-                               Keyboard="Numeric"
+                               Keyboard="Text"
+                               Placeholder="hh:mm:ss"
                                HorizontalTextAlignment="Center"
                                TextColor="White"
                                BackgroundColor="Transparent" />
