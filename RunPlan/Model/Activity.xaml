@@ -64,11 +64,10 @@
                             <Entry Text="{Binding DistanceText}"
 							   FontSize="20"
 							   WidthRequest="100"
-							   Keyboard="Numeric"
 							   HorizontalTextAlignment="Center"
 							   TextColor="White"
 							   BackgroundColor="Transparent" 
-                                   Placeholder="Title"/>
+                               />
                             <Label Text="km"
 							   FontSize="18"
 							   TextColor="White"
@@ -98,11 +97,12 @@
                             <Entry Text="{Binding Time}"
 							   FontSize="20"
 							   WidthRequest="100"
-							   Keyboard="Numeric"
+							   Keyboard="Text"
+                               Placeholder="hh:mm:ss"
 							   HorizontalTextAlignment="Center"
 							   TextColor="White"
 							   BackgroundColor="Transparent"
-                               Placeholder="hh:mm:ss"/>
+                               />
                             <Label Text="min"
 							   FontSize="18"
 							   TextColor="White"

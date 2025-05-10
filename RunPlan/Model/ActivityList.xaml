@@ -13,9 +13,9 @@
         <VerticalStackLayout Padding="20" Spacing="10">
 
 			<Grid ColumnDefinitions="*, Auto"
-      Padding="10"
-      VerticalOptions="Center"
-      HorizontalOptions="FillAndExpand">
+				  Padding="10"
+				  VerticalOptions="Center"
+				  HorizontalOptions="FillAndExpand">
 				<Label Text="Your Runs!"
 					   FontAttributes="Bold"
 					   FontSize="32"
@@ -37,77 +37,75 @@
 
 
 
-			<HorizontalStackLayout HorizontalOptions="Start"
-                       VerticalOptions="Center"
-                       Spacing="10"
-                       Padding="0,10">
+            <ScrollView Orientation="Horizontal"
+            HorizontalScrollBarVisibility="Never"
+            Padding="10,10,10,0">
 
-				<!-- This Week Button -->
-				<VerticalStackLayout Spacing="4" VerticalOptions="End">
-					<Label Text="" HeightRequest="16"/>
-					<!-- Fakes label spacing -->
-					<Button Text="This Week"
-							Command="{Binding FilterThisWeekCommand}"
-							BackgroundColor="#4E3689"
-							TextColor="White"
-							FontAttributes="Bold"
-							HeightRequest="50"
-							WidthRequest="110"
-							CornerRadius="25" />
-				</VerticalStackLayout>
+                <HorizontalStackLayout Spacing="12"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start">
 
-				<!-- Month Picker -->
-				<VerticalStackLayout Spacing="4" VerticalOptions="End">
-					<Label Text="  Select Month"
-						   FontSize="12"
-						   TextColor="White"
-						   HorizontalOptions="Start" />
-					<Border StrokeShape="RoundRectangle 25"
-							StrokeThickness="0"
-							Stroke="Transparent"
-							BackgroundColor="#4E3689"
-							Padding="0">
-						<Picker ItemsSource="{Binding AvailableMonths}"
-								SelectedItem="{Binding SelectedMonth}"
-								WidthRequest="140"
-								HeightRequest="50"
-								BackgroundColor="#4E3689"
-								TextColor="White"
-								TitleColor="White"
-								FontAttributes="Bold" />
-					</Border>
-				</VerticalStackLayout>
+                    <!-- This Week Button -->
+                    <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="110">
+                        <Label Text="" HeightRequest="16" />
+                        <Button Text="This Week"
+                    Command="{Binding FilterThisWeekCommand}"
+                    BackgroundColor="#4E3689"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    CornerRadius="25" />
+                    </VerticalStackLayout>
 
-				<!-- Year Picker with Rounded Corners -->
-				<VerticalStackLayout Spacing="4" VerticalOptions="End">
-					<Label Text="  Select Year"
-						   FontSize="12"
-						   TextColor="White"
-						   HorizontalOptions="Start" />
+                    <!-- Month Picker -->
+                    <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="140">
+                        <Label Text="  Select Month"
+                   FontSize="12"
+                   TextColor="White"
+                   HorizontalOptions="Start" />
+                        <Border StrokeShape="RoundRectangle 25"
+                    StrokeThickness="0"
+                    Stroke="Transparent"
+                    BackgroundColor="#4E3689"
+                    Padding="0">
+                            <Picker ItemsSource="{Binding AvailableMonths}"
+                        SelectedItem="{Binding SelectedMonth}"
+                        HeightRequest="50"
+                        BackgroundColor="#4E3689"
+                        TextColor="White"
+                        TitleColor="White"
+                        FontAttributes="Bold" />
+                        </Border>
+                    </VerticalStackLayout>
 
-					<Border StrokeShape="RoundRectangle 25"
-							BackgroundColor="#4E3689"
-							Padding="0"
-							StrokeThickness="0"
-							Stroke="Transparent"
-							>
-						<Picker ItemsSource="{Binding AvailableYears}"
-								SelectedItem="{Binding SelectedYear}"
-								WidthRequest="140"
-								HeightRequest="50"
-								BackgroundColor="#4E3689"
-								TextColor="White"
-								TitleColor="White"
-								FontAttributes="Bold" />
-					</Border>
-				</VerticalStackLayout>
+                    <!-- Year Picker -->
+                    <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="140">
+                        <Label Text="  Select Year"
+                   FontSize="12"
+                   TextColor="White"
+                   HorizontalOptions="Start" />
+                        <Border StrokeShape="RoundRectangle 25"
+                    BackgroundColor="#4E3689"
+                    Padding="0"
+                    StrokeThickness="0"
+                    Stroke="Transparent">
+                            <Picker ItemsSource="{Binding AvailableYears}"
+                        SelectedItem="{Binding SelectedYear}"
+                        HeightRequest="50"
+                        BackgroundColor="#4E3689"
+                        TextColor="White"
+                        TitleColor="White"
+                        FontAttributes="Bold" />
+                        </Border>
+                    </VerticalStackLayout>
 
-
-			</HorizontalStackLayout>
+                </HorizontalStackLayout>
+            </ScrollView>
 
 
 
-			<Label Text="List Of Activities"
+
+            <Label Text="List Of Activities"
                    FontAttributes="Bold"
                    FontSize="18"
                    TextColor="White"
