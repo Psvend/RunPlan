@@ -66,6 +66,7 @@
                         <Border StrokeShape="RoundRectangle 25"
                                 StrokeThickness="0"
                                 Stroke="Transparent"
+                                HorizontalOptions="Center"
                                 BackgroundColor="#4E3689"
                                 Padding="0">
                             <Picker ItemsSource="{Binding AvailableMonths}"
