@@ -49,32 +49,32 @@
                     <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="110">
                         <Label Text="" HeightRequest="16" />
                         <Button Text="This Week"
-                    Command="{Binding FilterThisWeekCommand}"
-                    BackgroundColor="#4E3689"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    HeightRequest="50"
-                    CornerRadius="25" />
+                                Command="{Binding FilterThisWeekCommand}"
+                                BackgroundColor="#4E3689"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="25" />
                     </VerticalStackLayout>
 
                     <!-- Month Picker -->
                     <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="140">
                         <Label Text="  Select Month"
-                   FontSize="12"
-                   TextColor="White"
-                   HorizontalOptions="Start" />
+                               FontSize="12"
+                               TextColor="White"
+                               HorizontalOptions="Start" />
                         <Border StrokeShape="RoundRectangle 25"
-                    StrokeThickness="0"
-                    Stroke="Transparent"
-                    BackgroundColor="#4E3689"
-                    Padding="0">
+                                StrokeThickness="0"
+                                Stroke="Transparent"
+                                BackgroundColor="#4E3689"
+                                Padding="0">
                             <Picker ItemsSource="{Binding AvailableMonths}"
-                        SelectedItem="{Binding SelectedMonth}"
-                        HeightRequest="50"
-                        BackgroundColor="#4E3689"
-                        TextColor="White"
-                        TitleColor="White"
-                        FontAttributes="Bold" />
+                                    SelectedItem="{Binding SelectedMonth}"
+                                    HeightRequest="50"
+                                    BackgroundColor="#4E3689"
+                                    TextColor="White"
+                                    TitleColor="White"
+                                    FontAttributes="Bold" />
                         </Border>
                     </VerticalStackLayout>
 
@@ -155,10 +155,10 @@
                                   RowDefinitions="Auto,Auto"
                                   RowSpacing="10">
                                 <StackLayout Grid.Column="0" Grid.RowSpan="2">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" />
-                                    <Label Text="{Binding Time, StringFormat='Time: {0}'}" />
-                                    <Label Text="{Binding Date, StringFormat='Date: {0}'}" />
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="White" />
+                                    <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" TextColor="White" />
+                                    <Label Text="{Binding Time, StringFormat='Time: {0}'}" TextColor="White" />
+                                    <Label Text="{Binding Date, StringFormat='Date: {0}'}" TextColor="White" />
                                 </StackLayout>
 
                                 <ImageButton 

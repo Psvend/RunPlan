@@ -25,7 +25,7 @@
                 <Button Text="Logout"
                         Command="{Binding LogoutCommand}"
                         BackgroundColor="White"
-                        TextColor="#7B61FF"
+                        TextColor="#8260DA"
                         BorderWidth="2"
                         FontAttributes="Bold"
                         CornerRadius="20"
@@ -34,7 +34,7 @@
                         FontSize="12"
                         HorizontalOptions="End"
                         VerticalOptions="Start"
-                        Margin="0,-50,20,0"
+                        Margin="0,-50,-15,0"
                         Grid.Column="0" />
                 
                 <Image Source="logo_nobackground.png"
@@ -42,6 +42,7 @@
                        WidthRequest="150"
                        VerticalOptions="Center"
                        HorizontalOptions="End"
+                       Margin="0,-10,-40,0"
                        Aspect="AspectFill"
                        Grid.Column="1"/>
                 </Grid>
@@ -53,56 +54,55 @@
 
                 <!-- Last Activity Card -->
                 <Border BackgroundColor="#4E3689"
-                        StrokeShape="RoundRectangle 20"
-                        Padding="15"
-                        HorizontalOptions="Fill"
-                        Stroke="#4E3689">
-                    <Grid ColumnDefinitions="Auto,*,Auto"
-                          RowDefinitions="Auto,Auto"
-                          ColumnSpacing="10">
-
-                        <!-- Icon -->
-                        <Image Source="pin_white.png" 
-                               HeightRequest="40"
-                               WidthRequest="40"
-                               Grid.RowSpan="2" 
-                               Grid.Column="0" 
-                               VerticalOptions="Center" />
+        StrokeShape="RoundRectangle 20"
+        Padding="15"
+        HorizontalOptions="Fill"
+        Stroke="#4E3689">
+                    <VerticalStackLayout Spacing="6">
 
                         <!-- Title -->
                         <Label Text="Last Activity"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="White"
-                               Grid.Column="1"
-                               Grid.Row="0"
-                               Grid.ColumnSpan="2" />
+               FontSize="18"
+               FontAttributes="Bold"
+               TextColor="White" />
 
-                        <!-- Run name -->
-                        <Label x:Name="LastActivityName"
-                               Text="{Binding LastActivity.Name}"
-                               TextColor="White"
-                               Grid.Row="1"
-                               Grid.Column="1" />
+                        <!-- Activity Name and Icon (1st row) -->
+                        <HorizontalStackLayout Spacing="10">
+                            <Image Source="pin_white.png"
+                   HeightRequest="40"
+                   WidthRequest="40"
+                   VerticalOptions="Center" />
+                            <Label x:Name="LastActivityName"
+                   Text="{Binding LastActivity.Name}"
+                   TextColor="White"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   LineBreakMode="TailTruncation"
+                   MaxLines="1"
+                   VerticalOptions="Center"
+                   HorizontalOptions="StartAndExpand" />
+                        </HorizontalStackLayout>
 
-                        <!-- Run time + pace in same row -->
-                        <StackLayout Orientation="Horizontal"
-                                     HorizontalOptions="End"
-                                     Grid.Row="1"
-                                     Grid.Column="2"
-                                     Spacing="15">
+                        <!-- Pace, Time, Distance (2nd row) -->
+                        <HorizontalStackLayout Spacing="15"
+                               HorizontalOptions="End">
                             <Label x:Name="LastActivityPace"
-                                   Text="{Binding LastActivityPace}"
-                                   TextColor="White" />
+                   Text="{Binding LastActivityPace}"
+                   TextColor="White"
+                   FontSize="14" />
                             <Label x:Name="LastActivityTime"
-                                   Text="{Binding LastActivity.Time}"
-                                   TextColor="White" />
+                   Text="{Binding LastActivity.Time}"
+                   TextColor="White"
+                   FontSize="14" />
                             <Label x:Name="LastActivityDistance"
-                                   Text="{Binding LastActivity.Distance, StringFormat='{}{0} km'}"
-                                   TextColor="White" />
-                        </StackLayout>
-                    </Grid>
+                   Text="{Binding LastActivity.Distance, StringFormat='{}{0} km'}"
+                   TextColor="White"
+                   FontSize="14" />
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
                 </Border>
+
 
 
                 <!-- Weekly Summary Card -->
