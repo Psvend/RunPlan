@@ -62,7 +62,7 @@
                         <Label Text="  Select Month"
                                FontSize="12"
                                TextColor="White"
-                               HorizontalOptions="Start" />
+                               HorizontalOptions="Center" />
                         <Border StrokeShape="RoundRectangle 25"
                                 StrokeThickness="0"
                                 Stroke="Transparent"
@@ -73,6 +73,7 @@
                                     HeightRequest="50"
                                     BackgroundColor="#4E3689"
                                     TextColor="White"
+                                    HorizontalOptions="Center"
                                     TitleColor="White"
                                     FontAttributes="Bold" />
                         </Border>
@@ -83,7 +84,7 @@
                         <Label Text="  Select Year"
                    FontSize="12"
                    TextColor="White"
-                   HorizontalOptions="Start" />
+                   HorizontalOptions="Center" />
                         <Border StrokeShape="RoundRectangle 25"
                     BackgroundColor="#4E3689"
                     Padding="0"
@@ -136,7 +137,7 @@
 
 
 			<CollectionView ItemsSource="{Binding RunningActivities}"
-                            Margin="0,0,0,20"
+                            Margin="0,0,0,40"
                             SelectionChanged="OnActivitySelected"
                             SelectionMode="Single">
                 <CollectionView.ItemTemplate>
