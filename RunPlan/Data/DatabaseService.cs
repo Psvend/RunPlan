@@ -36,7 +36,7 @@ namespace RunPlan.Data
             {
                 await _database.CreateTableAsync<RunningActivity>();
                 await _database.CreateTableAsync<Training>();
-                //await _database.CreateTableAsync<User>();
+                await _database.CreateTableAsync<User>();
                 await _database.CreateTableAsync<TrainingField>();
                 await EnsureDatabaseInitialized();
             }
