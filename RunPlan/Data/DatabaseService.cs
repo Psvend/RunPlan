@@ -69,7 +69,7 @@ namespace RunPlan.Data
 
 #if ANDROID
             folderPath = Android.App.Application.Context.GetExternalFilesDir(null).AbsolutePath;
-            dbFileName = "database_android.db";  // ✅ Android gets a separate database
+            dbFileName = "database.db";  // ✅ Android gets a separate database
             string androidDbPath = Path.Combine(folderPath, dbFileName);
 
             return androidDbPath;
