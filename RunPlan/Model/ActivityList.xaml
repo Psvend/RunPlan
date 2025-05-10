@@ -38,10 +38,10 @@
 
 
             <ScrollView Orientation="Horizontal"
-            HorizontalScrollBarVisibility="Never"
-            Padding="10,10,10,0">
+                        HorizontalScrollBarVisibility="Never"
+                        Padding="10,3,3,0">
 
-                <HorizontalStackLayout Spacing="12"
+                <HorizontalStackLayout Spacing="4"
                            VerticalOptions="Center"
                            HorizontalOptions="Start">
 
@@ -66,6 +66,8 @@
                         <Border StrokeShape="RoundRectangle 25"
                                 StrokeThickness="0"
                                 Stroke="Transparent"
+                                HeightRequest="50"
+                                WidthRequest="100"
                                 HorizontalOptions="Center"
                                 BackgroundColor="#4E3689"
                                 Padding="0">
@@ -83,21 +85,24 @@
                     <!-- Year Picker -->
                     <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="140">
                         <Label Text="  Select Year"
-                   FontSize="12"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+                               FontSize="12"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
                         <Border StrokeShape="RoundRectangle 25"
-                    BackgroundColor="#4E3689"
-                    Padding="0"
-                    StrokeThickness="0"
-                    Stroke="Transparent">
+                                BackgroundColor="#4E3689"
+                                Padding="0"
+                                StrokeThickness="0"
+                                HeightRequest="50"
+                                WidthRequest="100"
+                                HorizontalOptions="Center"
+                                Stroke="Transparent">
                             <Picker ItemsSource="{Binding AvailableYears}"
-                        SelectedItem="{Binding SelectedYear}"
-                        HeightRequest="50"
-                        BackgroundColor="#4E3689"
-                        TextColor="White"
-                        TitleColor="White"
-                        FontAttributes="Bold" />
+                                    SelectedItem="{Binding SelectedYear}"
+                                    HeightRequest="50"
+                                    BackgroundColor="#4E3689"
+                                    TextColor="White"
+                                    TitleColor="White"
+                                    FontAttributes="Bold" />
                         </Border>
                     </VerticalStackLayout>
 
