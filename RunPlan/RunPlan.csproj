@@ -69,6 +69,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Android\Resources\Raw\database.db" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="3.9.0" />
@@ -113,6 +117,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Model\NewFolder\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Include="Platforms\Android\Resources\Raw\database.db" />
 	</ItemGroup>
 
 	<ItemGroup>
