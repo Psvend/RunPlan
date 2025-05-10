@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using RunPlan.Messages;
+using System.Globalization;
 
 
 
@@ -106,6 +107,14 @@ public partial class ActivityViewModel : BaseVievModel
             await Shell.Current.DisplayAlert("Error", "Distance must be a valid number.", "OK");
             return;
         }
+
+        //to fix language issues
+        if (!DateTime.TryParseExact(Date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter the date in yyyy-MM-dd format.", "OK");
+            return;
+        }
+
 
         await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
 
