@@ -116,7 +116,7 @@ public partial class ActivityViewModel : BaseVievModel
         }
 
 
-        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, Date, Grade, Description);
+        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, parsedDate.ToString("yyyy-MM-dd"), Grade, Description);
 
         // Clear inputs
         ActivityName = DistanceText = Time = Date = string.Empty;
