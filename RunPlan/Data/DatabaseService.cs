@@ -26,7 +26,14 @@ namespace RunPlan.Data
         {
             _dbPath = GetDatabasePath();
             Console.WriteLine($"📌 SQLite database path: {_dbPath}");
-            CopySeedDatabaseIfNeeded().Wait();
+
+            // Only copy the bundled DB on Android/iOS — not Windows
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Block the constructor until copy is done
+                CopySeedDatabaseIfNeeded().GetAwaiter().GetResult();
+            }
+
             _database = new SQLiteAsyncConnection(_dbPath);
         }
 
@@ -48,21 +55,25 @@ namespace RunPlan.Data
 
         private async Task CopySeedDatabaseIfNeeded()
         {
-            if (!File.Exists(_dbPath))
+            try
             {
-                try
+                if (File.Exists(_dbPath))
                 {
-                    using var stream = await FileSystem.OpenAppPackageFileAsync("database.db");
-                    using var dest = File.Create(_dbPath);
-                    await stream.CopyToAsync(dest);
-                    Console.WriteLine("✅ Copied bundled DB to app storage.");
+                    File.Delete(_dbPath); // Force overwrite
+                    Console.WriteLine("🧨 Deleted old DB at: " + _dbPath);
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"❌ Failed to copy DB: {ex.Message}");
-                }
+
+                using var stream = await FileSystem.OpenAppPackageFileAsync("database.db");
+                using var dest = File.Create(_dbPath);
+                await stream.CopyToAsync(dest);
+                Console.WriteLine("✅ Copied bundled DB to: " + _dbPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ DB copy failed: {ex.Message}");
             }
         }
+
 
 
         private string GetDatabasePath()
