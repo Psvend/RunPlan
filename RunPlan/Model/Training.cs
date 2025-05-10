@@ -20,7 +20,7 @@ namespace RunPlan.Model
         public int Time { get; set; }
         public string Grade { get; set; } = string.Empty;
         public int Distance { get; set; }
-        public string Date { get; set; }
+       
 
 
         // <-- tell the library “I have many TrainingField children”
