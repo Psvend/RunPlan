@@ -82,35 +82,57 @@
 
                 <!-- Time Box -->
                 <Frame Grid.Row="0" Grid.Column="1"
-				   BackgroundColor="#4E3689"
-				   CornerRadius="12"
-				   BorderColor="#4E3689"
-				   HeightRequest="150"
-				   WidthRequest="180"
-				   HorizontalOptions="Center"
-				   VerticalOptions="Center"
-				   Padding="0"
-				   HasShadow="False">
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       BorderColor="#4E3689"
+                       HeightRequest="150"
+                       WidthRequest="220"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="10"
+                       HasShadow="False">
 
-                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                        <VerticalStackLayout >
-                            <Entry Text="{Binding Time}"
-							   FontSize="20"
-							   WidthRequest="100"
-							   Keyboard="Text"
-                               Placeholder="hh:mm:ss"
-							   HorizontalTextAlignment="Center"
-							   TextColor="White"
-							   BackgroundColor="Transparent"
-                               />
-                            <Label Text="min"
-							   FontSize="18"
-							   TextColor="White"
-							   HorizontalOptions="Center" />
-                        </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
 
+                            <!-- Hours -->
+                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Picker ItemsSource="{Binding HourOptions}" 
+                                        SelectedItem="{Binding SelectedHour}" 
+                                        WidthRequest="60"
+                                        TextColor="White"
+                                        BackgroundColor="Transparent" />
+                                <Label Text="hh" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
 
-                    </Grid>
+                            <!-- Minutes -->
+                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Picker ItemsSource="{Binding MinuteOptions}" 
+                                        SelectedItem="{Binding SelectedMinute}" 
+                                        WidthRequest="60"
+                                        TextColor="White"
+                                        BackgroundColor="Transparent" />
+                                <Label Text="mm" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+
+                            <!-- Seconds -->
+                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                <Picker ItemsSource="{Binding SecondOptions}" 
+                                        SelectedItem="{Binding SelectedSecond}" 
+                                        WidthRequest="60"
+                                        TextColor="White"
+                                        BackgroundColor="Transparent" />
+                                <Label Text="ss" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+
+                        </HorizontalStackLayout>
+
+                        <!-- Optional: show total duration -->
+                        <Label Text="{Binding CombinedDuration}" 
+                               TextColor="White" 
+                               FontSize="14" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
                 </Frame>
 
                 <!-- Date Box -->

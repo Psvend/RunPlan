@@ -20,6 +20,10 @@ namespace RunPlan.ViewModel;
 public partial class ActivityViewModel : BaseVievModel
 {
     public ObservableCollection<RunningActivity> RunningActivities { get; } = new();
+    public ObservableCollection<int> HourOptions { get; } = new(Enumerable.Range(0, 24));
+    public ObservableCollection<int> MinuteOptions { get; } = new(Enumerable.Range(0, 60));
+    public ObservableCollection<int> SecondOptions { get; } = new(Enumerable.Range(0, 60));
+
 
     private readonly DatabaseService _databaseService;
 
@@ -58,9 +62,18 @@ public partial class ActivityViewModel : BaseVievModel
     [ObservableProperty] private string date;
     [ObservableProperty] private string grade;
     [ObservableProperty] private string description;
+    [ObservableProperty] private int selectedHour;
+    [ObservableProperty] private int selectedMinute;
+    [ObservableProperty] private int selectedSecond;
+
+
 
     [ObservableProperty] private bool startButtonVisible = true;
     [ObservableProperty] private bool stopButtonVisible = false;
+    // Optional binding display string
+
+    public string CombinedDuration =>
+    new TimeSpan(SelectedHour, SelectedMinute, SelectedSecond).ToString(@"hh\:mm\:ss");
 
 
     [RelayCommand]
@@ -93,10 +106,10 @@ public partial class ActivityViewModel : BaseVievModel
     {
         if (string.IsNullOrWhiteSpace(ActivityName) ||
             string.IsNullOrWhiteSpace(DistanceText) ||
-            string.IsNullOrWhiteSpace(Time) ||
             string.IsNullOrWhiteSpace(Date) ||
             string.IsNullOrWhiteSpace(Grade) ||
-            string.IsNullOrWhiteSpace(Description))
+           string.IsNullOrWhiteSpace(Description) ||
+    (SelectedHour == 0 && SelectedMinute == 0 && SelectedSecond == 0))
         {
             await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
             return;
@@ -116,10 +129,19 @@ public partial class ActivityViewModel : BaseVievModel
         }
 
 
-        await _databaseService.InsertRunningActivity(ActivityName, distance, Time, parsedDate.ToString("yyyy-MM-dd"), Grade, Description);
+        await _databaseService.InsertRunningActivity(ActivityName, distance, CombinedDuration, parsedDate.ToString("yyyy-MM-dd"), Grade, Description);
 
         // Clear inputs
-        ActivityName = DistanceText = Time = Date = string.Empty;
+        // ✅ Clear all input fields
+        ActivityName = string.Empty;
+        DistanceText = string.Empty;
+        Date = string.Empty;
+        Grade = string.Empty;
+        Description = string.Empty;
+
+        SelectedHour = 0;
+        SelectedMinute = 0;
+        SelectedSecond = 0;
 
         await LoadActivities();
 
