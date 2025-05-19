@@ -41,7 +41,7 @@
                         HorizontalScrollBarVisibility="Never"
                         Padding="10,3,3,0">
 
-                <HorizontalStackLayout Spacing="4"
+                <HorizontalStackLayout Spacing="2"
                            VerticalOptions="Center"
                            HorizontalOptions="Start">
 
@@ -83,7 +83,7 @@
                     </VerticalStackLayout>
 
                     <!-- Year Picker -->
-                    <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="140">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="140">
                         <Label Text="  Select Year"
                                FontSize="12"
                                TextColor="White"
@@ -100,6 +100,7 @@
                                     SelectedItem="{Binding SelectedYear}"
                                     HeightRequest="50"
                                     BackgroundColor="#4E3689"
+                                    HorizontalOptions="Center"
                                     TextColor="White"
                                     TitleColor="White"
                                     FontAttributes="Bold" />

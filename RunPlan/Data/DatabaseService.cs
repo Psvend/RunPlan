@@ -59,8 +59,8 @@ namespace RunPlan.Data
             {
                 if (File.Exists(_dbPath))
                 {
-                    File.Delete(_dbPath); // Force overwrite
-                    Console.WriteLine("🧨 Deleted old DB at: " + _dbPath);
+                    //File.Delete(_dbPath); // Force overwrite
+                    return;
                 }
 
                 using var stream = await FileSystem.OpenAppPackageFileAsync("database.db");

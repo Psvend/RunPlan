@@ -112,6 +112,8 @@
 
                     </Grid>
                 </Frame>
+
+                <!-- Date Box -->
                 <Frame Grid.Row="1" Grid.Column="0"
 				   BackgroundColor="#4E3689"
 				   CornerRadius="12"

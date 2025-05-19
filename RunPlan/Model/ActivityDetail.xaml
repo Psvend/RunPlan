@@ -148,7 +148,7 @@
                             <Entry Text="{Binding RunningActivity.Time, Mode=TwoWay}"
 								   FontSize="36"
 								   WidthRequest="100"
-								   Keyboard="Numeric"
+								   Keyboard="Text"
 								   HorizontalTextAlignment="Center"
 								   TextColor="White"
 								   BackgroundColor="Transparent" />
@@ -224,7 +224,7 @@
                             <Entry Text="{Binding RunningActivity.Grade, Mode=TwoWay}"
 								   FontSize="36"
 								   WidthRequest="100"
-								   Keyboard="Numeric"
+								   Keyboard="Text"
 								   HorizontalTextAlignment="Center"
 								   TextColor="White"
 								   BackgroundColor="Transparent" />
