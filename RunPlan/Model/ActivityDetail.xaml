@@ -144,18 +144,44 @@
 						</Label>
 
                         <!-- Edit Mode -->
-                        <VerticalStackLayout IsVisible="{Binding IsEditing}">
-                            <Entry Text="{Binding RunningActivity.Time, Mode=TwoWay}"
-								   FontSize="36"
-								   WidthRequest="100"
-								   Keyboard="Text"
-								   HorizontalTextAlignment="Center"
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}" Spacing="8" HorizontalOptions="Center">
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                                <!-- Hours -->
+                                <VerticalStackLayout Spacing="2">
+                                    <Picker ItemsSource="{Binding HourOptions}"
+											SelectedItem="{Binding SelectedHour}"
+											WidthRequest="60"
+											TextColor="White"
+											BackgroundColor="Transparent" />
+                                    <Label Text="hh" FontSize="14" TextColor="White" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                                <!-- Minutes -->
+                                <VerticalStackLayout Spacing="2">
+                                    <Picker ItemsSource="{Binding MinuteOptions}"
+											SelectedItem="{Binding SelectedMinute}"
+											WidthRequest="60"
+											TextColor="White"
+											BackgroundColor="Transparent" />
+                                    <Label Text="mm" FontSize="14" TextColor="White" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                                <!-- Seconds -->
+                                <VerticalStackLayout Spacing="2">
+                                    <Picker ItemsSource="{Binding SecondOptions}"
+											SelectedItem="{Binding SelectedSecond}"
+											WidthRequest="60"
+											TextColor="White"
+											BackgroundColor="Transparent" />
+                                    <Label Text="ss" FontSize="14" TextColor="White" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <!-- Optional: Display full formatted duration -->
+                            <Label Text="{Binding CombinedDuration}"
 								   TextColor="White"
-								   BackgroundColor="Transparent" />
-                            <Label Text="min"
-								   FontSize="18"
-								   TextColor="White"
-								   HorizontalOptions="Center" />
+								   FontSize="14"
+								   HorizontalOptions="Center"/>
                         </VerticalStackLayout>
 
 

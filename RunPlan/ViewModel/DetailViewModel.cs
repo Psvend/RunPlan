@@ -11,6 +11,7 @@ using System.Globalization;
 using RunPlan.Messages;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 
 
 
@@ -25,11 +26,28 @@ public partial class DetailViewModel: ObservableObject
     public DetailViewModel(DatabaseService databaseService)
     {
         _databaseService = databaseService;
+
+        //For the time picker
+        HourOptions = new ObservableCollection<int>(Enumerable.Range(0, 24));
+        MinuteOptions = new ObservableCollection<int>(Enumerable.Range(0, 60));
+        SecondOptions = new ObservableCollection<int>(Enumerable.Range(0, 60));
     }
 
+    [ObservableProperty] private RunningActivity runningActivity;
+    [ObservableProperty] private bool isEditing;
 
-    [ObservableProperty]
-    private RunningActivity runningActivity;
+    // Time picker options
+    public ObservableCollection<int> HourOptions { get; }
+    public ObservableCollection<int> MinuteOptions { get; }
+    public ObservableCollection<int> SecondOptions { get; }
+
+    [ObservableProperty] private int selectedHour;
+    [ObservableProperty] private int selectedMinute;
+    [ObservableProperty] private int selectedSecond;
+
+    public string CombinedDuration =>
+        new TimeSpan(SelectedHour, SelectedMinute, SelectedSecond).ToString(@"hh\:mm\:ss");
+
 
     partial void OnRunningActivityChanged(RunningActivity value)
     {
@@ -39,12 +57,18 @@ public partial class DetailViewModel: ObservableObject
         OnPropertyChanged(nameof(Distance));
         OnPropertyChanged(nameof(Grade));
         OnPropertyChanged(nameof(Description));
+
+        // Sync pickers with existing time
+        if (TimeSpan.TryParse(value.Time, out var parsedTime))
+        {
+            SelectedHour = parsedTime.Hours;
+            SelectedMinute = parsedTime.Minutes;
+            SelectedSecond = parsedTime.Seconds;
+        }
     }
 
 
-    //To handle editing of the page
-    [ObservableProperty]
-    private bool isEditing;
+   
 
 
 
@@ -53,7 +77,7 @@ public partial class DetailViewModel: ObservableObject
     {
         if (RunningActivity != null)
         {
-
+            RunningActivity.Time = CombinedDuration;
             await _databaseService.UpdateActivityAsync(RunningActivity);
 
             // Reload the updated object from DB
@@ -88,16 +112,11 @@ public partial class DetailViewModel: ObservableObject
 
 
 
-
-
-
     public string Name => RunningActivity?.Name ?? "N/A";
     public string Time => RunningActivity?.Time ?? "00:00:00";
     public double Distance => RunningActivity?.Distance ?? 0;
     public string Grade => RunningActivity?.Grade ?? "Empty for now";
     public string Description => RunningActivity?.Description ?? "Nothing yet";
-
-
 
 
 

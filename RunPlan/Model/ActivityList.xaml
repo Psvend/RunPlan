@@ -39,14 +39,14 @@
 
             <ScrollView Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
-                        Padding="10,3,3,0">
+                        Padding="5,3,3,0">
 
-                <HorizontalStackLayout Spacing="2"
+                <HorizontalStackLayout Spacing="0"
                            VerticalOptions="Center"
                            HorizontalOptions="Start">
 
                     <!-- This Week Button -->
-                    <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="110">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="110">
                         <Label Text="" HeightRequest="16" />
                         <Button Text="This Week"
                                 Command="{Binding FilterThisWeekCommand}"
@@ -58,7 +58,7 @@
                     </VerticalStackLayout>
 
                     <!-- Month Picker -->
-                    <VerticalStackLayout Spacing="4" VerticalOptions="End" WidthRequest="140">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="140">
                         <Label Text="  Select Month"
                                FontSize="12"
                                TextColor="White"
@@ -162,11 +162,11 @@
                             <Grid ColumnDefinitions="*,Auto"
                                   RowDefinitions="Auto,Auto"
                                   RowSpacing="10">
-                                <StackLayout Grid.Column="0" Grid.RowSpan="2">
+                                <StackLayout Grid.Column="0" Grid.RowSpan="2" Padding="0,0,0,10">
                                     <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="White" />
                                     <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" TextColor="White" />
                                     <Label Text="{Binding Time, StringFormat='Time: {0}'}" TextColor="White" />
-                                    <Label Text="{Binding Date, StringFormat='Date: {0}'}" TextColor="White" />
+                                    <Label Text="{Binding Date, StringFormat='Date: {0}'}" TextColor="White"  />
                                 </StackLayout>
 
                                 <ImageButton 
