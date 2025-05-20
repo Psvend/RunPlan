@@ -39,14 +39,14 @@
 
             <ScrollView Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
-                        Padding="5,3,3,0">
+                        Padding="3,3,3,0">
 
-                <HorizontalStackLayout Spacing="0"
+                <HorizontalStackLayout Spacing="4"
                            VerticalOptions="Center"
                            HorizontalOptions="Start">
 
                     <!-- This Week Button -->
-                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="110">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="110" Margin="0,0,5,0">
                         <Label Text="" HeightRequest="16" />
                         <Button Text="This Week"
                                 Command="{Binding FilterThisWeekCommand}"
@@ -58,7 +58,7 @@
                     </VerticalStackLayout>
 
                     <!-- Month Picker -->
-                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="140">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="End">
                         <Label Text="  Select Month"
                                FontSize="12"
                                TextColor="White"
@@ -66,10 +66,10 @@
                         <Border StrokeShape="RoundRectangle 25"
                                 StrokeThickness="0"
                                 Stroke="Transparent"
-                                HeightRequest="50"
-                                WidthRequest="100"
                                 HorizontalOptions="Center"
                                 BackgroundColor="#4E3689"
+                                HeightRequest="50"
+                                WidthRequest="140"
                                 Padding="0">
                             <Picker ItemsSource="{Binding AvailableMonths}"
                                     SelectedItem="{Binding SelectedMonth}"
@@ -83,7 +83,7 @@
                     </VerticalStackLayout>
 
                     <!-- Year Picker -->
-                    <VerticalStackLayout Spacing="2" VerticalOptions="End" WidthRequest="140">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="End">
                         <Label Text="  Select Year"
                                FontSize="12"
                                TextColor="White"
@@ -126,7 +126,7 @@
 					Padding="0"
 					StrokeThickness="0"
 					Stroke="Transparent"
-					Margin="0,0,0,5">
+					Margin="0,0,0,6">
 				<SearchBar Placeholder="Search activities..."
 						   Text="{Binding SearchQuery, Mode=TwoWay}"
 						   TextChanged="OnSearchTextChanged"
@@ -153,7 +153,7 @@
                                 Padding="15"
                                 BackgroundColor="#4E3689"
                                 Stroke="MediumPurple"
-                                Margin="0,6">
+                                Margin="0,3">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command= "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ActivityListViewModel}},x:DataType=viewmodel ActivityListViewModel, Path=GoToDetailsCommand}"
@@ -161,8 +161,8 @@
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="*,Auto"
                                   RowDefinitions="Auto,Auto"
-                                  RowSpacing="10">
-                                <StackLayout Grid.Column="0" Grid.RowSpan="2" Padding="0,0,0,10">
+                                  RowSpacing="20">
+                                <StackLayout Grid.Column="0" Grid.RowSpan="2" Padding="0">
                                     <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="White" />
                                     <Label Text="{Binding Distance, StringFormat='Distance: {0} km'}" TextColor="White" />
                                     <Label Text="{Binding Time, StringFormat='Time: {0}'}" TextColor="White" />

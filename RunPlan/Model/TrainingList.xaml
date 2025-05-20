@@ -53,14 +53,19 @@
                         VerticalOptions="Center"
                         
 						>
-                    <Picker ItemsSource="{Binding AvailableGrades}"
-							SelectedItem="{Binding SelectedGrade}"
-							WidthRequest="130"
-							HeightRequest="50"
-							BackgroundColor="#4E3689"
-							TextColor="White"
-							TitleColor="White"
-							FontAttributes="Bold" />
+                    <Grid HorizontalOptions="Center"
+                          VerticalOptions="Center"
+                          WidthRequest="130">
+                        <Picker ItemsSource="{Binding AvailableGrades}" 
+                                SelectedItem="{Binding SelectedGrade}"
+                                HeightRequest="50"
+                                BackgroundColor="#4E3689"
+                                TextColor="White"
+                                TitleColor="White"
+                                FontAttributes="Bold"
+                                WidthRequest="120" />
+                    </Grid>
+
                 </Border>
             </VerticalStackLayout>
 
@@ -97,11 +102,14 @@
                    HorizontalOptions="Center"
                    IsVisible="{Binding IsEmpty}" />
 
+
+
             <!-- Training List -->
             <CollectionView ItemsSource="{Binding Trainings}"
-                            Margin="0,0,0,20"
-                            SelectionChanged="OnTrainingSelected"
-                            SelectionMode="Single">
+                Margin="0,0,0,10"
+                SelectionChanged="OnTrainingSelected"
+                SelectionMode="Single">
+
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
@@ -109,13 +117,27 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Training">
                         <Border StrokeShape="RoundRectangle 10"
-                                Padding="15"
-                                BackgroundColor="#4E3689"
-                                Stroke="MediumPurple"
-                                Margin="0,6">
+                    Padding="15"
+                    BackgroundColor="#4E3689"
+                    Stroke="MediumPurple"
+                    Margin="0,3">
+
+                            <!-- 👇 Remove selection visual by keeping colors static -->
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#4E3689" />
+                                            <Setter Property="Stroke" Value="MediumPurple" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
                             <Grid ColumnDefinitions="*,Auto"
-                                  RowDefinitions="Auto,Auto"
-                                  RowSpacing="10">
+                      RowDefinitions="Auto,Auto"
+                      RowSpacing="20">
                                 <StackLayout Grid.Column="0" Grid.RowSpan="2">
                                     <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="White" />
                                     <Label Text="{Binding Description}" TextColor="White" />
@@ -124,21 +146,23 @@
                                 </StackLayout>
 
                                 <ImageButton
-                                    Source="bin.png"
-                                    Grid.Column="1"
-                                    Grid.Row="0"
-                                    WidthRequest="60"
-                                    HeightRequest="60"
-                                    BackgroundColor="Transparent"
-                                    VerticalOptions="Start"
-                                    Aspect="AspectFit"
-                                    Clicked="OnDeleteTrainingClicked"
-                                    CommandParameter="{Binding .}" />
+                        Source="bin.png"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        WidthRequest="60"
+                        HeightRequest="60"
+                        BackgroundColor="Transparent"
+                        VerticalOptions="Start"
+                        Aspect="AspectFit"
+                        Clicked="OnDeleteTrainingClicked"
+                        CommandParameter="{Binding .}" />
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+
 
         </VerticalStackLayout>
     </ScrollView>
