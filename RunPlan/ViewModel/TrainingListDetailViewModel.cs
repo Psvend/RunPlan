@@ -19,13 +19,27 @@ namespace RunPlan.ViewModel
 
         [ObservableProperty]
         private ObservableCollection<TrainingField> trainingFields = new();
+        
+        [ObservableProperty]
+        private string selectedGrade;
+
+        [ObservableProperty]
+        private double editableDistance;
 
         private readonly DatabaseService _databaseService;
+
+
+        public ObservableCollection<string> Difficulties { get; } = new()
+        {
+        "Super Easy", "Easy", "Medium", "Hard","Extra Hard"
+        };
 
         public TrainingListDetailViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
         }
+
+
 
         [RelayCommand]
         private void Edit()
@@ -33,11 +47,44 @@ namespace RunPlan.ViewModel
             IsEditing = true;
         }
 
+        partial void OnTrainingChanged(Training value)
+        {
+            if (value != null)
+            {
+                EditableDistance = value.Distance;
+                SelectedGrade = value.Grade;
+                _ = LoadTrainingFields();
+            }
+        }
+
+        partial void OnIsEditingChanged(bool value)
+        {
+            if (value && Training != null)
+            {
+                EditableDistance = Training.Distance;
+                SelectedGrade = Training.Grade;
+            }
+        }
+
         [RelayCommand]
         private async Task Save()
         {
-            IsEditing = false;
+            if (Training != null)
+            {
+                Training.Distance = (int)EditableDistance;
+                Training.Grade = SelectedGrade; // Apply edited value
+                await _databaseService.UpdateTrainingAsync(Training); // Save to DB
+
+                // ✅ Re-fetch updated data from DB
+                var updated = await _databaseService.GetTrainingByIdAsync(Training.Id);
+                Training = updated; // ✅ Triggers OnTrainingChanged and UI update
+
+
+                IsEditing = false;
+            }
         }
+
+
 
         [RelayCommand]
         public async Task LoadTrainingFields()
@@ -53,11 +100,9 @@ namespace RunPlan.ViewModel
             }
         }
 
-        // ✅ This triggers LoadTrainingFields when Training is set
-        partial void OnTrainingChanged(Training value)
-        {
-            _ = LoadTrainingFields();
-        }
+
+
+        
     }
 }
 

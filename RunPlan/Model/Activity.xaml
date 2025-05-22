@@ -192,9 +192,6 @@
 							   HorizontalOptions="Center" />
                         </VerticalStackLayout>
 
-
-
-
                     </Grid>
                 </Frame>
 
@@ -228,16 +225,16 @@
 
 
         <Button Text="Start Tracking Automatically"
-             Command="{Binding StartTrackingCommand}"
-             BackgroundColor="DarkViolet"
-            TextColor="White"
-            CornerRadius="10" 
+                 Command="{Binding StartTrackingCommand}"
+                 BackgroundColor="DarkViolet"
+                TextColor="White"
+                CornerRadius="10" 
                 IsVisible="{Binding StartButtonVisible}"/>
         <Button Text="Stop Tracking"
-             Command="{Binding StopTrackingCommand}"
-            BackgroundColor="Gray"
-            TextColor="White"
-            CornerRadius="10"
+                 Command="{Binding StopTrackingCommand}"
+                BackgroundColor="Gray"
+                TextColor="White"
+                CornerRadius="10"
                 IsVisible="{Binding StopButtonVisible}"/>
 
         </VerticalStackLayout>

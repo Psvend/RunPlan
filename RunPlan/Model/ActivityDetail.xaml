@@ -19,7 +19,7 @@
 
     <ScrollView>
 		<VerticalStackLayout Padding="20" Spacing="20">
-            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10">
+            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,10" ColumnSpacing="10">
                 <!-- Back Button -->
                 <ImageButton Source="back.png"
 						 Clicked="OnBackClicked"
@@ -67,7 +67,7 @@
             </StackLayout>
 
             <!-- Info Grid (2x2 Boxes) -->
-			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions ="Center">
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="5" RowSpacing="5" HorizontalOptions ="Center">
 
 				<!-- Distance Box -->
 				<Frame Grid.Row="0" Grid.Column="0"
@@ -83,17 +83,22 @@
 					<Grid VerticalOptions="Center" HorizontalOptions="Center">
 
                         <!-- View Mode -->
-                        <Label HorizontalTextAlignment="Center"
-							   VerticalTextAlignment="Center"
-							   TextColor="White"
-                               IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
-							<Label.FormattedText>
-								<FormattedString>
-									<Span Text="{Binding Distance}" FontSize="36" FontAttributes="Bold" />
-									<Span Text=" km" FontSize="18" />
-								</FormattedString>
-							</Label.FormattedText>
-						</Label>
+                        <VerticalStackLayout IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}"
+											 HorizontalOptions="Center"
+											 VerticalOptions="Center"
+											 Spacing="0">
+                            <Label Text="{Binding Distance}"
+								   FontSize="36"
+								   FontAttributes="Bold"
+								   TextColor="White"
+								   HorizontalTextAlignment="Center" />
+
+                            <Label Text="km"
+								   FontSize="18"
+								   TextColor="White"
+								   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
 
                         <!-- Edit Mode -->
                         <VerticalStackLayout IsVisible="{Binding IsEditing}">
@@ -103,11 +108,12 @@
 								   Keyboard="Numeric"
 								   HorizontalTextAlignment="Center"
 								   TextColor="White"
+                                   FontAttributes="Bold"
 								   BackgroundColor="Transparent" />
 											<Label Text="km"
-								   FontSize="18"
-								   TextColor="White"
-								   HorizontalOptions="Center" />
+												   FontSize="18"
+												   TextColor="White"
+												   HorizontalOptions="Center" />
                         </VerticalStackLayout>
 
 
@@ -137,8 +143,8 @@
                                IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
 							<Label.FormattedText>
 								<FormattedString>
-									<Span Text="{Binding Time}" FontSize="36" FontAttributes="Bold" />
-									<Span Text=" min" FontSize="18" />
+                                    <Span Text="{Binding Time}" FontSize="36" FontAttributes="Bold" TextColor="White" />
+                                    <Span Text=" min" FontSize="18" TextColor="White" />
 								</FormattedString>
 							</Label.FormattedText>
 						</Label>
@@ -150,38 +156,37 @@
                                 <VerticalStackLayout Spacing="2">
                                     <Picker ItemsSource="{Binding HourOptions}"
 											SelectedItem="{Binding SelectedHour}"
-											WidthRequest="60"
+											WidthRequest="50"
 											TextColor="White"
+                                            FontSize="36"
 											BackgroundColor="Transparent" />
-                                    <Label Text="hh" FontSize="14" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="hh" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
 
                                 <!-- Minutes -->
                                 <VerticalStackLayout Spacing="2">
                                     <Picker ItemsSource="{Binding MinuteOptions}"
 											SelectedItem="{Binding SelectedMinute}"
-											WidthRequest="60"
+											WidthRequest="50"
 											TextColor="White"
+                                            FontSize="36"
 											BackgroundColor="Transparent" />
-                                    <Label Text="mm" FontSize="14" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="mm" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
 
                                 <!-- Seconds -->
                                 <VerticalStackLayout Spacing="2">
                                     <Picker ItemsSource="{Binding SecondOptions}"
 											SelectedItem="{Binding SelectedSecond}"
-											WidthRequest="60"
+											WidthRequest="50"
 											TextColor="White"
+                                            FontSize="36"
 											BackgroundColor="Transparent" />
-                                    <Label Text="ss" FontSize="14" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="ss" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
 
-                            <!-- Optional: Display full formatted duration -->
-                            <Label Text="{Binding CombinedDuration}"
-								   TextColor="White"
-								   FontSize="14"
-								   HorizontalOptions="Center"/>
+                            
                         </VerticalStackLayout>
 
 
@@ -202,16 +207,18 @@
 					   HasShadow="False">
 
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label HorizontalTextAlignment="Center"
-							   VerticalTextAlignment="Center"
-							   TextColor="White">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding Pace, StringFormat='{0}'}" FontSize="36" FontAttributes="Bold" />
-                                    <Span Text="min/km" FontSize="18" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                            <Label Text="{Binding Pace}"
+								   FontSize="36"
+								   TextColor="White"
+                                   FontAttributes="Bold"
+								   HorizontalTextAlignment="Center" />
+
+                            <Label Text="min/km"
+								   FontSize="18"
+								   TextColor="White"
+								   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
                     </Grid>
 				</Frame>
 
@@ -239,25 +246,28 @@
                                IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
                             <Label.FormattedText>
 								<FormattedString>
-									<Span Text="{Binding Grade}" FontSize="36" FontAttributes="Bold" />
-									<Span Text="" FontSize="18" />
+                                    <Span Text="{Binding Grade}" FontSize="36" FontAttributes="Bold" TextColor="White" />
+                                    <Span Text="" FontSize="18" TextColor="White"/>
 								</FormattedString>
 							</Label.FormattedText>
 						</Label>
 
                         <!-- Edit Mode -->
                         <VerticalStackLayout IsVisible="{Binding IsEditing}">
-                            <Entry Text="{Binding RunningActivity.Grade, Mode=TwoWay}"
-								   FontSize="36"
-								   WidthRequest="100"
-								   Keyboard="Text"
-								   HorizontalTextAlignment="Center"
-								   TextColor="White"
-								   BackgroundColor="Transparent" />
-                            <Label Text=""
-								   FontSize="18"
-								   TextColor="White"
-								   HorizontalOptions="Center" />
+                            <Picker ItemsSource="{Binding diffeculties}"
+									SelectedItem="{Binding RunningActivity.Grade, Mode=TwoWay}"
+									TitleColor="Gray"
+									TextColor="White"
+									BackgroundColor="#4E3689"
+									FontSize="28"
+                                    FontAttributes="Bold"
+									HorizontalOptions="Center"
+									WidthRequest="140" />
+							<Label Text="Grade"
+									FontSize="18"
+									TextColor="White"
+                                    VerticalTextAlignment="Center"
+									HorizontalOptions="Center" />			   				
                         </VerticalStackLayout>
 
 

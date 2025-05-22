@@ -68,7 +68,13 @@ public partial class DetailViewModel: ObservableObject
     }
 
 
-   
+    public ObservableCollection<string> diffeculties { get; } = new()
+    {
+    "Easy",
+    "Moderate",
+    "Hard"
+    };
+
 
 
 

@@ -7,11 +7,13 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 using RunPlan.Model;
 using RunPlan.ViewModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 
 namespace RunPlan.Model
 {
-    public class Training
+    public partial class Training : ObservableObject
+
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

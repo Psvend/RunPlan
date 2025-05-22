@@ -20,7 +20,7 @@
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Top buttons: Back + Edit + Save -->
-            <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="0,0,0,10">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="-10,0,-20,10" ColumnSpacing="10">
                 <!-- Back Button -->
                 <ImageButton Source="back.png"
                              Clicked="OnBackClicked"
@@ -64,7 +64,7 @@
                    HorizontalOptions="Center" />
 
             <!-- Info grid (2x2 box) -->
-            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20" HorizontalOptions="Center">
+            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10" HorizontalOptions="Center">
 
                 <!-- Distance Box -->
                 <Border Grid.Row="0" Grid.Column="0"
@@ -77,14 +77,40 @@
                         VerticalOptions="Center"
                         Padding="0">
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="{Binding Training.Distance, StringFormat='{0} km'}"
-                               FontSize="36"
-                               FontAttributes="Bold"
-                               TextColor="White"
-                               HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center" />
+
+                        <!-- View Mode -->
+                        <VerticalStackLayout Spacing="0" HorizontalOptions="Center"
+                             IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
+                            <Label Text="{Binding Training.Distance}"
+                                   FontSize="36"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="km"
+                                   FontSize="18"
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
+                        <!-- Edit Mode -->
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}" Spacing="0" HorizontalOptions="Center">
+                            <Entry Text="{Binding EditableDistance, Mode=TwoWay}"
+                                   FontSize="36"
+                                   Keyboard="Numeric"
+                                   TextColor="White"
+                                   HorizontalTextAlignment="Center"
+                                   WidthRequest="100"
+                                   BackgroundColor="Transparent"
+                                   FontAttributes="Bold" />
+                            <Label Text="km"
+                                   FontSize="18"
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+
                     </Grid>
                 </Border>
+
 
                 <!-- Grade Box -->
                 <Border Grid.Row="0" Grid.Column="1"
@@ -97,12 +123,28 @@
                         VerticalOptions="Center"
                         Padding="0">
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                        <!-- View Mode -->
                         <Label Text="{Binding Training.Grade}"
                                FontSize="36"
                                FontAttributes="Bold"
                                TextColor="White"
                                HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center" />
+                               VerticalTextAlignment="Center"
+                               IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}" />
+
+                        <!-- Edit Mode -->
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}" Spacing="4" HorizontalOptions="Center">
+                            <Picker ItemsSource="{Binding Difficulties}"
+                                    SelectedItem="{Binding SelectedGrade}"
+                                    FontSize="28"
+                                    BackgroundColor="#4E3689"
+                                    WidthRequest="130"
+                                    TextColor="White" />
+                            <Label Text="Grade"
+                                   FontSize="18"
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
                     </Grid>
                 </Border>
             </Grid>

@@ -53,6 +53,11 @@ namespace RunPlan.Data
             }
         }
 
+        public async Task<Training> GetTrainingByIdAsync(int id)
+        {
+            return await _database.Table<Training>().FirstOrDefaultAsync(t => t.Id == id);
+        }
+
         private async Task CopySeedDatabaseIfNeeded()
         {
             try
