@@ -64,7 +64,11 @@
                    HorizontalOptions="Center" />
 
             <!-- Info grid (2x2 box) -->
-            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10" HorizontalOptions="Center">
+            <Grid ColumnDefinitions="Auto,Auto" 
+                  RowDefinitions="Auto, Auto" 
+                  ColumnSpacing="5" 
+                  RowSpacing="5" 
+                  HorizontalOptions="Center">
 
                 <!-- Distance Box -->
                 <Border Grid.Row="0" Grid.Column="0"
@@ -72,7 +76,7 @@
                         Stroke="#4E3689"
                         StrokeShape="RoundRectangle 12"
                         HeightRequest="150"
-                        WidthRequest="180"
+                        WidthRequest="170"
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
                         Padding="0">
@@ -101,7 +105,7 @@
                                    HorizontalTextAlignment="Center"
                                    WidthRequest="100"
                                    BackgroundColor="Transparent"
-                                   FontAttributes="Bold" />
+                                    />
                             <Label Text="km"
                                    FontSize="18"
                                    TextColor="White"
@@ -118,7 +122,7 @@
                         Stroke="#4E3689"
                         StrokeShape="RoundRectangle 12"
                         HeightRequest="150"
-                        WidthRequest="180"
+                        WidthRequest="170"
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
                         Padding="0">
@@ -147,29 +151,146 @@
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
+
+                <!-- Time -->
+                <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       BorderColor="#4E3689"
+                       HeightRequest="150"
+                       WidthRequest="260"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="0"
+                       HasShadow="False">
+
+                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+
+                        <!-- View Mode -->
+                        <Label HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               TextColor="White"
+                               IsVisible="{Binding IsEditing, Converter={StaticResource InverseBoolConverter}}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Training.Time}" FontSize="36" FontAttributes="Bold" TextColor="White" />
+                                    <Span Text=" min" FontSize="18" TextColor="White" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <!-- Edit Mode -->
+                        <VerticalStackLayout IsVisible="{Binding IsEditing}" Spacing="8" HorizontalOptions="Center">
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+
+                                <VerticalStackLayout Spacing="2">
+                                    <Picker ItemsSource="{Binding HourOptions}"
+                                            SelectedItem="{Binding SelectedHour}"
+                                            WidthRequest="50"
+                                            TextColor="White"
+                                            FontSize="36"
+                                            BackgroundColor="Transparent" />
+                                    <Label Text="hh" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="2">
+                                    <Picker ItemsSource="{Binding MinuteOptions}"
+                                            SelectedItem="{Binding SelectedMinute}"
+                                            WidthRequest="50"
+                                            TextColor="White"
+                                            FontSize="36"
+                                            BackgroundColor="Transparent" />
+                                    <Label Text="mm" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="2">
+                                    <Picker ItemsSource="{Binding SecondOptions}"
+                                            SelectedItem="{Binding SelectedSecond}"
+                                            WidthRequest="50"
+                                            TextColor="White"
+                                            FontSize="36"
+                                            BackgroundColor="Transparent" />
+                                    <Label Text="ss" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Frame>
+
+
             </Grid>
 
+            
             <!-- Training fields -->
-            <CollectionView ItemsSource="{Binding TrainingFields}">
+            <CollectionView ItemsSource="{Binding TrainingFields}"
+                            ItemsLayout="VerticalList"
+                            HorizontalOptions="Center">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:TrainingField">
-                        <Border Stroke="#5E3DAC"
-                                BackgroundColor="#5E3DAC"
-                                StrokeShape="RoundRectangle 10"
-                                Margin="5"
-                                WidthRequest="250"
-                                Padding="14">
-                            <Label Text="{Binding Text}" 
-                                   TextColor="White" 
-                                   FontSize="16" 
-                                   HorizontalOptions="Center" 
-                                   VerticalOptions="Center"/>
-                        </Border>
+                        <Grid WidthRequest="260" HeightRequest="45" Margin="0,0,0,5">
+
+                            <!-- Edit Mode -->
+                            <Frame BackgroundColor="White"
+                                   CornerRadius="8"
+                                   Padding="10,0,40,0"
+                                   HasShadow="False"
+                                   HeightRequest="45"
+                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TrainingListDetailViewModel}}, Path=IsEditing}">
+                                <Entry Text="{Binding Text, Mode=TwoWay}"
+                                       Placeholder="Write your training section here"
+                                       TextColor="#4E3689"
+                                       BackgroundColor="Transparent"
+                                       FontSize="16"
+                                       VerticalTextAlignment="Center"
+                                       HeightRequest="45"/>
+                            </Frame>
+
+                            <!-- View Mode -->
+                            <Frame BackgroundColor="#5E3DAC"
+                                   CornerRadius="10"
+                                   Padding="10,0"
+                                   HasShadow="True"
+                                   HeightRequest="45"
+                                   BorderColor="Transparent"
+                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TrainingListDetailViewModel}}, Path=IsEditing, Converter={StaticResource InverseBoolConverter}}">
+                                <Label Text="{Binding Text}"
+                                       TextColor="White"
+                                       FontSize="16"
+                                       VerticalTextAlignment="Center"
+                                       VerticalOptions="Center"/>
+                            </Frame>
+
+                            <!-- Delete button only in edit mode -->
+                            <ImageButton Source="bin2.png"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TrainingListDetailViewModel}}, Path=DeleteFieldCommand}"
+                                         CommandParameter="{Binding .}"
+                                         BackgroundColor="Transparent"
+                                         HeightRequest="20"
+                                         WidthRequest="20"
+                                         Margin="0,0,10,0"
+                                         HorizontalOptions="End"
+                                         VerticalOptions="Center"
+                                         Padding="0"
+                                         Aspect="AspectFit"
+                                         Scale="0.8"
+                                         IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TrainingListDetailViewModel}}, Path=IsEditing}" />
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-
+            <!-- ✅ Add Field Button -->
+            <Button Text="Add Section"
+                        Command="{Binding AddFieldCommand}"
+                        BackgroundColor="White"
+                        TextColor="MediumPurple"
+                        CornerRadius="12"
+                        WidthRequest="150"
+                        Margin="0,10,0,30"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding IsEditing}" />
 
 
 
@@ -177,7 +298,7 @@
             <!-- Description -->
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 15"
-                    WidthRequest="390"
+                    WidthRequest="340"
                     Padding="20"
                     VerticalOptions="Start">
                 <VerticalStackLayout Spacing="10">

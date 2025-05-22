@@ -30,6 +30,7 @@
                  Command="{Binding AddActivityCommand}"
                  Grid.Column="2" />
             </Grid>
+            
             <!-- Title -->
             <StackLayout Spacing="5" Margin="0,0,0,20">
 
@@ -44,34 +45,38 @@
             <!-- Info Grid (2x2 Boxes) -->
             <Grid ColumnDefinitions="Auto,Auto" 
                   RowDefinitions="Auto,Auto"
-                  ColumnSpacing="20" RowSpacing="20"
+                  ColumnSpacing="5" 
+                  RowSpacing="5"
                   HorizontalOptions ="Center"
                   Margin="0,0,0,30">
 
                 <!-- Distance Box -->
                 <Frame Grid.Row="0" Grid.Column="0"
-				   BackgroundColor="#4E3689"
-				   CornerRadius="12"
-				   BorderColor="#4E3689"
-				   HeightRequest="150"
-				   WidthRequest="180"
-				   HorizontalOptions="Center"
-				   VerticalOptions="Center"
-				   Padding="0"
-				   HasShadow="False">
+				       BackgroundColor="#4E3689"
+				       CornerRadius="12"
+				       BorderColor="#4E3689"
+				       HeightRequest="150"
+				       WidthRequest="170"
+				       HorizontalOptions="Center"
+				       VerticalOptions="Center"
+				       Padding="0"
+				       HasShadow="False">
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                         <VerticalStackLayout >
                             <Entry Text="{Binding DistanceText}"
-							   FontSize="20"
-							   WidthRequest="100"
-							   HorizontalTextAlignment="Center"
-							   TextColor="White"
-							   BackgroundColor="Transparent" 
-                               />
+							       FontSize="25"
+							       WidthRequest="100"
+                                   Keyboard="Numeric"
+							       HorizontalTextAlignment="Center"
+							       TextColor="White"
+							       BackgroundColor="Transparent"
+                                   Placeholder="0"
+                                   PlaceholderColor="Gray"
+                                   />
                             <Label Text="km"
-							   FontSize="18"
-							   TextColor="White"
-							   HorizontalOptions="Center" />
+							       FontSize="18"
+							       TextColor="White"
+							       HorizontalOptions="Center" />
                         </VerticalStackLayout>
 
 
@@ -86,62 +91,62 @@
                        CornerRadius="12"
                        BorderColor="#4E3689"
                        HeightRequest="150"
-                       WidthRequest="220"
+                       WidthRequest="170"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Padding="10"
                        HasShadow="False">
 
                     <VerticalStackLayout Spacing="8" VerticalOptions="Center">
-                        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <HorizontalStackLayout Spacing="0" HorizontalOptions="Center">
 
                             <!-- Hours -->
-                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
                                 <Picker ItemsSource="{Binding HourOptions}" 
                                         SelectedItem="{Binding SelectedHour}" 
-                                        WidthRequest="60"
+                                        WidthRequest="50"
                                         TextColor="White"
+                                        FontSize="25"
                                         BackgroundColor="Transparent" />
-                                <Label Text="hh" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                                <Label Text="hh" TextColor="White" FontSize="18" HorizontalOptions="Center" />
                             </VerticalStackLayout>
 
                             <!-- Minutes -->
-                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
                                 <Picker ItemsSource="{Binding MinuteOptions}" 
                                         SelectedItem="{Binding SelectedMinute}" 
-                                        WidthRequest="60"
+                                        WidthRequest="50"
                                         TextColor="White"
+                                        FontSize="25"
                                         BackgroundColor="Transparent" />
-                                <Label Text="mm" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                                <Label Text="mm" TextColor="White" FontSize="18" HorizontalOptions="Center" />
                             </VerticalStackLayout>
 
                             <!-- Seconds -->
-                            <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
                                 <Picker ItemsSource="{Binding SecondOptions}" 
                                         SelectedItem="{Binding SelectedSecond}" 
-                                        WidthRequest="60"
+                                        WidthRequest="50"
                                         TextColor="White"
+                                        FontSize="25"
                                         BackgroundColor="Transparent" />
-                                <Label Text="ss" TextColor="White" FontSize="14" HorizontalOptions="Center" />
+                                <Label Text="ss" TextColor="White" FontSize="18" HorizontalOptions="Center" />
                             </VerticalStackLayout>
 
                         </HorizontalStackLayout>
 
-                        <!-- Optional: show total duration -->
-                        <Label Text="{Binding CombinedDuration}" 
-                               TextColor="White" 
-                               FontSize="14" 
-                               HorizontalOptions="Center" />
+                       
                     </VerticalStackLayout>
                 </Frame>
 
+                
                 <!-- Date Box -->
                 <Frame Grid.Row="1" Grid.Column="0"
 				   BackgroundColor="#4E3689"
 				   CornerRadius="12"
 				   BorderColor="#4E3689"
 				   HeightRequest="150"
-				   WidthRequest="180"
+				   WidthRequest="170"
 				   HorizontalOptions="Center"
 				   VerticalOptions="Center"
 				   Padding="0"
@@ -150,42 +155,42 @@
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                         <VerticalStackLayout>
                             <Entry HorizontalTextAlignment="Center"
-						   VerticalTextAlignment="Center"
-						   TextColor="White"
-                               Text="{Binding Date, StringFormat='{0}'}" FontSize="20" FontAttributes="Bold"
-                                   Placeholder="yyyy-MM-dd"/>
-
-
-                        <Label Text="Date"
-	                    FontSize="18"
-	                    TextColor="White"
-	                    HorizontalOptions="Center" />
+						           VerticalTextAlignment="Center"
+						           TextColor="White"
+                                   Text="{Binding Date, StringFormat='{0}'}" 
+                                   FontSize="25" 
+                                   Placeholder="yyyy-MM-dd"
+                                   PlaceholderColor="Gray"/>
+                            <Label Text="Date"
+	                                FontSize="18"
+	                                TextColor="White"
+	                                HorizontalOptions="Center" />
                         </VerticalStackLayout>
                     </Grid>
                 </Frame>
 
-
+                <!-- Grade Box -->
                 <Frame Grid.Row="1" Grid.Column="1"
-				   BackgroundColor="#4E3689"
-				   CornerRadius="12"
-				   BorderColor="#4E3689"
-				   HeightRequest="150"
-				   WidthRequest="180"
-				   HorizontalOptions="Center"
-				   VerticalOptions="Center"
-				   Padding="0"
-				   HasShadow="False">
+				       BackgroundColor="#4E3689"
+				       CornerRadius="12"
+				       BorderColor="#4E3689"
+				       HeightRequest="150"
+				       WidthRequest="170"
+				       HorizontalOptions="Center"
+				       VerticalOptions="Center"
+				       Padding="0"
+				       HasShadow="False">
 
                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
                       
                         <VerticalStackLayout >
-                            <Picker Title =""
-                            ItemsSource="{Binding diffeculties}"
-                            SelectedItem="{Binding Grade}"
-                            TitleColor="Gray"
-                            TextColor="Black"
-                            BackgroundColor="White"
-                            FontSize="18"/>
+                            <Picker Title ="Select"
+                                    ItemsSource="{Binding diffeculties}"
+                                    SelectedItem="{Binding Grade}"
+                                    TitleColor="Gray"
+                                    TextColor="White"
+                                    BackgroundColor="#4E3689"
+                                    FontSize="25"/>
                             <Label Text="Grade"
 							   FontSize="18"
 							   TextColor="White"
@@ -204,7 +209,7 @@
             <Frame BackgroundColor="White"
                CornerRadius="15"
                Padding="20"
-			   WidthRequest="390"
+			   WidthRequest="340"
                HasShadow="False"
                VerticalOptions="Start"
                    Margin="0,0,0,30">
@@ -218,7 +223,7 @@
 						HeightRequest="100"
 						BackgroundColor="Transparent"
                         VerticalOptions="StartAndExpand"
-                            Placeholder="A lovely run"/>
+                        Placeholder="A lovely run"/>
                 </VerticalStackLayout>
             </Frame>
 

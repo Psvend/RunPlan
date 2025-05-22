@@ -15,8 +15,162 @@ using RunPlan.Messages;
 
 
 
+
 namespace RunPlan.ViewModel
 {
+    public partial class CreateTrainingViewModel : ObservableObject
+    {
+        private readonly DatabaseService _databaseService;
+        private List<Training> allTrainings = new();
+
+        public CreateTrainingViewModel(DatabaseService databaseService)
+        {
+            _databaseService = databaseService;
+
+            // Time picker options
+            HourOptions = new ObservableCollection<int>(Enumerable.Range(0, 24));
+            MinuteOptions = new ObservableCollection<int>(Enumerable.Range(0, 60));
+            SecondOptions = new ObservableCollection<int>(Enumerable.Range(0, 60));
+
+            _ = LoadTrainingsAsync();
+        }
+
+        // Inputs
+        [ObservableProperty] private string name;
+        [ObservableProperty] private string description;
+        [ObservableProperty] private string grade;
+        [ObservableProperty] private string distance;
+
+        [ObservableProperty] private ObservableCollection<Training> existingTrainings = new();
+        [ObservableProperty] private bool isBusy;
+
+        [ObservableProperty] private ObservableCollection<TrainingField> customFields = new();
+        [ObservableProperty] private Training currentTraining;
+
+        const int MaxCustomFields = 10;
+
+        public ObservableCollection<string> AvailableGrades { get; } = new()
+        {
+            "Super Easy", "Easy", "Medium", "Hard", "Extra Hard"
+        };
+
+        // Time pickers
+        public ObservableCollection<int> HourOptions { get; }
+        public ObservableCollection<int> MinuteOptions { get; }
+        public ObservableCollection<int> SecondOptions { get; }
+
+        [ObservableProperty] private int selectedHour;
+        [ObservableProperty] private int selectedMinute;
+        [ObservableProperty] private int selectedSecond;
+
+        public string CombinedTime =>
+            new TimeSpan(SelectedHour, SelectedMinute, SelectedSecond).TotalMinutes.ToString("0");
+
+        // Load Trainings
+        [RelayCommand]
+        public async Task LoadTrainingsAsync()
+        {
+            if (IsBusy) return;
+
+            try
+            {
+                IsBusy = true;
+                allTrainings = await _databaseService.GetAllTrainingsAsync();
+                ExistingTrainings.Clear();
+
+                foreach (var t in allTrainings)
+                    ExistingTrainings.Add(t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Failed to load trainings: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+
+        // Save Training
+        [RelayCommand]
+        public async Task SaveTraining()
+        {
+            if (string.IsNullOrWhiteSpace(Name) ||
+                string.IsNullOrWhiteSpace(Grade) ||
+                string.IsNullOrWhiteSpace(Description) ||
+                string.IsNullOrWhiteSpace(Distance))
+            {
+                await Shell.Current.DisplayAlert("Error", "Please fill in all fields.", "OK");
+                return;
+            }
+
+            if (!int.TryParse(CombinedTime, out int timeInt) ||
+                !int.TryParse(Distance, out int distanceInt))
+            {
+                await Shell.Current.DisplayAlert("Error", "Time and Distance must be valid numbers.", "OK");
+                return;
+            }
+
+            var training = new Training
+            {
+                Name = Name,
+                Description = Description,
+                Time = timeInt,
+                Grade = Grade,
+                Distance = distanceInt
+            };
+
+            int newId = await _databaseService.InsertTrainingWithFieldsAsync(training, CustomFields.ToList());
+            training.Id = newId;
+            CurrentTraining = training;
+
+            // Reset form
+            Name = Grade = Description = Distance = string.Empty;
+            SelectedHour = SelectedMinute = SelectedSecond = 0;
+            CustomFields.Clear();
+
+            await LoadTrainingsAsync();
+            WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
+        }
+
+        [RelayCommand]
+        public async Task LoadCustomFields(int trainingId)
+        {
+            var fields = await _databaseService.GetFieldsForTrainingAsync(trainingId);
+            CustomFields.Clear();
+            foreach (var f in fields)
+                CustomFields.Add(f);
+        }
+
+        [RelayCommand]
+        public void AddField()
+        {
+            if (CustomFields.Count >= MaxCustomFields)
+                return;
+
+            CustomFields.Add(new TrainingField
+            {
+                TrainingId = 0,
+                Text = string.Empty,
+                SortOrder = CustomFields.Count
+            });
+        }
+
+        [RelayCommand]
+        public void DeleteField(TrainingField field)
+        {
+            if (CustomFields.Contains(field))
+                CustomFields.Remove(field);
+        }
+    }
+}
+
+
+
+
+
+    /*
     public partial class CreateTrainingViewModel : ObservableObject
     {
         private readonly DatabaseService _databaseService;
@@ -77,7 +231,9 @@ namespace RunPlan.ViewModel
             }
         }
 
-        // ✅ Refactored SaveTraining method using composite DB transaction
+
+
+        //  Refactored SaveTraining method using composite DB transaction
         [RelayCommand]
         public async Task SaveTraining()
         {
@@ -121,6 +277,8 @@ namespace RunPlan.ViewModel
             WeakReferenceMessenger.Default.Send(new TrainingUpdatedMessage());
         }
 
+
+
         [RelayCommand]
         public async Task LoadCustomFields(int trainingId)
         {
@@ -129,6 +287,8 @@ namespace RunPlan.ViewModel
             foreach (var f in fields)
                 CustomFields.Add(f);
         }
+
+
 
         [RelayCommand]
         public void AddField()
@@ -176,6 +336,8 @@ namespace RunPlan.ViewModel
 
 
 
-
+    
     }
+    
 }
+*/

@@ -41,78 +41,120 @@
 
         
             <!-- 2x2 Grid for Inputs -->
-            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto"
-      ColumnSpacing="20" RowSpacing="20"
-      HorizontalOptions="Center">
+            <Grid ColumnDefinitions="*,*" 
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="30" RowSpacing="5"
+                  HorizontalOptions="Center">
 
                 <!-- Distance -->
                 <Frame Grid.Row="0" Grid.Column="0"
-           BackgroundColor="#4E3689"
-           CornerRadius="12"
-           HeightRequest="150" WidthRequest="160"
-           HasShadow="False">
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       HeightRequest="150" 
+                       WidthRequest="170"
+                       BorderColor="Transparent"
+                       HasShadow="False">
                     <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                         <Entry Text="{Binding Distance}"
-                   FontSize="36"
-                   WidthRequest="100"
-                   Keyboard="Numeric"
-                   HorizontalTextAlignment="Center"
-                   TextColor="White"
-                   BackgroundColor="Transparent" />
+                               FontSize="25"
+                               WidthRequest="100"
+                               Keyboard="Numeric"
+                               Placeholder="20"
+                               PlaceholderColor="LightGray"
+                               HorizontalTextAlignment="Center"
+                               TextColor="White"
+                               BackgroundColor="Transparent" />
                         <Label Text="km"
-                   FontSize="18"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+                               FontSize="18"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Duration -->
-                <Frame Grid.Row="0" Grid.Column="1"
-           BackgroundColor="#4E3689"
-           CornerRadius="12"
-           HeightRequest="150" WidthRequest="160"
-           HasShadow="False">
-                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Entry Text="{Binding Time}"
-                   FontSize="36"
-                   WidthRequest="100"
-                   Placeholder="hh:mm:ss"
-                   HorizontalTextAlignment="Center"
-                   TextColor="White"
-                   BackgroundColor="Transparent" />
-                        <Label Text="min"
-                   FontSize="18"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
+             
                 <!-- Grade -->
-                <Frame Grid.Row="1" Grid.Column="0"
-           BackgroundColor="#4E3689"
-           CornerRadius="12"
-           HeightRequest="150" WidthRequest="160"
-           HasShadow="False">
+                <Frame Grid.Row="0" Grid.Column="1"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       Padding="5"
+                       BorderColor="Transparent"
+                       HeightRequest="150" WidthRequest="170"
+                       HasShadow="False">
                     <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Picker Title="Select Grade"
-                    ItemsSource="{Binding AvailableGrades}"
-                    SelectedItem="{Binding Grade}"
-                    FontSize="22"
-                    WidthRequest="140"
-                    TextColor="White"
-                    BackgroundColor="Transparent" />
+                        <Picker Title="Select"
+                                ItemsSource="{Binding AvailableGrades}"
+                                SelectedItem="{Binding Grade}"
+                                FontSize="25"
+                                TitleColor="LightGray"
+                                WidthRequest="140"
+                                TextColor="White"
+                                BackgroundColor="Transparent" />
                         <Label Text="Grade"
-                   FontSize="18"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+                               FontSize="18"
+                               TextColor="White"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+
+                <!-- Duration (Centered under both columns) -->
+                <Frame Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       BackgroundColor="#4E3689"
+                       CornerRadius="12"
+                       BorderColor="#4E3689"
+                       HeightRequest="150"
+                       WidthRequest="260"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="10"
+                       HasShadow="False">
+
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="0" HorizontalOptions="Center">
+
+                            <!-- Hours -->
+                            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                                <Picker ItemsSource="{Binding HourOptions}" 
+                                        SelectedItem="{Binding SelectedHour}" 
+                                        WidthRequest="50"
+                                        TextColor="White"
+                                        FontSize="25"
+                                        BackgroundColor="Transparent" />
+                                <Label Text="hh" TextColor="White" FontSize="18" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+
+                            <!-- Minutes -->
+                            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                                <Picker ItemsSource="{Binding MinuteOptions}" 
+                                        SelectedItem="{Binding SelectedMinute}" 
+                                        WidthRequest="50"
+                                        TextColor="White"
+                                        FontSize="25"
+                                        BackgroundColor="Transparent" />
+                                <Label Text="mm" TextColor="White" FontSize="18" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+
+                            <!-- Seconds -->
+                            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                                <Picker ItemsSource="{Binding SecondOptions}" 
+                                        SelectedItem="{Binding SelectedSecond}" 
+                                        WidthRequest="50"
+                                        TextColor="White"
+                                        FontSize="25"
+                                        BackgroundColor="Transparent" />
+                                <Label Text="ss" TextColor="White" FontSize="18" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Frame>
 
-                
-           
+
+            </Grid>
+
 
             <!-- Training Text Fields -->
-                <Grid Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
+            <Grid Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="Center">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center" WidthRequest="370">
                         <!-- each custom field drives an Entry bound to its Text property -->
                         <CollectionView ItemsSource="{Binding CustomFields}"
@@ -120,7 +162,7 @@
                                         HorizontalOptions="Center">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="model:TrainingField">
-                                    <Grid WidthRequest="350" HeightRequest="45" Margin="0,20,0,5">
+                                    <Grid WidthRequest="330" HeightRequest="45" Margin="0,0,0,5">
                                         <Frame BackgroundColor="White"
                                                CornerRadius="8"
                                                Padding="10,0,40,0"
@@ -160,11 +202,12 @@
                                 TextColor="MediumPurple"
                                 CornerRadius="12"
                                 WidthRequest="150"
+                                Margin="0,0,0,30"
                                 HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Grid>
 
-            </Grid>
+         
 
             
             
@@ -173,7 +216,7 @@
             <Frame BackgroundColor="White"
                    CornerRadius="15"
                    Padding="20"
-                   WidthRequest="390"
+                   WidthRequest="340"
                    HasShadow="False"
                    VerticalOptions="StartAndExpand">
                 <Editor Placeholder="Add notes here..."
